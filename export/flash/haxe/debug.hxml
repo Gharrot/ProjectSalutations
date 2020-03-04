@@ -1,0 +1,21 @@
+-main ApplicationMain 
+-cp C:/HaxeToolkit/haxe/lib/flixel/4,6,3
+-D flixel=4.6.3
+-cp C:/HaxeToolkit/haxe/lib/openfl/1,3,0
+-D openfl=1.3.0
+-cp source
+-D tools=7.6.3
+-D FLX_NO_DEBUG
+-D flash-use-stage
+-D NAPE_RELEASE_BUILD
+-D fdb
+-D web
+--macro flixel.system.macros.FlxDefines.run()
+-cp export/flash
+-swf-lib obj/assets.swf
+-swf-version 11.8
+-swf export/flash/bin/ProjectSalutations.swf
+-cp export/flash/haxe
+#--remap nme:flash
+#--no-inline
+-debug
