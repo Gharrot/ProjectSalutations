@@ -507,13 +507,10 @@ class ForgottenWoods extends Location
 				}
 				else
 				{
-					message.push("You follow the path through the thorns.");
-					message.push("The thorns cut deep, and you are soon forced to turn back.");
-					message.push("You stand in front of a path that continues through a patch of thorned branches.");
-					message.push("You see another path over to your right you could cut through to.");
-					deer.takeDamage(2);
-					showChoice(message, ["Move forward", "Head to the other path", "Head back"], [deepWoodsMaze, deepWoodsMaze, deepWoodsMaze], deer);
-					mazePosition = 3;
+					message.push("You try to pull yourself up the steep slope, but you just don't have the strength.");
+					message.push("The path ahead of you leads to a sharp incline before continuing on.");
+					showChoice(message, ["Climb up", "Head back"], [deepWoodsMaze, deepWoodsMaze, deepWoodsMaze], deer);
+					mazePosition = 4;
 				}
 			}
 		}

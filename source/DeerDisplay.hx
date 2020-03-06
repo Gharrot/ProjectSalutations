@@ -44,6 +44,7 @@ class DeerDisplay extends FlxObject
         }
         FlxG.state.remove(nameText);
         FlxG.state.remove(deerSprite);
+        FlxG.state.remove(bgSprite);
     }
 
     public function hide(){
@@ -85,8 +86,8 @@ class DeerDisplay extends FlxObject
 		bgSprite.x = x;
 		bgSprite.y = y;
 		
-        deerSprite.x = x + 46; 
-        deerSprite.y = y + 62;
+        deerSprite.x = x + 62; 
+        deerSprite.y = y + 69;
 		
 		for(i in 0...5){
             statNumbers[i].x = x + 28 + (i*21);

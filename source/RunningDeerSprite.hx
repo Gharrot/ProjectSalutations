@@ -24,6 +24,8 @@ class RunningDeerSprite extends FlxSprite
 		actionTime = randomNums.float(2, 5);
 		running = true;
 		
+		runningSpeed = randomNums.float(40, 60);
+		
 		loadGraphic("assets/images/MaleDeer.png", true, 32, 32);
 		animation.add("running", [10, 11, 12, 13, 14], 8, true);
 		animation.add("looking", [0, 1, 1, 1, 1, 2, 2, 3, 3, 3, 3, 3, 4, 4, 4, 4, 4, 0, 0, 0, 0], 5, true);
@@ -59,6 +61,7 @@ class RunningDeerSprite extends FlxSprite
 			actionTime = randomNums.float(3, 6);
 			running = true;
 			animation.play("running");
+			runningSpeed += randomNums.float(-5, 5);
 		}else if(actionNum == 1){
 			//Looking
 			actionTime = randomNums.float(3, 4);

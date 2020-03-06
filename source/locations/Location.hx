@@ -18,7 +18,6 @@ class Location{
     public var backgroundImageFileMiniFramed:String;
 	
     private var actionText:FlxText;
-    private var deerNameText:FlxText;
 	
 	private var displayedTextList:FlxUIListModified;
     private var displayedOptions:Array<FlxButton>;
@@ -50,7 +49,7 @@ class Location{
 		mainState.updateTopBar();
 		
 		if(actionText == null){
-			actionText = new FlxText(0, 90, 260, "Exploring", 20);
+			actionText = new FlxText(0, 60, 260, "Exploring", 20);
 			actionText.color = FlxColor.BLACK;
 			actionText.screenCenter(FlxAxes.X);
 			actionText.alignment = "center";
@@ -156,6 +155,7 @@ class Location{
 		//Reset variables
 		defended = false;
 		eaten = false;
+		dayStarted = false;
 		GameVariables.instance.checkVariables();
 		
 		//Out of food
@@ -238,11 +238,11 @@ class Location{
     }
 
     public function showChoice(text:Array<String>, optionNames:Array<String>, resultFunction:Array<(String, Deer)->Void>, deer:Deer){
-		displayedTextList = new FlxUIListModified(40, 140, null, 400, 280);
+		displayedTextList = new FlxUIListModified(40, 110, null, 400, 280);
 		FlxG.state.add(displayedTextList);
 		
 		for(i in 0...text.length){
-			var happenedText:FlxUIText = new FlxUIText(40, 150, 400, text[i], 20);
+			var happenedText:FlxUIText = new FlxUIText(40, 110, 400, text[i], 20);
 			happenedText.color = 0xFF000000;
 			displayedTextList.add(happenedText);
 		}
@@ -251,10 +251,10 @@ class Location{
 		
 		for(i in 0...optionNames.length){
 			displayedOptions[i] = spawnButton(optionNames[i]);
-			if(i != (optionNames.length - 1)){
-				displayedOptions[i].x += (-100) + ((i%2) * 200);
+			if(i != (optionNames.length - 1) || (optionNames.length%2 == 0)){
+				displayedOptions[i].x += (-90) + ((i%2) * 180);
 			}
-			displayedOptions[i].y += 187 + (Math.floor(i/2) * 45);
+			displayedOptions[i].y += 100 + (Math.floor(i/2) * 48);
 			displayedOptions[i].onUp.callback = choiceChosen.bind(optionNames[i], resultFunction[i], deer);
 			FlxG.state.add(displayedOptions[i]);
 		}
@@ -269,18 +269,18 @@ class Location{
 	}
 	
 	public function showResult(text:Array<String>, buttonText:String = "Continue"){
-		displayedTextList = new FlxUIListModified(40, 140, null, 400, 280);
+		displayedTextList = new FlxUIListModified(40, 110, null, 400, 280);
 		FlxG.state.add(displayedTextList);
 		
 		for(i in 0...text.length){
-			var happenedText:FlxUIText = new FlxUIText(40, 150, 400, text[i], 20);
+			var happenedText:FlxUIText = new FlxUIText(40, 110, 400, text[i], 20);
 			happenedText.color = 0xFF000000;
 			displayedTextList.add(happenedText);
 		}
 		
         displayedOptions = new Array();
 		displayedOptions[0] = spawnButton(buttonText);
-		displayedOptions[0].y += 155;
+		displayedOptions[0].y += 100;
 		displayedOptions[0].onUp.callback = continueOn.bind();
 		FlxG.state.add(displayedOptions[0]);
 	}
@@ -365,7 +365,7 @@ class Location{
 		deerDisplayBoxes = new Array<DeerDisplay>();
 		for(i in 0...3){
 			var newDisplayBox = new DeerDisplay();
-			newDisplayBox.moveDisplay(20 + (150*i), 520);
+			newDisplayBox.moveDisplay(3 + (159*i), 500);
 			
 			deerDisplayBoxes.push(newDisplayBox);
 			
@@ -375,10 +375,13 @@ class Location{
 	
 	public function removeChildren(){
 		if(deerDisplayBoxes != null){
-			for(i in 0...deerDisplayBoxes.length){
+			for (i in 0...deerDisplayBoxes.length){
+				deerDisplayBoxes[i].destroyChildren();
 				FlxG.state.remove(deerDisplayBoxes[i]);
 			}
 		}
+		
+		deerDisplayBoxes = null;
 	}
 	
 	public function createItemDescriptions():Array<FlxText>{
