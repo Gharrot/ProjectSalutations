@@ -18,6 +18,8 @@ class ForgottenWoods extends Location
 		super();
 		name = "Unfamiliar Woods";
 		backgroundImageFile = "assets/images/LocationImages/ForgottenWoods.png";
+		backgroundImageFileNoFrame = "assets/images/LocationImages/ForgottenWoodsNoFrame.png";
+		backgroundImageFileMiniFramed = "assets/images/LocationImages/ForgottenWoodsEmptyDeerTile.png";
 	}
 
 	override public function setOut()
@@ -284,7 +286,7 @@ class ForgottenWoods extends Location
 
 		mazePosition = 0;
 
-		if (choice == "Deep woods entrance")
+		if (choice == "Deep woods entrance" || choice == "The Deep Woods")
 		{
 			message.push("As you walk the woods grow darker around you. You soon come to a dense thicket.");
 			if (gameVariables.unfamiliarWoodsDeepWoodsThicketCleared)
@@ -299,7 +301,7 @@ class ForgottenWoods extends Location
 			}
 			else
 			{
-				showChoice(message, ["Push through the thicket", "Navigate around the thicket", "Head back"], [deepWoods, deepWoods, deepWoods], deer);
+				showChoice(message, ["Push through the thicket", "Navigate past the thicket", "Head back"], [deepWoods, deepWoods, deepWoods], deer);
 			}
 		}
 		else if (choice == "Push through the thicket")
@@ -425,7 +427,7 @@ class ForgottenWoods extends Location
 					message.push("You get disorientated a bit, but you still manage to progress deeper into the woods.");
 					message.push("The path ahead of you leads through some particularly thorny brush.");
 					message.push("You see another path over to your right you could cut through to.");
-					showChoice(message, ["Move forward", "Head to the other path", "Head back"], [deepWoodsMaze, deepWoodsMaze, continueOnChoice], deer);
+					showChoice(message, ["Move forward", "Head to the other path", "Head back"], [deepWoodsMaze, deepWoodsMaze, deepWoodsMaze], deer);
 				}
 				else
 				{
@@ -452,7 +454,7 @@ class ForgottenWoods extends Location
 				message.push("You push through a low brush and reach the other path.");
 				message.push("You stand in front of a path that leads through some dense bushes.");
 				message.push("You see another path over to your left you could cut through to.");
-				showChoice(message, ["Move forward", "Head to the other path", "Head back"], [deepWoodsMaze, deepWoodsMaze, continueOnChoice], deer);
+				showChoice(message, ["Move forward", "Head to the other path", "Head back"], [deepWoodsMaze, deepWoodsMaze, deepWoodsMaze], deer);
 			}
 			else if (choice == "Move forward")
 			{
@@ -479,7 +481,7 @@ class ForgottenWoods extends Location
 					message.push("You stand in front of a path that continues through a patch of thorned branches.");
 					message.push("You see another path over to your right you could cut through to.");
 					deer.takeDamage(2);
-					showChoice(message, ["Move forward", "Head to the other path", "Head back"], [deepWoodsMaze, deepWoodsMaze, continueOnChoice], deer);
+					showChoice(message, ["Move forward", "Head to the other path", "Head back"], [deepWoodsMaze, deepWoodsMaze, deepWoodsMaze], deer);
 					mazePosition = 3;
 				}
 			}
@@ -491,7 +493,7 @@ class ForgottenWoods extends Location
 				message.push("You push back through the thorns, which seem to hurt much less going this direction.");
 				message.push("You stand in front of a path that continues through a patch of thorned branches.");
 				message.push("You see another path over to your right you could cut through to.");
-				showChoice(message, ["Move forward", "Head to the other path", "Head back"], [deepWoodsMaze, deepWoodsMaze, continueOnChoice], deer);
+				showChoice(message, ["Move forward", "Head to the other path", "Head back"], [deepWoodsMaze, deepWoodsMaze, deepWoodsMaze], deer);
 				mazePosition = 3;
 			}
 			else if (choice == "Climb up")
@@ -510,7 +512,7 @@ class ForgottenWoods extends Location
 					message.push("You stand in front of a path that continues through a patch of thorned branches.");
 					message.push("You see another path over to your right you could cut through to.");
 					deer.takeDamage(2);
-					showChoice(message, ["Move forward", "Head to the other path", "Head back"], [deepWoodsMaze, deepWoodsMaze, continueOnChoice], deer);
+					showChoice(message, ["Move forward", "Head to the other path", "Head back"], [deepWoodsMaze, deepWoodsMaze, deepWoodsMaze], deer);
 					mazePosition = 3;
 				}
 			}
@@ -534,7 +536,7 @@ class ForgottenWoods extends Location
 					message.push("With some quick footwork you make it to the top safely.");
 					message.push("The path ahead of you leads through a patch of dense bushes.");
 					message.push("You see another path over to your left you could cut through to.");
-					showChoice(message, ["Move forward", "Head to the other path", "Head back"], [deepWoodsMaze, deepWoodsMaze, continueOnChoice], deer);
+					showChoice(message, ["Move forward", "Head to the other path", "Head back"], [deepWoodsMaze, deepWoodsMaze, deepWoodsMaze], deer);
 				}
 				else
 				{
@@ -562,7 +564,7 @@ class ForgottenWoods extends Location
 				message.push("You push through a low brush and reach the other path.");
 				message.push("You stand in front of a path that continues through a patch of thorned branches.");
 				message.push("You see another path over to your right you could cut through to.");
-				showChoice(message, ["Move forward", "Head to the other path", "Head back"], [deepWoodsMaze, deepWoodsMaze, continueOnChoice], deer);
+				showChoice(message, ["Move forward", "Head to the other path", "Head back"], [deepWoodsMaze, deepWoodsMaze, deepWoodsMaze], deer);
 				mazePosition = 3;
 			}
 			else if (choice == "Move forward")
@@ -582,7 +584,7 @@ class ForgottenWoods extends Location
 					message.push("Pushing forward as hard as you can, you are unable to make any real progress and turn back.");
 					message.push("You stand in front of a path that leads through some dense bushes.");
 					message.push("You see another path over to your left you could cut through to.");
-					showChoice(message, ["Move forward", "Head to the other path", "Head back"], [deepWoodsMaze, deepWoodsMaze, continueOnChoice], deer);
+					showChoice(message, ["Move forward", "Head to the other path", "Head back"], [deepWoodsMaze, deepWoodsMaze, deepWoodsMaze], deer);
 				}
 			}
 		}
@@ -594,7 +596,7 @@ class ForgottenWoods extends Location
 				message.push("You head towards the den, pushing through some dense bushes. They bend away easily in this direction.");
 				message.push("You stand in front of a path that leads through some dense bushes.");
 				message.push("You see another path over to your left you could cut through to.");
-				showChoice(message, ["Move forward", "Head to the other path", "Head back"], [deepWoodsMaze, deepWoodsMaze, continueOnChoice], deer);
+				showChoice(message, ["Move forward", "Head to the other path", "Head back"], [deepWoodsMaze, deepWoodsMaze, deepWoodsMaze], deer);
 			}
 			else if (choice == "Move forward")
 			{
@@ -652,7 +654,7 @@ class ForgottenWoods extends Location
 					mazePosition = 8;
 					message.push("You stand in front of a path travelling deep into the woods.");
 					message.push("The path looks especially treacherous; the woods overtaking it are old, dense, and threateningly thistled.");
-					showChoice(message, ["Walk forward", "Head back"], [deepWoodsMaze, deepWoodsMaze], deer);
+					showChoice(message, ["Follow the path further", "Head back"], [deepWoodsMaze, deepWoodsMaze], deer);
 				}
 			}
 		}
@@ -970,19 +972,19 @@ class ForgottenWoods extends Location
 			
 			//Apple awarding
 			if(appleResult == "Caught"){
-				message += "with the apple safely in your mouth (+4 food).";
-				GameVariables.instance.modifyFood(4);
+				message += "with the apple safely in your mouth (+2 food).";
+				GameVariables.instance.modifyFood(2);
 			}else if(appleResult == "Grazed"){
-				message += "and pick up the apple on the ground next to you (+4 food).";
-				GameVariables.instance.modifyFood(4);
+				message += "and pick up the apple on the ground next to you (+2 food).";
+				GameVariables.instance.modifyFood(2);
 			}else if(appleResult == "Missed"){
 				message += "looking back up at the apple you missed.";
 			}
 			
-			showResult(message, deer);
+			showResult([message]);
 		}
 		else if(choice == "Continue on"){
-			showResult("Not willing to risk injury, you move on.", deer);
+			showResult(["Not willing to risk injury, you move on."]);
 		}
 	}
 

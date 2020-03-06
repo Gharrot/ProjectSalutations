@@ -11,15 +11,32 @@ class DeerDisplay extends FlxObject
 {
     public var deer:Deer;
 	
+	public var bgSprite:FlxSprite;
 	public var deerSprite:FlxSprite;
 
     public var nameText:FlxText;
     public var statNumbers:Array<FlxText>;
 
-    public function new(deer:Deer){
+    public function new(?deer:Deer){
         super();
         this.deer = deer;
     }
+	
+	public function emptyDisplay(){
+        for(i in 0...5){
+            statNumbers[i].visible = false;
+        }
+        nameText.visible = false;
+        deerSprite.visible = false;
+	}
+	
+	public function unemptyDisplay(){
+        for(i in 0...5){
+            statNumbers[i].visible = true;
+        }
+        nameText.visible = true;
+        deerSprite.visible = true;
+	}
 
     public function destroyChildren(){
         for(i in 0...5){
@@ -35,6 +52,7 @@ class DeerDisplay extends FlxObject
         }
         nameText.visible = false;
 		deerSprite.visible = false;
+		bgSprite.visible = false;
 		this.visible = false;
     }
 
@@ -44,10 +62,15 @@ class DeerDisplay extends FlxObject
         }
         nameText.visible = true;
 		deerSprite.visible = true;
+		bgSprite.visible = true;
 		this.visible = true;
     }
 
     public function moveDisplay(x:Int, y:Int):Void{
+		if(deer == null){
+			deer = Deer.getNewBlankDeer();
+		}
+		
 		if(deerSprite == null){
 			setupDeerSprite();
 		}
@@ -59,8 +82,11 @@ class DeerDisplay extends FlxObject
         this.x = x; 
         this.y = y;
 		
-        deerSprite.x = x; 
-        deerSprite.y = y;
+		bgSprite.x = x;
+		bgSprite.y = y;
+		
+        deerSprite.x = x + 46; 
+        deerSprite.y = y + 62;
 		
 		for(i in 0...5){
             statNumbers[i].x = x + 28 + (i*21);
@@ -75,20 +101,27 @@ class DeerDisplay extends FlxObject
 	public function updateDeer(?newDeer:Deer) {
 		if(newDeer != null){
 			deer = newDeer;
+			unemptyDisplay();
 		}
 		
         var statValues = [deer.str, deer.res, deer.dex, deer.int, deer.lck];
 		for(i in 0...statNumbers.length){
 			statNumbers[i].text = Std.string(statValues[i]);
 		}
+		
+		if(deer.gender == "Male"){
+			deerSprite.loadGraphic("assets/images/MaleDeer.png", true, 32, 32);
+		}else{
+			deerSprite.loadGraphic("assets/images/FemaleDeer.png", true, 32, 32);
+		}
+		
+		deerSprite.animation.add("looking", [0, 1, 1, 1, 1, 2, 2, 3, 3, 3, 3, 3, 4, 4, 4, 4, 4, 0, 0, 0, 0], 5, false);
+		deerSprite.animation.add("monching", [5, 6, 7, 7, 7, 8, 9, 0, 0, 0, 0, 0, 0], 4, false);
 
 		nameText.text = deer.name;
 	}
 
     public function setupTexts() {
-		if(deer == null){
-			deer = Deer.getNewBlankDeer();
-		}
 		
         var statValues = [deer.str, deer.res, deer.dex, deer.int, deer.lck];
 		
@@ -108,8 +141,21 @@ class DeerDisplay extends FlxObject
     }
 	
 	function setupDeerSprite(){
+		bgSprite = new FlxSprite(0, 0);
+		bgSprite.loadGraphic(GameVariables.instance.currentLocation.backgroundImageFileMiniFramed);
+		FlxG.state.add(bgSprite);
+		
 		deerSprite = new FlxSprite(0, 0);
-		deerSprite.loadGraphic("assets/images/MaleSprite.png");
+		if(deer.gender == "Male"){
+			deerSprite.loadGraphic("assets/images/MaleDeer.png", true, 32, 32);
+		}else{
+			deerSprite.loadGraphic("assets/images/FemaleDeer.png", true, 32, 32);
+		}
+		
+		deerSprite.animation.add("looking", [0, 1, 1, 1, 1, 2, 2, 3, 3, 3, 3, 3, 4, 4, 4, 4, 4, 0, 0, 0, 0], 5, false);
+		deerSprite.animation.add("monching", [5, 6, 7, 7, 7, 8, 9, 0, 0, 0, 0, 0, 0], 4, false);
+		
+		deerSprite.scale.set(2, 2);
 		FlxG.state.add(deerSprite);
 	}
 }

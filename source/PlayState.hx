@@ -53,7 +53,7 @@ class PlayState extends FlxState
 		timeUntilNextSprite -= FlxG.elapsed;
 		if(timeUntilNextSprite <= 0){
 			var randomNums:FlxRandom = new FlxRandom();
-			timeUntilNextSprite = randomNums.float(3, 5);
+			timeUntilNextSprite = randomNums.float(4, 7);
 			
 			var newRunningDeer:RunningDeerSprite = new RunningDeerSprite(-32, 600);
 			deerSprites[deerSprites.length] = newRunningDeer;

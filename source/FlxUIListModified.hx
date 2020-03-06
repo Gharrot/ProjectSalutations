@@ -77,7 +77,7 @@ class FlxUIListModified extends FlxUIGroup
 	 * @param	NextButton	Button to Scroll +
 	 */
 	
-	public function new(X:Float=0,Y:Float=0,?Widgets:Array<IFlxUIWidget>=null,W:Float=0,H:Float=0,?MoreString:String="and then...",?BeforeString:String="before that...",?Stacking:Int=STACK_VERTICAL,?Spacing:Float=0,PrevButtonOffset:FlxPoint=null,NextButtonOffset:FlxPoint=null,PrevButton:IFlxUIButton=null,NextButton:IFlxUIButton=null) 
+	public function new(X:Float=0,Y:Float=0,?Widgets:Array<IFlxUIWidget>=null,W:Float=0,H:Float=0,?MoreString:String="",?BeforeString:String="",?Stacking:Int=STACK_VERTICAL,?Spacing:Float=5,PrevButtonOffset:FlxPoint=null,NextButtonOffset:FlxPoint=null,PrevButton:IFlxUIButton=null,NextButton:IFlxUIButton=null) 
 	{
 		_skipRefresh = true;
 		super(X, Y);
@@ -163,10 +163,10 @@ class FlxUIListModified extends FlxUIGroup
 		}
 		
 		if (prevButtonOffset == null) {
-			prevButtonOffset = FlxPoint.get(0, 0);
+			prevButtonOffset = FlxPoint.get(350, 300);
 		}
 		if (nextButtonOffset == null) {
-			nextButtonOffset = FlxPoint.get(0, 0);
+			nextButtonOffset = FlxPoint.get(380, 300);
 		}
 		_skipRefresh = false;
 		setSize(W, H);
@@ -236,7 +236,56 @@ class FlxUIListModified extends FlxUIGroup
 	}
 	
 	private function onClick(i:Int):Void {
-		scrollIndex += i;
+		
+		if (group.members.indexOf(cast prevButton) != -1) {
+			remove(cast prevButton, true);
+		}
+		if (group.members.indexOf(cast nextButton) != -1) {
+			remove(cast nextButton, true);
+		}
+		
+		if(i > 0){
+			var textsVisible:Int = 0;
+			for (widget in group.members) {
+				if(widget.visible == true){
+					textsVisible++;
+				}
+			}
+			scrollIndex += textsVisible;
+		}
+		else
+		{
+			var initialScrollIndex = scrollIndex;
+			var textsVisible:Int = 0;
+			
+			var finished:Bool = false;
+			while(!finished){
+				scrollIndex--;
+				
+				refreshList();
+				if (group.members.indexOf(cast prevButton) != -1) {
+					remove(cast prevButton, true);
+				}
+				if (group.members.indexOf(cast nextButton) != -1) {
+					remove(cast nextButton, true);
+				}
+				
+				var textsVisible:Int = 0;
+				for (widget in group.members) {
+					if(widget.visible == true){
+						textsVisible++;
+					}
+				}
+				
+				if(scrollIndex + textsVisible <= initialScrollIndex){
+					finished = true;
+				}
+			} 
+		}
+		
+		if(scrollIndex < 0){
+			scrollIndex = 0;
+		}
 		refreshList();
 	}
 	

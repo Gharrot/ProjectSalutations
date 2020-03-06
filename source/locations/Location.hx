@@ -12,9 +12,10 @@ import flixel.FlxG;
 
 class Location{
     public var name:String;
-    public var neighboringLocations:Array<Location>;
-    public var movementCosts:Array<Int>;
+	
     public var backgroundImageFile:String;
+    public var backgroundImageFileNoFrame:String;
+    public var backgroundImageFileMiniFramed:String;
 	
     private var actionText:FlxText;
     private var deerNameText:FlxText;
@@ -22,19 +23,21 @@ class Location{
 	private var displayedTextList:FlxUIListModified;
     private var displayedOptions:Array<FlxButton>;
 	
+	public var activeDeer:Array<Deer>;
+	private var deerDisplayBoxes:Array<DeerDisplay>;
+	private var activeDeerScrollIndex:Int = 0;
+	
 	private var defended:Bool = false;
 	private var eaten:Bool = false;
 	
 	private var starved:Bool = false;
-	
-	public var currentlyActiveDeer:Array<Deer>;
 	
 	public var continueCount:Int = 0;
 	
 	public var dayStarted:Bool = false;
 
     public function new() {
-		currentlyActiveDeer = new Array<Deer>();
+		activeDeer = new Array<Deer>();
     }
 
     public function setOut() {
@@ -60,6 +63,7 @@ class Location{
         for (i in 0...gameVariables.controlledDeer.length) {
 			if (!gameVariables.controlledDeer[i].actedThisRound && gameVariables.controlledDeer[i].currentAction == "Exploring"){
 				gameVariables.controlledDeer[i].actedThisRound = true;
+				setActiveDeer([gameVariables.controlledDeer[i]]);
 				explore(gameVariables.controlledDeer[i]);
 				actionText.text = "Exploring";
 				return;
@@ -70,6 +74,7 @@ class Location{
         for (i in 0...gameVariables.controlledDeer.length) {
 			if (!gameVariables.controlledDeer[i].actedThisRound && gameVariables.controlledDeer[i].currentAction == "Foraging"){
 				gameVariables.controlledDeer[i].actedThisRound = true;
+				setActiveDeer([gameVariables.controlledDeer[i]]);
 				forage(gameVariables.controlledDeer[i]);
 				actionText.text = "Foraging";
 				return;
@@ -87,6 +92,7 @@ class Location{
 		
 		if(deerHunters.length > 0){
 			actionText.text = "Hunting";
+			setActiveDeer(deerHunters);
 			hunt(deerHunters);
 			return;
 		}
@@ -103,6 +109,7 @@ class Location{
 		if(!defended){
 			actionText.text = "Defending";
 			defended = true;
+			setActiveDeer(deerDefenders);
 			defend(deerDefenders);
 			return;
 		}
@@ -118,6 +125,7 @@ class Location{
 		
 		if(deerResters.length > 0){
 			actionText.text = "Resting";
+			setActiveDeer(deerResters);
 			rest(deerResters);
 			return;
 		}
@@ -142,6 +150,8 @@ class Location{
         for (i in 0...GameVariables.instance.controlledDeer.length) {
 			GameVariables.instance.controlledDeer[i].actedThisRound = false;
         }
+		
+		setActiveDeer([]);
 		
 		//Reset variables
 		defended = false;
@@ -228,7 +238,7 @@ class Location{
     }
 
     public function showChoice(text:Array<String>, optionNames:Array<String>, resultFunction:Array<(String, Deer)->Void>, deer:Deer){
-		displayedTextList = new FlxUIListModified(40, 150, null, 400, 280);
+		displayedTextList = new FlxUIListModified(40, 140, null, 400, 280);
 		FlxG.state.add(displayedTextList);
 		
 		for(i in 0...text.length){
@@ -238,12 +248,16 @@ class Location{
 		}
 
         displayedOptions = new Array();
-        for(i in 0...optionNames.length){
+		
+		for(i in 0...optionNames.length){
 			displayedOptions[i] = spawnButton(optionNames[i]);
-			displayedOptions[i].y += 110 + (i * 45);
+			if(i != (optionNames.length - 1)){
+				displayedOptions[i].x += (-100) + ((i%2) * 200);
+			}
+			displayedOptions[i].y += 187 + (Math.floor(i/2) * 45);
 			displayedOptions[i].onUp.callback = choiceChosen.bind(optionNames[i], resultFunction[i], deer);
 			FlxG.state.add(displayedOptions[i]);
-        }
+		}
     }
 	
 	public function choiceChosen(choice:String, resultFunction:(String, Deer)->Void, deer:Deer){
@@ -255,7 +269,7 @@ class Location{
 	}
 	
 	public function showResult(text:Array<String>, buttonText:String = "Continue"){
-		displayedTextList = new FlxUIListModified(40, 150, null, 400, 280);
+		displayedTextList = new FlxUIListModified(40, 140, null, 400, 280);
 		FlxG.state.add(displayedTextList);
 		
 		for(i in 0...text.length){
@@ -297,10 +311,74 @@ class Location{
 	}
 	
 	public function returnToDen(){
+		removeChildren();
+		
 		var mainState:MainGame = cast(FlxG.state, MainGame);
 		mainState.updateTopBar();
 		mainState.returnToMainScreen();
 		mainState.remove(actionText);
+	}
+	
+	public function setActiveDeer(deer:Array<Deer>){
+		activeDeer = deer;
+		activeDeerScrollIndex = 0;
+		displayActiveDeer();
+	}
+	
+	public function addActiveDeer(deer:Array<Deer>){
+		for(i in 0...deer.length){
+			activeDeer.push(deer[i]);
+		}
+		displayActiveDeer();
+	}
+	
+	public function displayActiveDeer(){
+		if (deerDisplayBoxes == null){
+			setupActiveDeerDisplay();
+		}
+		
+		for (i in activeDeerScrollIndex ... (activeDeerScrollIndex + 3)){
+			var displayBoxIndex:Int = i - activeDeerScrollIndex;
+			if (i < activeDeer.length){
+				deerDisplayBoxes[displayBoxIndex].updateDeer(activeDeer[i]);
+				deerDisplayBoxes[displayBoxIndex].unemptyDisplay();
+			}else{
+				deerDisplayBoxes[displayBoxIndex].emptyDisplay();
+			}
+		}
+		
+		if(activeDeerScrollIndex > 0){
+			//ShowLeftScrollButton
+		}
+		
+		if(activeDeerScrollIndex + 3 > activeDeer.length){
+			//showRightScrollButton
+		}
+	}
+	
+	public function scrollDeer(amount:Int){
+		activeDeerScrollIndex += amount;
+		displayActiveDeer();
+	}
+	
+	private function setupActiveDeerDisplay(){
+		deerDisplayBoxes = new Array<DeerDisplay>();
+		for(i in 0...3){
+			var newDisplayBox = new DeerDisplay();
+			newDisplayBox.moveDisplay(20 + (150*i), 520);
+			
+			deerDisplayBoxes.push(newDisplayBox);
+			
+			FlxG.state.add(newDisplayBox);
+		}
+	}
+	
+	public function removeChildren(){
+		if(deerDisplayBoxes != null){
+			for(i in 0...deerDisplayBoxes.length){
+				FlxG.state.remove(deerDisplayBoxes[i]);
+			}
+		}
 	}
 	
 	public function createItemDescriptions():Array<FlxText>{
