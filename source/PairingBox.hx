@@ -14,8 +14,6 @@ class PairingBox extends FlxObject
 	var maleDeerCharacterDisplay:DeerDisplay;
 	var femaleDeerCharacterDisplay:DeerDisplay;
 	
-	var maleDeerEmptySprite:FlxSprite;
-	var femaleDeerEmptySprite:FlxSprite;
 	var maleDeerEmptyText:FlxText;
 	var femaleDeerEmptyText:FlxText;
 	
@@ -76,20 +74,16 @@ class PairingBox extends FlxObject
         FlxG.state.remove(femaleLeftButton);
         FlxG.state.remove(femaleRightButton);
 		
+		FlxG.state.remove(maleDeerCharacterDisplay);
+		maleDeerCharacterDisplay.destroyChildren();
 		if(noMales){
-			FlxG.state.remove(maleDeerEmptySprite);
 			FlxG.state.remove(maleDeerEmptyText);
-		}else {
-			FlxG.state.remove(maleDeerCharacterDisplay);
-			maleDeerCharacterDisplay.destroyChildren();
 		}
 		
+		FlxG.state.remove(femaleDeerCharacterDisplay);
+		femaleDeerCharacterDisplay.destroyChildren();
 		if(noFemales){
-			FlxG.state.remove(femaleDeerEmptySprite);
 			FlxG.state.remove(femaleDeerEmptyText);
-		}else{
-			FlxG.state.remove(femaleDeerCharacterDisplay);
-			femaleDeerCharacterDisplay.destroyChildren();
 		}
 		
         FlxG.state.remove(questionText);
@@ -103,12 +97,14 @@ class PairingBox extends FlxObject
 	}
 	
 	function setupDeerDisplays(){
+		maleDeerCharacterDisplay = new DeerDisplay(maleDeer[0]);
+		maleDeerCharacterDisplay.moveDisplay(67, 240);
+		FlxG.state.add(maleDeerCharacterDisplay);
+		
 		if(maleDeer.length == 0){
 			noMales = true;
 			
-			maleDeerEmptySprite = new FlxSprite(67, 240);
-			maleDeerEmptySprite.loadGraphic("assets/images/EmptyDeerTile.png");
-			FlxG.state.add(maleDeerEmptySprite);
+			maleDeerCharacterDisplay.emptyDisplay();
 			
 			maleDeerEmptyText = new FlxText(0, 0, 360, "No available males", 13);
 			maleDeerEmptyText.screenCenter();
@@ -119,18 +115,16 @@ class PairingBox extends FlxObject
 			FlxG.state.add(maleDeerEmptyText);
 		}else{
 			noMales = false;
-			
-			maleDeerCharacterDisplay = new DeerDisplay(maleDeer[0]);
-			maleDeerCharacterDisplay.moveDisplay(67, 240);
-			FlxG.state.add(maleDeerCharacterDisplay);
 		}
+		
+		femaleDeerCharacterDisplay = new DeerDisplay(femaleDeer[0]);
+		femaleDeerCharacterDisplay.moveDisplay(253, 240);
+		FlxG.state.add(femaleDeerCharacterDisplay);
 		
 		if(femaleDeer.length == 0){
 			noFemales = true;
 			
-			femaleDeerEmptySprite = new FlxSprite(253, 240);
-			femaleDeerEmptySprite.loadGraphic("assets/images/EmptyDeerTile.png");
-			FlxG.state.add(femaleDeerEmptySprite);
+			femaleDeerCharacterDisplay.emptyDisplay();
 			
 			femaleDeerEmptyText = new FlxText(0, 0, 360, "No available females", 13);
 			femaleDeerEmptyText.screenCenter();
@@ -141,10 +135,6 @@ class PairingBox extends FlxObject
 			FlxG.state.add(femaleDeerEmptyText);
 		}else{
 			noFemales = false;
-			
-			femaleDeerCharacterDisplay = new DeerDisplay(femaleDeer[0]);
-			femaleDeerCharacterDisplay.moveDisplay(253, 240);
-			FlxG.state.add(femaleDeerCharacterDisplay);
 		}
 	}
 
@@ -172,7 +162,6 @@ class PairingBox extends FlxObject
 			ButtonUtils.fixButtonText(confirmButton, 22, 7, -7);
 		}
 		confirmButton.screenCenter();
-		confirmButton.x += 5;
 		confirmButton.y = 460;
         FlxG.state.add(confirmButton); 
 		
