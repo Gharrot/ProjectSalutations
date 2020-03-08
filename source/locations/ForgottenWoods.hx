@@ -688,7 +688,7 @@ class ForgottenWoods extends Location
 		}
 		else
 		{
-			var newDeerFriend:Deer = Deer.buildADeer(12);
+			var newDeerFriend:Deer = Deer.buildADeer(randomNums.int(11, 13));
 			foundDeer = newDeerFriend;
 
 			if (foundDeer.str <= 2 && (randomNums.int(0,1) == 0))

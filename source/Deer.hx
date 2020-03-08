@@ -119,34 +119,65 @@ class Deer{
 		return result;
 	}
 	
-	public function increaseStatByName(statName:String, amount:Int = 1){
+	public function modifyStatByName(statName:String, amount:Int = 1){
 		if(statName == "Strength"){
-			this.str += amount;
+			str += amount;
 		}else if(statName == "Resilience"){
-			this.res += amount;
+			res += amount;
 		}else if(statName == "Dexterity"){
-			this.dex += amount;
+			dex += amount;
 		}else if(statName == "Intellect"){
-			this.int += amount;
+			int += amount;
 		}else if(statName == "Fortune"){
-			this.lck += amount;
+			lck += amount;
 		}
 	}
 	
 	public function getStatByName(statName:String):Int{
 		if(statName == "Strength"){
-			return this.str;
+			return str;
 		}else if(statName == "Resilience"){
-			return this.res;
+			return res;
 		}else if(statName == "Dexterity"){
-			return this.dex;
+			return dex;
 		}else if(statName == "Intellect"){
-			return this.int;
+			return int;
 		}else if(statName == "Fortune"){
-			return this.lck;
+			return lck;
 		}
 		
 		return -1;
+	}
+	
+	public function getStatTotal():Int{
+		return this.str + this.res + this.dex + this.int + this.lck;
+	}
+	
+	public function getStatsOverZero(?shuffle:Bool = true):Array<String>{
+		var statNames = new Array<String>();
+		
+		if(str > 0){
+			statNames.push("Strength");
+		}
+		if(res > 0){
+			statNames.push("Resilience");
+		}
+		if(dex > 0){
+			statNames.push("Dexterity");
+		}
+		if(int > 0){
+			statNames.push("Intellect");
+		}
+		if(lck > 0){
+			statNames.push("Fortune");
+		}
+		
+		if(shuffle){
+			var randomizer:FlxRandom = new FlxRandom();
+			randomizer.shuffle(statNames);
+		}
+		
+		return statNames;
 	}
 	
 	static public function buildADeer(totalStatPoints:Int, ?distributions:Array<Array<Int>>):Deer{
@@ -167,14 +198,76 @@ class Deer{
 			
 			for (i in 0...chosenDistribution.length) {
 				if (statRoll <= chosenDistribution[i]) {
-					newDeer.increaseStatByName(statNames[i]);
+					newDeer.modifyStatByName(statNames[i]);
 					break;
 				}
 			}
 		}
 		
-		if(newDeer.res == 0){
-			newDeer.res = 1;
+		newDeer.maxHealth = newDeer.res * 2;
+		newDeer.health = newDeer.maxHealth;
+			
+		if(randomizer.bool()){
+			newDeer.gender = "Female";
+		}else{
+			newDeer.gender = "Male";
+		}
+		
+		newDeer.name = NameGenerator.getRandomName(newDeer.gender);
+		
+		return newDeer;
+	}
+	
+	static public function generateBabyDeer(motherDeer:Deer, fatherDeer:Deer):Deer{
+		var randomizer:FlxRandom = new FlxRandom();
+		var statNames = ["Strength", "Resilience", "Dexterity", "Intellect", "Fortune"];
+		randomizer.shuffle(statNames);
+		
+		var newDeer:Deer = getNewBlankDeer();
+		
+		var mothersInfluence:Int = randomizer.int(2, 3);
+		
+		//Inheriting mother's stats
+		for (i in 0...mothersInfluence) {
+			newDeer.modifyStatByName(statNames[i], motherDeer.getStatByName(statNames[i]));
+		}
+		
+		//Inheriting father's stats
+		for (i in mothersInfluence...5) {
+			newDeer.modifyStatByName(statNames[i], fatherDeer.getStatByName(statNames[i]));
+		}
+		
+		//shuffling a bit
+		var shuffles:Int = randomizer.int(1, 4);
+		
+		for (i in 0...shuffles) {
+			var statToDecrease:String = statNames[randomizer.int(0, statNames.length)];
+			if(newDeer.getStatByName(statToDecrease) > 0){
+				newDeer.modifyStatByName(statToDecrease, -1);
+				newDeer.modifyStatByName(statNames[randomizer.int(0, statNames.length)], 1);
+			}
+		}
+		
+		//Balance out the stats if they have more or less than their parents
+		var parentsTotalStats = motherDeer.getStatTotal() + fatherDeer.getStatTotal();
+		var statDifference:Int = newDeer.getStatTotal() - Math.floor(parentsTotalStats/2);
+		
+		var statChanges:Int = cast(Math.abs(statDifference), Int);
+		
+		if(statDifference > 0){
+			var statsOverZero:Array<String> = newDeer.getStatsOverZero();
+			while(statChanges > 0 && statsOverZero.length > 0){
+				newDeer.modifyStatByName(statsOverZero[randomizer.int(0, statsOverZero.length)], -1);
+				
+				statsOverZero = newDeer.getStatsOverZero();
+				statChanges--;
+			}
+		}
+		else if (statDifference < 0)
+		{
+			for(i in 0...statChanges){
+				newDeer.modifyStatByName(statNames[randomizer.int(0, statNames.length)], 1);
+			}
 		}
 		
 		newDeer.maxHealth = newDeer.res * 2;
