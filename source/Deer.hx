@@ -1,4 +1,6 @@
 package;
+import statuses.DeerStatusEffect;
+import statuses.BabyStatusEffect;
 import haxe.display.Position.Location;
 import locations.Location;
 import flixel.math.FlxRandom;
@@ -6,14 +8,21 @@ import flixel.math.FlxRandom;
 class Deer{
     public var name:String;
     public var gender:String;
+    public var player:Bool;
 
     public var str:Int;
 	public var res:Int;
 	public var dex:Int;
 	public var int:Int;
 	public var lck:Int;
+	
+	public var baseStr:Int;
+	public var baseRes:Int;
+	public var baseDex:Int;
+	public var baseInt:Int;
+	public var baseLck:Int;
 
-    public var player:Bool;
+	public var statusEffects:Array<statuses.DeerStatusEffect>;
 
     public var currentAction:String;
 	public var actedThisRound:Bool;
@@ -29,12 +38,19 @@ class Deer{
     public function new(name:String, gender:String, str:Int, res:Int, dex:Int, int:Int, lck:Int, player:Bool = false) {
         this.name = name;
         this.gender = gender;
-        this.str = str;
-        this.res = res;
-        this.dex = dex;
-        this.int = int;
-        this.lck = lck;
         this.player = player;
+		
+        this.str = str;      
+        this.res = res;      
+        this.dex = dex;      
+        this.int = int;      
+        this.lck = lck;
+		
+		this.baseStr = str;
+		this.baseRes = res;
+		this.baseDex = dex;
+		this.baseInt = int;
+		this.baseLck = lck;
 		
 		this.maxHealth = res * 2;
 		this.health = maxHealth;
@@ -96,6 +112,52 @@ class Deer{
 		}
 	}
 	
+	public function becomeABaby(){
+		statusEffects.push(new BabyStatusEffect("Baby", 3, -1 * str, -1 * res, -1 * dex, -1 * int, -1 * lck));
+		baby = true;
+	}
+	
+	public function updateStatuses(){
+		var originalLength:Int = statusEffects.length;
+		for (i in 1...(originalLength + 1)) {
+			var currentStatus:DeerStatusEffect = statusEffects[originalLength - i];
+			
+			currentStatus.progressStatusEffect();
+			
+			if(currentStatus.duration <= 0){
+				statusEffects.remove(currentStatus);
+				if(currentStatus.statusName == "Baby"){
+					GameVariables.instance.addDeer();
+					GameVariables.instance.babyDeer.remove(Deer);
+				}
+			}
+		}
+		
+		updateStats();
+	}
+	
+	public function updateStats(){
+		str = baseStr;
+		res = baseRes;
+		dex = baseDex;
+		int = baseInt;
+		lck = baseLck;
+		
+		for(i in 0...statusEffects.length){
+			str += statusEffects[i].strChange;
+			res += statusEffects[i].resChange;
+			dex += statusEffects[i].dexChange;
+			int += statusEffects[i].intChange;
+			lck += statusEffects[i].lckChange;
+		}
+		
+		str = Math.max(0, str);
+		res = Math.max(0, res);
+		dex = Math.max(0, dex);
+		int = Math.max(0, int);
+		lck = Math.max(0, lck);
+	}
+	
 	//Returns a hint about the deer's stats
 	public function getGlimmer():String{
 		var result:String = "(insert glimmer here)";
@@ -119,17 +181,32 @@ class Deer{
 		return result;
 	}
 	
-	public function modifyStatByName(statName:String, amount:Int = 1){
+	public function modifyStatByName(statName:String, amount:Int = 1, ?baseStats:Bool = true){
 		if(statName == "Strength"){
 			str += amount;
+			if(baseStats){
+				baseStr += amount;
+			}
 		}else if(statName == "Resilience"){
 			res += amount;
+			if(baseStats){
+				baseRes += amount;
+			}
 		}else if(statName == "Dexterity"){
 			dex += amount;
+			if(baseStats){
+				baseDex += amount;
+			}
 		}else if(statName == "Intellect"){
 			int += amount;
+			if(baseStats){
+				baseInt += amount;
+			}
 		}else if(statName == "Fortune"){
 			lck += amount;
+			if(baseStats){
+				baseLck += amount;
+			}
 		}
 	}
 	
@@ -280,6 +357,8 @@ class Deer{
 		}
 		
 		newDeer.name = NameGenerator.getRandomName(newDeer.gender);
+		
+		newDeer.becomeABaby();
 		
 		return newDeer;
 	}

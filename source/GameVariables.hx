@@ -78,6 +78,22 @@ class GameVariables {
 		}
 	}
 	
+	public function advanceDay(){
+		//loop backwards through controlled deer
+		var originalLength:Int = controlledDeer.length;
+		for (i in 1...originalLength) {
+			var currentDeer:Deer = controlledDeer[originalLength - i];
+			currentDeer.updateStatuses();
+		}
+		
+		//loop backwards through baby deer
+		originalLength = babyDeer.length;
+		for (i in 1...originalLength) {
+			var currentDeer:Deer = babyDeer[originalLength - i];
+			currentDeer.updateStatuses();
+		}
+	}
+	
 	public function modifyFood(amount:Int){
 		currentFood += amount;
 		if(currentFood < 0){
@@ -92,6 +108,10 @@ class GameVariables {
 	public function addFoundDeer(deer:Deer){
 		deer.currentAction = "Waiting";
 		addDeer(deer);
+	}
+	
+	public function addBabyDeer(deer:Deer){
+		babyDeer.push(deer);
 	}
 	
 	public function prepareDeer(){

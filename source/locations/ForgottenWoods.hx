@@ -797,6 +797,7 @@ class ForgottenWoods extends Location
 		showChoice(messages, ["Walk inside", "Head back"], [insideCave, continueOnChoice], deer);
 	}
 
+	//Change to be 1 stone for each stat, need a deer with 4+ to make it glow
 	public function insideCave(choice:String, deer:Deer)
 	{
 		var messages:Array<String> = new Array<String>();

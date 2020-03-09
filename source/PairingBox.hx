@@ -93,6 +93,8 @@ class PairingBox extends FlxObject
     }
 	
 	public function confirm(){
+		var babyDeer:Deer = Deer.generateBabyDeer(femaleDeer[femalePage}, maleDeer[malePage]);
+		GameVariables.instance.addBabyDeer(babyDeer);
 		close();
 	}
 	

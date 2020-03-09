@@ -158,6 +158,8 @@ class Location{
 		dayStarted = false;
 		GameVariables.instance.checkVariables();
 		
+		GameVariables.instance.advanceDay();
+		
 		//Out of food
 		if (starved) {
 			starved = false;
