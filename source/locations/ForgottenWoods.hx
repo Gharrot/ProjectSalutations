@@ -684,7 +684,7 @@ class ForgottenWoods extends Location
 			message[1] += " and have a glimmer of ";
 			message[1] += foundDeer.getGlimmer();
 			message[1] += " in their eye.";
-			showChoice(message, ["Welcome back", "Scare off", "Continue on"], [helpStuckDeer, scareOffDeer, declineDeerFriend], deer);
+			showChoice(message, ["Welcome back", "Scare off", "Continue on"], [returningDeer, scareOffDeer, declineDeerFriend], deer);
 		}
 		else
 		{
@@ -988,12 +988,14 @@ class ForgottenWoods extends Location
 
 	override public function createItemDescriptions():Array<FlxText>
 	{
-		var texts:Array<FlxText> = new Array<FlxText>();
+		var texts:Array<FlxText> = super.createItemDescriptions();
 
 		var bunnyFurAmount:Int = GameVariables.instance.unfamiliarWoodsDenRabbitFur;
-		var bunnyFurText:FlxText = new FlxText(25, 140, 0, "Rabbit fur: " + Std.string(bunnyFurAmount), 18);
-		bunnyFurText.color = FlxColor.BLACK;
-		texts[texts.length] = bunnyFurText;
+		if(bunnyFurAmount > 0){
+			var bunnyFurText:FlxText = new FlxText(25, 140, 0, "Rabbit fur: " + Std.string(bunnyFurAmount), 18);
+			bunnyFurText.color = FlxColor.BLACK;
+			texts.push(bunnyFurText);
+		}
 
 		return texts;
 	}

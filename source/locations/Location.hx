@@ -22,6 +22,10 @@ class Location{
 	private var displayedTextList:FlxUIListModified;
     private var displayedOptions:Array<FlxButton>;
 	
+	private var optionIndex:Int;
+	private var scrollOptionsLeftButton:FlxButton;
+	private var scrollOptionsRightButton:FlxButton;
+	
 	public var activeDeer:Array<Deer>;
 	private var deerDisplayBoxes:Array<DeerDisplay>;
 	private var activeDeerScrollIndex:Int = 0;
@@ -191,7 +195,7 @@ class Location{
 	}
 	
 	public function eat() {
-		var amountToEat = GameVariables.instance.controlledDeer.length;
+		var amountToEat = GameVariables.instance.controlledDeer.length + GameVariables.instance.babyDeer.length;
 		if(GameVariables.instance.currentFood - amountToEat < 0){
 			starved = true;
 		}
@@ -243,6 +247,8 @@ class Location{
 		displayedTextList = new FlxUIListModified(40, 110, null, 400, 280);
 		FlxG.state.add(displayedTextList);
 		
+		optionIndex = 0;
+		
 		for(i in 0...text.length){
 			var happenedText:FlxUIText = new FlxUIText(40, 110, 400, text[i], 20);
 			happenedText.color = 0xFF000000;
@@ -250,17 +256,80 @@ class Location{
 		}
 
         displayedOptions = new Array();
-		
-		for(i in 0...optionNames.length){
-			displayedOptions[i] = spawnButton(optionNames[i]);
+		for (i in 0...optionNames.length){
+			displayedOptions.push(spawnButton(optionNames[i]));
 			if(i != (optionNames.length - 1) || (optionNames.length%2 == 0)){
 				displayedOptions[i].x += (-90) + ((i%2) * 180);
 			}
-			displayedOptions[i].y += 100 + (Math.floor(i/2) * 48);
+			
+			if(i%4 <= 1){
+				displayedOptions[i].y += 100;
+			}else{
+				displayedOptions[i].y += 148;
+			}
+			
 			displayedOptions[i].onUp.callback = choiceChosen.bind(optionNames[i], resultFunction[i], deer);
 			FlxG.state.add(displayedOptions[i]);
+			
+			if(i >= 4){
+				displayedOptions[i].visible = false;
+			}
 		}
+		
+		if(scrollOptionsLeftButton == null){
+			scrollOptionsLeftButton = new FlxButton(420, 180);
+			scrollOptionsLeftButton.loadGraphic("assets/images/LeftButton.png", true, 96, 60);
+			scrollOptionsLeftButton.screenCenter();
+			scrollOptionsLeftButton.x -= 160;
+			scrollOptionsLeftButton.y += 124;
+			scrollOptionsLeftButton.updateHitbox();
+			
+			scrollOptionsLeftButton.onUp.callback = changeButtonPage.bind(-4);
+			FlxG.state.add(scrollOptionsLeftButton);
+		}
+		
+		if(scrollOptionsRightButton == null){
+			scrollOptionsRightButton = new FlxButton(420, 470);
+			scrollOptionsRightButton.loadGraphic("assets/images/RightButton.png", true, 96, 60);
+			scrollOptionsRightButton.screenCenter();
+			scrollOptionsRightButton.x += 160;
+			scrollOptionsRightButton.y += 124;
+			scrollOptionsRightButton.updateHitbox();
+			
+			scrollOptionsRightButton.onUp.callback = changeButtonPage.bind(4);
+			FlxG.state.add(scrollOptionsRightButton);
+		}
+		
+		updateOptionScrollButtons();
     }
+	
+	public function changeButtonPage(amount:Int){
+		for (i in optionIndex...cast(Math.min(optionIndex + 4, displayedOptions.length), Int)){
+			displayedOptions[i].visible = false;
+		}
+		
+		optionIndex += amount;
+		
+		for (i in optionIndex...cast(Math.min(optionIndex + 4, displayedOptions.length), Int)){
+			displayedOptions[i].visible = true;
+		}
+		
+		updateOptionScrollButtons();
+	}
+	
+	private function updateOptionScrollButtons(){
+		if(optionIndex > 0){
+			scrollOptionsLeftButton.visible = true;
+		}else{
+			scrollOptionsLeftButton.visible = false;
+		}
+		
+		if(optionIndex + 4 < displayedOptions.length){
+			scrollOptionsRightButton.visible = true;
+		}else{
+			scrollOptionsRightButton.visible = false;
+		}
+	}
 	
 	public function choiceChosen(choice:String, resultFunction:(String, Deer)->Void, deer:Deer){
         for(i in 0...displayedOptions.length){
@@ -285,6 +354,9 @@ class Location{
 		displayedOptions[0].y += 100;
 		displayedOptions[0].onUp.callback = continueOn.bind();
 		FlxG.state.add(displayedOptions[0]);
+		
+		optionIndex = 0;
+		updateOptionScrollButtons();
 	}
 	
 	public function continueOnChoice(choice:String, deer:Deer){
@@ -381,6 +453,24 @@ class Location{
 				deerDisplayBoxes[i].destroyChildren();
 				FlxG.state.remove(deerDisplayBoxes[i]);
 			}
+			deerDisplayBoxes = null;
+		}
+		
+		if(displayedOptions != null){
+			for (i in 0...displayedOptions.length){
+				FlxG.state.remove(displayedOptions[i]);
+			}
+			displayedOptions = null;
+		}
+		
+		if(scrollOptionsLeftButton != null){
+			FlxG.state.remove(scrollOptionsLeftButton);
+			scrollOptionsLeftButton = null;
+		}
+		
+		if(scrollOptionsRightButton != null){
+			FlxG.state.remove(scrollOptionsRightButton);
+			scrollOptionsRightButton = null;
 		}
 		
 		deerDisplayBoxes = null;
@@ -388,6 +478,15 @@ class Location{
 	
 	public function createItemDescriptions():Array<FlxText>{
 		var texts:Array<FlxText> = new Array<FlxText>();
+		
+		var deerInDenText:FlxText = new FlxText(25, 140, 0, "Deer: " + GameVariables.instance.controlledDeer.length + "/" + GameVariables.instance.maxPackSize, 18);
+		deerInDenText.color = FlxColor.BLACK;
+		texts.push(deerInDenText);
+		
+		var kidsInDenText:FlxText = new FlxText(25, 140, 0, "Young Deer: " + GameVariables.instance.babyDeer.length + "/" + GameVariables.instance.maxBabyPackSize, 18);
+		kidsInDenText.color = FlxColor.BLACK;
+		texts.push(kidsInDenText);
+		
 		return texts;
 	}
 }

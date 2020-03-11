@@ -8,7 +8,7 @@ class GameVariables {
 	public var save:FlxSave;
 	
     public var controlledDeer:Array<Deer>;
-	public var maxPackSize:Int;
+	public var maxPackSize:Int
 	
     public var babyDeer:Array<Deer>;
 	public var maxBabyPackSize:Int;
@@ -81,14 +81,14 @@ class GameVariables {
 	public function advanceDay(){
 		//loop backwards through controlled deer
 		var originalLength:Int = controlledDeer.length;
-		for (i in 1...originalLength) {
+		for (i in 1...(originalLength+1)) {
 			var currentDeer:Deer = controlledDeer[originalLength - i];
 			currentDeer.updateStatuses();
 		}
 		
 		//loop backwards through baby deer
 		originalLength = babyDeer.length;
-		for (i in 1...originalLength) {
+		for (i in 1...(originalLength+1)) {
 			var currentDeer:Deer = babyDeer[originalLength - i];
 			currentDeer.updateStatuses();
 		}
@@ -98,6 +98,12 @@ class GameVariables {
 		currentFood += amount;
 		if(currentFood < 0){
 			currentFood = 0;
+		}
+		
+		var realMaxFood:Int = cast(Math.ceil(maxFood * 1.5), Int);
+		
+		if(currentFood > realMaxFood){
+			currentFood = realMaxFood;
 		}
 	}
 	
@@ -123,10 +129,6 @@ class GameVariables {
 	}
 	
 	public function loseAllDeer(){
-		if(controlledDeer.length <= 1){
-			return;
-		}
-		
 		//loop backwards through controlled deer
 		var originalLength:Int = controlledDeer.length;
 		for (i in 1...originalLength) {
@@ -143,6 +145,7 @@ class GameVariables {
 		}else{
 			unfamiliarWoodsLostDeer[unfamiliarWoodsLostDeer.length] = deer;
 		}
+		deer.removeAllStatusEffects();
 		controlledDeer.remove(deer);
 	}
 	

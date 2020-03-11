@@ -12,8 +12,10 @@ class DeerStatusEffect
 	
 	public var duration:Int;
 	
-	public function new(?name = "Buff", ?duration:Int = 1, ?strChange = 0, ?resChange = 0, ?dexChange = 0, ?intChange = 0, ?lckChange = 0) 
+	public function new(?statusName = "Buff", ?duration:Int = 1, ?strChange = 0, ?resChange = 0, ?dexChange = 0, ?intChange = 0, ?lckChange = 0) 
 	{
+		this.statusName = statusName;
+		
 		this.strChange  = strChange;
 		this.resChange  = resChange;
 		this.dexChange  = dexChange;

@@ -53,7 +53,12 @@ class Deer{
 		this.baseLck = lck;
 		
 		this.maxHealth = res * 2;
+		if(maxHealth == 0){
+			maxHealth = 1;
+		}
 		this.health = maxHealth;
+		
+		statusEffects = new Array<DeerStatusEffect>();
 
         currentAction = "Exploring";
 		
@@ -113,8 +118,23 @@ class Deer{
 	}
 	
 	public function becomeABaby(){
-		statusEffects.push(new BabyStatusEffect("Baby", 3, -1 * str, -1 * res, -1 * dex, -1 * int, -1 * lck));
+		addStatusEffect(new BabyStatusEffect("Baby", 3, -1 * str, -1 * res, -1 * dex, -1 * int, -1 * lck));
 		baby = true;
+	}
+	
+	public function addStatusEffect(statusEffect:DeerStatusEffect){
+		statusEffects.push(statusEffect);
+		updateStatuses();
+	}
+	
+	public function removeAllStatusEffects(){
+		var originalLength:Int = statusEffects.length;
+		for (i in 1...(originalLength + 1)) {
+			var currentStatus:DeerStatusEffect = statusEffects[originalLength - i];
+			statusEffects.remove(currentStatus);
+		}
+		
+		updateStats();
 	}
 	
 	public function updateStatuses(){
@@ -127,8 +147,8 @@ class Deer{
 			if(currentStatus.duration <= 0){
 				statusEffects.remove(currentStatus);
 				if(currentStatus.statusName == "Baby"){
-					GameVariables.instance.addDeer();
-					GameVariables.instance.babyDeer.remove(Deer);
+					GameVariables.instance.addDeer(this);
+					GameVariables.instance.babyDeer.remove(this);
 				}
 			}
 		}
@@ -151,11 +171,11 @@ class Deer{
 			lck += statusEffects[i].lckChange;
 		}
 		
-		str = Math.max(0, str);
-		res = Math.max(0, res);
-		dex = Math.max(0, dex);
-		int = Math.max(0, int);
-		lck = Math.max(0, lck);
+		str = cast(Math.max(0, str), Int);
+		res = cast(Math.max(0, res), Int);
+		dex = cast(Math.max(0, dex), Int);
+		int = cast(Math.max(0, int), Int);
+		lck = cast(Math.max(0, lck), Int);
 	}
 	
 	//Returns a hint about the deer's stats
@@ -263,7 +283,7 @@ class Deer{
 		randomizer.shuffle(statNames);
 		
 		if(distributions == null){
-			distributions = [[30, 53, 73, 88, 100]];
+			distributions = [[26, 50, 70, 86, 100]];
 		}
 		
 		var chosenDistribution:Array<Int> = distributions[randomizer.int(0, distributions.length - 1)];
@@ -327,7 +347,12 @@ class Deer{
 		
 		//Balance out the stats if they have more or less than their parents
 		var parentsTotalStats = motherDeer.getStatTotal() + fatherDeer.getStatTotal();
-		var statDifference:Int = newDeer.getStatTotal() - Math.floor(parentsTotalStats/2);
+		var statDifference:Int = newDeer.getStatTotal() - Math.floor(parentsTotalStats / 2);
+		
+		trace(motherDeer.getStatTotal());
+		trace(fatherDeer.getStatTotal());
+		trace(newDeer.getStatTotal());
+		trace(statDifference);
 		
 		var statChanges:Int = cast(Math.abs(statDifference), Int);
 		

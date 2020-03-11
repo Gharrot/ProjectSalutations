@@ -15,6 +15,7 @@ class MainGame extends FlxState
 
     var currentScreen:String;
     
+	var setOutDisabledText:FlxText;
     var continueButton:FlxButton;
 
 	var deerTilePage:Int;
@@ -210,6 +211,7 @@ class MainGame extends FlxState
 		itemDescriptions = GameVariables.instance.currentLocation.createItemDescriptions();
 		for(i in 0...itemDescriptions.length){
 			add(itemDescriptions[i]);
+			itemDescriptions[i].y = 140 + (30 * i);
 		}
 		
 		//den buttons
@@ -241,7 +243,7 @@ class MainGame extends FlxState
         improveButton.labelAlphas[2] = 1.0;
         add(improveButton);
 		
-		breedButton = new FlxButton(290, 292, "Pairing", herdClicked);
+		breedButton = new FlxButton(290, 292, "Breeding", herdClicked);
         breedButton.loadGraphic("assets/images/DenButton.png", true, 160, 56);
         breedButton.updateHitbox();
         breedButton.label.size = 22;
@@ -303,10 +305,10 @@ class MainGame extends FlxState
 				var babyDeerTile:BabyDeerTile = new BabyDeerTile(GameVariables.instance.babyDeer[i]);
 				add(babyDeerTile);
 				babyDeerTile.loadGraphic("assets/images/MaleDeerTileSprite.png", true, 190, 134);
-				babyDeerTile.moveDisplay(10 + ((i%2)*205), 120 + (Std.int(i/2)*144));
+				babyDeerTile.moveDisplay(30 + ((i%2)*225), 398);
 				babyDeerTiles.push(babyDeerTile);
 			}else{
-				var locationSprite:FlxSprite = new FlxSprite(30 + ((i%2)*225), 408);
+				var locationSprite:FlxSprite = new FlxSprite(30 + ((i%2)*225), 398);
 				add(locationSprite);
 				locationSprite.loadGraphic(GameVariables.instance.currentLocation.backgroundImageFile, true, 190, 134);
 				babyLocationSprites.push(locationSprite);
@@ -501,7 +503,14 @@ class MainGame extends FlxState
 	
 	public function updateTopBar(){
         dateText.text = "Fall Wk 1";
-        foodText.text = "Food: " + Std.string(GameVariables.instance.currentFood) + "/" + Std.string(GameVariables.instance.maxFood);
+		
+        foodText.text = "Food: ";
+		if(GameVariables.instance.currentFood > GameVariables.instance.maxFood){
+			foodText.text += "(" + Std.string(GameVariables.instance.currentFood) + ")";
+		}else{
+			foodText.text += Std.string(GameVariables.instance.currentFood);
+		}
+		foodText.text += "/" + Std.string(GameVariables.instance.maxFood);
 	}
 	
 	function deerReplacement(){

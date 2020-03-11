@@ -19,6 +19,7 @@ class PairingBox extends FlxObject
 	
     var questionText:FlxText;
 
+	var disabledText:FlxText;
     var confirmButton:FlxButton;
     var xButton:FlxButton;
 	
@@ -86,6 +87,10 @@ class PairingBox extends FlxObject
 			FlxG.state.remove(femaleDeerEmptyText);
 		}
 		
+		if(disabledText != null){
+			FlxG.state.add(disabledText);
+		}
+		
         FlxG.state.remove(questionText);
 
         GameVariables.instance.mainGameMenu.returnToMainScreen();
@@ -93,7 +98,7 @@ class PairingBox extends FlxObject
     }
 	
 	public function confirm(){
-		var babyDeer:Deer = Deer.generateBabyDeer(femaleDeer[femalePage}, maleDeer[malePage]);
+		var babyDeer:Deer = Deer.generateBabyDeer(femaleDeer[femalePage], maleDeer[malePage]);
 		GameVariables.instance.addBabyDeer(babyDeer);
 		close();
 	}
@@ -148,8 +153,10 @@ class PairingBox extends FlxObject
         xButton.onUp.callback = close.bind();
         FlxG.state.add(xButton);
 		
+		var confirmButtonDisabled:Bool = (maleDeer.length == 0 || femaleDeer.length == 0 || GameVariables.instance.babyDeer.length >= GameVariables.instance.maxBabyPackSize);
+		
 		confirmButton = new FlxButton(0, 460, "Breed");
-		if(maleDeer.length == 0 || femaleDeer.length == 0){
+		if(confirmButtonDisabled){
 			confirmButton.loadGraphic("assets/images/DenButtonStatic.png", false);
 			confirmButton.labelAlphas[1] = 0.6;
 		}else{
@@ -157,7 +164,7 @@ class PairingBox extends FlxObject
 			confirmButton.onUp.callback = confirm.bind();
 		}
 		confirmButton.scale.set(0.9, 0.9);
-		if(maleDeer.length == 0 || femaleDeer.length == 0){
+		if(confirmButtonDisabled){
 			ButtonUtils.fixButtonText(confirmButton, 22, 7, -7, 0.6);
 			confirmButton.alpha = 0.6;
 		}else{
@@ -204,6 +211,15 @@ class PairingBox extends FlxObject
 		questionText.color = 0xFF000000;
 		questionText.alignment = "center";
         FlxG.state.add(questionText);
+		
+		if(GameVariables.instance.babyDeer.length >= GameVariables.instance.maxBabyPackSize){
+			disabledText = new FlxText(0, 380, 360, "You can only care for " + GameVariables.instance.maxBabyPackSize + " young deer at a time", 30);
+			disabledText.screenCenter();
+			disabledText.y = 380;
+			disabledText.color = 0xFF000000;
+			disabledText.alignment = "center";
+			FlxG.state.add(disabledText);
+		}
     }
 	
 	function updateArrowButtons(){

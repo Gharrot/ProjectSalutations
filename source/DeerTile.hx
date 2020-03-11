@@ -144,7 +144,7 @@ class DeerTile extends FlxButton{
 		bgSprite.y = y + 10;
 		
 		deerSprite.x = x + 79;
-		deerSprite.y = y + 76;
+		deerSprite.y = y + 74;
     }
 	
 	public function updateDeer(?newDeer:Deer) {
