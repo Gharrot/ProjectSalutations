@@ -14,8 +14,16 @@ class ButtonUtils
 		
 		button.label.alpha = alphas;
 		button.labelAlphas[0] = alphas;
+		button.labelAlphas[1] = alphas;
 		button.labelAlphas[2] = alphas;
         button.updateHitbox();
+	}
+	
+	static public function setAlphas(button:FlxButton, alphas:Float = 1) {
+		button.label.alpha = alphas;
+		button.labelAlphas[0] = alphas;
+		button.labelAlphas[1] = alphas;
+		button.labelAlphas[2] = alphas;
 	}
 	
 }

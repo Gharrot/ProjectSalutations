@@ -279,9 +279,11 @@ class Location{
 		if(scrollOptionsLeftButton == null){
 			scrollOptionsLeftButton = new FlxButton(420, 180);
 			scrollOptionsLeftButton.loadGraphic("assets/images/LeftButton.png", true, 96, 60);
+			scrollOptionsLeftButton.scale.set(0.6, 0.6);
+			
 			scrollOptionsLeftButton.screenCenter();
-			scrollOptionsLeftButton.x -= 160;
-			scrollOptionsLeftButton.y += 124;
+			scrollOptionsLeftButton.x -= 187;
+			scrollOptionsLeftButton.y += 136;
 			scrollOptionsLeftButton.updateHitbox();
 			
 			scrollOptionsLeftButton.onUp.callback = changeButtonPage.bind(-4);
@@ -291,9 +293,11 @@ class Location{
 		if(scrollOptionsRightButton == null){
 			scrollOptionsRightButton = new FlxButton(420, 470);
 			scrollOptionsRightButton.loadGraphic("assets/images/RightButton.png", true, 96, 60);
+			scrollOptionsRightButton.scale.set(0.6, 0.6);
+			
 			scrollOptionsRightButton.screenCenter();
-			scrollOptionsRightButton.x += 160;
-			scrollOptionsRightButton.y += 124;
+			scrollOptionsRightButton.x += 223;
+			scrollOptionsRightButton.y += 136;
 			scrollOptionsRightButton.updateHitbox();
 			
 			scrollOptionsRightButton.onUp.callback = changeButtonPage.bind(4);
@@ -356,7 +360,10 @@ class Location{
 		FlxG.state.add(displayedOptions[0]);
 		
 		optionIndex = 0;
-		updateOptionScrollButtons();
+		
+		if(scrollOptionsLeftButton != null){
+			updateOptionScrollButtons();
+		}
 	}
 	
 	public function continueOnChoice(choice:String, deer:Deer){

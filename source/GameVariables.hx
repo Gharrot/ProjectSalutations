@@ -8,7 +8,7 @@ class GameVariables {
 	public var save:FlxSave;
 	
     public var controlledDeer:Array<Deer>;
-	public var maxPackSize:Int
+	public var maxPackSize:Int;
 	
     public var babyDeer:Array<Deer>;
 	public var maxBabyPackSize:Int;
@@ -29,6 +29,9 @@ class GameVariables {
     public var unfamiliarWoodsDeepWoodsFound:Bool;
     public var unfamiliarWoodsDeepWoodsThicketNavigated:Bool;
     public var unfamiliarWoodsDeepWoodsThicketCleared:Bool;
+    public var unfamiliarWoodsIntellectSpringFound:Bool;
+    public var unfamiliarWoodsInspiringViewFound:Bool;
+    public var unfamiliarWoodsSquirrelsOfGoodFortuneFound:Bool;
 	
 	public var abandonedFieldsMaxFood:Int;
     public var abandonedFieldsLostDeer:Array<Deer>;
@@ -221,11 +224,14 @@ class GameVariables {
 		unfamiliarWoodsMaxFood = 10;
 		unfamiliarWoodsDenRabbitFur = 0;
 		unfamiliarWoodsLostDeer = new Array<Deer>();
-		unfamiliarWoodsCaveFound = false;
+		unfamiliarWoodsCaveFound = true;
 		unfamiliarWoodsMedallionTaken = false;
-		unfamiliarWoodsDeepWoodsFound = false;
+		unfamiliarWoodsDeepWoodsFound = true;
 		unfamiliarWoodsDeepWoodsThicketNavigated = false;
 		unfamiliarWoodsDeepWoodsThicketCleared = false;
+		unfamiliarWoodsIntellectSpringFound = true;
+		unfamiliarWoodsInspiringViewFound = true;
+		unfamiliarWoodsSquirrelsOfGoodFortuneFound = true;
 		
 		abandonedFieldsMaxFood = 12;
 	}

@@ -3,6 +3,7 @@ package locations;
 import flixel.math.FlxRandom;
 import flixel.text.FlxText;
 import flixel.util.FlxColor;
+import statuses.DeerStatusEffect;
 
 class ForgottenWoods extends Location
 {
@@ -234,6 +235,24 @@ class ForgottenWoods extends Location
 			exploreOptionNames.push("The Deep Woods");
 			exploreOptionFunctions.push(deepWoods);
 		}
+		
+		if (GameVariables.instance.unfamiliarWoodsIntellectSpringFound)
+		{
+			exploreOptionNames.push("The Spring");
+			exploreOptionFunctions.push(intellectSpring);
+		}
+		
+		if (GameVariables.instance.unfamiliarWoodsInspiringViewFound)
+		{
+			exploreOptionNames.push("The Hill");
+			exploreOptionFunctions.push(inspiringView);
+		}
+		
+		if (GameVariables.instance.unfamiliarWoodsSquirrelsOfGoodFortuneFound)
+		{
+			exploreOptionNames.push("The Squirrels");
+			exploreOptionFunctions.push(squirrelVisiting);
+		}
 
 		exploreOptionNames.push("Wander Elsewhere");
 		exploreOptionFunctions.push(wander);
@@ -261,6 +280,18 @@ class ForgottenWoods extends Location
 		{
 			possibilities.push("The Deep Woods");
 		}
+		if (!GameVariables.instance.unfamiliarWoodsIntellectSpringFound)
+		{
+			possibilities.push("The Spring");
+		}
+		if (!GameVariables.instance.unfamiliarWoodsInspiringViewFound)
+		{
+			possibilities.push("The Hill");
+		}
+		if (!GameVariables.instance.unfamiliarWoodsSquirrelsOfGoodFortuneFound)
+		{
+			possibilities.push("The Squirrels");
+		}
 		possibilities.push("Deer Friend");
 
 		var resultingEvent:String = possibilities[randomNums.int(0, possibilities.length - 1)];
@@ -272,10 +303,92 @@ class ForgottenWoods extends Location
 		{
 			deepWoods("Deep woods entrance", deer);
 		}
+		else if (resultingEvent == "The Spring")
+		{
+			intellectSpring("spring", deer);
+		}
+		else if (resultingEvent == "The Hill")
+		{
+			inspiringView("hill", deer);
+		}
+		else if (resultingEvent == "The Squirrels")
+		{
+			squirrelVisiting("squrrels", deer);
+		}
 		else if (resultingEvent == "Deer Friend")
 		{
 			findDeer("Find deer", deer);
 		}
+	}
+	
+	public function intellectSpring(choice:String, deer:Deer){
+		GameVariables.instance.unfamiliarWoodsIntellectSpringFound = true;
+		
+		var message:Array<String> = new Array<String>();
+		message.push("Walking through the woods, you come a small pond.");
+		message.push("The pond seems to be fed by a natural spring flowing from some rocks nearby.");
+		message.push("You sit by the spring for a while, and feel a sense of calm flow over you.");
+		message.push("(+1 Intellect for 2 days).");
+		
+		deer.addStatusEffect(new DeerStatusEffect("Calmed", 3, 0, 0, 0, 1, 0));
+		
+		showResult(message);
+	}
+	
+	public function inspiringView(choice:String, deer:Deer){
+		GameVariables.instance.unfamiliarWoodsInspiringViewFound = true;
+		
+		var message:Array<String> = new Array<String>();
+		message.push("Walking through the woods, you come upon a dirt trail heading up a large hill. You decide you have to climb it.");
+		message.push("The trail is longer than you expected, with many sections overgrown.");
+		message.push("Still, you push on and reach the top.");
+		message.push("You sit on the top of the hill admiring the view of the forest, happy that your efforts have paid off.");
+		message.push("(+1 Resilience for 2 days).");
+		
+		deer.addStatusEffect(new DeerStatusEffect("Inspired", 3, 0, 1, 0, 0, 0));
+		
+		showResult(message);
+	}
+	
+	public function squirrelVisiting(choice:String, deer:Deer){
+		GameVariables.instance.unfamiliarWoodsSquirrelsOfGoodFortuneFound = true;
+		
+		var message:Array<String> = new Array<String>();
+		message.push("Walking through the woods, you start to get the sense that something is watching you.");
+		message.push("Looking up you see that many things are watching you.");
+		message.push("A pack of squirrels sit in the trees above you, staring intently.");
+		
+		showChoice(message, ["Offer some food (1)", "Continue On"], [feedingTheSquirrels, squirrelDenial], deer);
+	}
+	
+	public function feedingTheSquirrels(choice:String, deer:Deer){
+		var message:Array<String> = new Array<String>();
+		
+		if(GameVariables.instance.currentFood >= 1){
+			GameVariables.instance.modifyFood(-1);
+			message.push("You place some of the food you brought for the day on the ground in front of you.");
+			message.push("A few squirrels run down the tree to collect the food.");
+			message.push("They look up at you and chitter happily before scampering back up the tree to divide your gift.");
+			message.push("(+2 Luck for 2 days).");
+			
+			deer.addStatusEffect(new DeerStatusEffect("Luck of the Squirrels", 3, 0, 0, 0, 0, 1));
+		}
+		else
+		{
+			message.push("You move to give the squirrels some of your food, but realize that you don't have any.");
+			message.push("You keep walking.");
+		}
+		
+		showResult(message);
+	}
+	
+	public function squirrelDenial(choice:String, deer:Deer){
+		var message:Array<String> = new Array<String>();
+		message.push("You ignore the squirrels and keep walking.");
+		
+		deer.addStatusEffect(new DeerStatusEffect("Fury of the Squirrels", 3, 0, 0, 0, 0, -1));
+		
+		showResult(message);
 	}
 
 	public function deepWoods(choice:String, deer:Deer)
@@ -803,26 +916,51 @@ class ForgottenWoods extends Location
 		var messages:Array<String> = new Array<String>();
 		messages.push("You head inside.");
 		messages.push("Following the cave as it curves rightwards, you soon come to a dead-end.");
-		messages.push("You stand in front of a smooth stone wall, featureless except for 3 clear stones embedded within it.");
-		if (deerInCave.length == 0)
+		messages.push("You stand in front of a smooth stone wall, featureless except for an arc of 5 clear stones embedded within it.");
+		
+		deerInCave.push(deer);
+		
+		var statNames = ["Strength", "Resilience", "Dexterity", "Intellect", "Fortune"];
+		var stonesGlowing:Int = 0;
+		for (i in 0...deerInCave.length){
+			var originalStatNameLength = statNames.length;
+			for(j in 1...statNames.length+1){
+				if (deerInCave[i].getStatByName(statNames[originalStatNameLength - j]) >= 4){
+					statNames.remove(statNames[originalStatNameLength - j]);
+					stonesGlowing++;
+				}
+			}
+		}
+		
+		if (stonesGlowing == 1)
 		{
 			messages.push("One of the stones is glowing.");
 		}
-		else if (deerInCave.length == 1)
+		else if (stonesGlowing == 2)
 		{
-			messages.push("Two of the stones are glowing. " + deerInCave[0].name + " stands to your left.");
+			messages.push("Two of the stones are glowing.");
 		}
-		else if (deerInCave.length == 2)
+		else if (stonesGlowing == 3)
 		{
-			messages.push("As you walk forward to stand next to " + deerInCave[0].name + " and " + deerInCave[1].name + ", all three of the glowing stones begin to slowly pulse.");
+			messages.push("Three of the stones are glowing.");
+		}
+		else if (stonesGlowing == 4)
+		{
+			messages.push("Four of the stones are glowing.");
+		}
+		else if (stonesGlowing == 5)
+		{
+			if(deerInCave.length > 1){
+				messages.push("As you walk forward and stand next to the other deer waiting around, all five of the glowing stones begin to pulse slowly.");
+			}else{
+				messages.push("As you walk closer to to the wall, all five of the glowing stones begin to pulse slowly.");
+			}
 			messages.push("You hear a grinding sound as the stone wall lowers into the ground.");
 		}
 
-		deerInCave.push(deer);
-
-		if (deerInCave.length == 3)
+		if (stonesGlowing == 5)
 		{
-			showChoice(messages, ["Step Forward"], [continueOnChoice], deer);
+			showChoice(messages, ["Step Forward"], [enterDeepCave], deer);
 		}
 		else
 		{
@@ -833,12 +971,13 @@ class ForgottenWoods extends Location
 	public function enterDeepCave(choice:String, deer:Deer)
 	{
 		var messages:Array<String> = new Array<String>();
-		messages.push("The three of you step walk through the new opening and look around.");
+		
+		messages.push("You walk through the new opening and look around.");
 		messages.push("You are in a small room, lit dimly by a few glowing rods embedded in the room's ceiling.");
 
 		if (!GameVariables.instance.unfamiliarWoodsMedallionTaken)
 		{
-			messages.push("The room is empty, bar a stone pedestal near the back. A brown medallion sits on top.");
+			messages.push("The room is empty, bar a stone pedestal near the back. A bronze medallion sits on top.");
 			showChoice(messages, ["Take Medallion"], [takeMedallion], deer);
 		}
 		else

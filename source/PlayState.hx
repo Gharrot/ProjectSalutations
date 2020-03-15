@@ -21,7 +21,7 @@ class PlayState extends FlxState
 	override public function create():Void
 	{
 		super.create();
-		this.bgColor = 0xFFCBFFFA;
+		this.bgColor = 0xFFD8F6F3;
 		
 		var text = new flixel.text.FlxText(0, 0, 0, "Salutations", 64);
 		text.color = 0xFF000000;

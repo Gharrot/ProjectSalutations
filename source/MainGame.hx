@@ -43,7 +43,7 @@ class MainGame extends FlxState
 	override public function create()
 	{
 		super.create();
-		this.bgColor = 0xFFCBFFFA;
+		this.bgColor = 0xFFD8F6F3;
 
         GameVariables.instance.mainGameMenu = this;
 
@@ -52,6 +52,7 @@ class MainGame extends FlxState
 		setupMap();
 		setupDen();
         setupOtherButtons();
+		updateContinueButton();
 
         herdButton.loadGraphic("assets/images/HerdButtonSelected.png", false);
         currentScreen = "Setup";
@@ -74,6 +75,8 @@ class MainGame extends FlxState
         herdButton.visible = true;
         mapButton.visible = true;
         denButton.visible = true;
+		
+		updateContinueButton();
         continueButton.visible = true;
 		
         if (currentScreen == "Herd") {
@@ -98,6 +101,53 @@ class MainGame extends FlxState
         denButton.visible = false;
         continueButton.visible = false;
     }
+	
+	public function updateContinueButton(){
+		if(continueButton == null){
+			continueButton = new FlxButton(118, 568, "Set Out");
+			ButtonUtils.fixButtonText(continueButton, 30, 18, -2);
+			add(continueButton);
+		}
+		
+		var ableToContinue:Bool = true;
+		
+		if(GameVariables.instance.controlledDeer.length > GameVariables.instance.maxPackSize){
+			ableToContinue = false;
+		}
+		
+		if(ableToContinue){
+			continueButton.loadGraphic("assets/images/PassTimeButton.png", true, 244, 72);
+			continueButton.alpha = 1;
+			ButtonUtils.setAlphas(continueButton);
+			
+			if(setOutDisabledText != null){
+				setOutDisabledText.visible = false;
+			}
+			
+			continueButton.onUp.callback = continueClicked;
+		}
+		else
+		{
+			if(setOutDisabledText == null){
+				setOutDisabledText = new FlxText(0, 525, 360, "You can only control " + GameVariables.instance.maxPackSize + " deer at a time. \nDismiss or banish some to continue.", 13);
+				setOutDisabledText.screenCenter();
+				setOutDisabledText.y = 530;
+				setOutDisabledText.color = 0xFF000000;
+				setOutDisabledText.alignment = "center";
+				FlxG.state.add(setOutDisabledText);
+			}
+			else
+			{
+				setOutDisabledText.visible = true;
+			}
+			
+			continueButton.loadGraphic("assets/images/PassTimeButtonStatic.png", false);
+			continueButton.alpha = 0.6;
+			ButtonUtils.setAlphas(continueButton, 0.6);
+			
+			continueButton.onUp.callback = null;
+		}
+	}
 
     function deerTileClicked(deer:Deer){
         add(new DeerActionScreen(deer));
@@ -305,10 +355,10 @@ class MainGame extends FlxState
 				var babyDeerTile:BabyDeerTile = new BabyDeerTile(GameVariables.instance.babyDeer[i]);
 				add(babyDeerTile);
 				babyDeerTile.loadGraphic("assets/images/MaleDeerTileSprite.png", true, 190, 134);
-				babyDeerTile.moveDisplay(30 + ((i%2)*225), 398);
+				babyDeerTile.moveDisplay(30 + ((i%2)*225), 390);
 				babyDeerTiles.push(babyDeerTile);
 			}else{
-				var locationSprite:FlxSprite = new FlxSprite(30 + ((i%2)*225), 398);
+				var locationSprite:FlxSprite = new FlxSprite(30 + ((i%2)*225), 390);
 				add(locationSprite);
 				locationSprite.loadGraphic(GameVariables.instance.currentLocation.backgroundImageFile, true, 190, 134);
 				babyLocationSprites.push(locationSprite);
@@ -323,19 +373,6 @@ class MainGame extends FlxState
     }
 
     function setupOtherButtons(){
-        continueButton = new FlxButton(118, 568, "Set Out", continueClicked);
-        continueButton.loadGraphic("assets/images/PassTimeButton.png", true, 244, 72);
-        continueButton.updateHitbox();
-        continueButton.label.size = 30;
-        continueButton.label.color = 0xFF000000;
-        for(offsets in continueButton.labelOffsets){
-            offsets.y += 16;
-        }
-        continueButton.label.alpha = 1.0;
-        continueButton.labelAlphas[0] = 1.0;
-        continueButton.labelAlphas[2] = 1.0;
-        add(continueButton);
-
         herdButton = new FlxButton(0, 25, "Herd", herdClicked);
         herdButton.loadGraphic("assets/images/HerdButton.png", true, 160, 69);
         herdButton.updateHitbox();
@@ -495,7 +532,7 @@ class MainGame extends FlxState
 		dateText.alignment = "left";
 		add(dateText);
 
-        foodText = new FlxText(345, 0, 130, "Food: " + Std.string(GameVariables.instance.currentFood) + "/" + Std.string(GameVariables.instance.maxFood), 18);
+        foodText = new FlxText(315, 0, 160, "Food: " + Std.string(GameVariables.instance.currentFood) + "/" + Std.string(GameVariables.instance.maxFood), 18);
 		foodText.color = 0xFF000000;
 		foodText.alignment = "right";
 		add(foodText);

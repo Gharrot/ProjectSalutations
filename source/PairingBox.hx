@@ -88,7 +88,7 @@ class PairingBox extends FlxObject
 		}
 		
 		if(disabledText != null){
-			FlxG.state.add(disabledText);
+			FlxG.state.remove(disabledText);
 		}
 		
         FlxG.state.remove(questionText);
@@ -213,9 +213,9 @@ class PairingBox extends FlxObject
         FlxG.state.add(questionText);
 		
 		if(GameVariables.instance.babyDeer.length >= GameVariables.instance.maxBabyPackSize){
-			disabledText = new FlxText(0, 380, 360, "You can only care for " + GameVariables.instance.maxBabyPackSize + " young deer at a time", 30);
+			disabledText = new FlxText(0, 425, 360, "You can only care for \n" + GameVariables.instance.maxBabyPackSize + " young deer at a time", 13);
 			disabledText.screenCenter();
-			disabledText.y = 380;
+			disabledText.y = 420;
 			disabledText.color = 0xFF000000;
 			disabledText.alignment = "center";
 			FlxG.state.add(disabledText);

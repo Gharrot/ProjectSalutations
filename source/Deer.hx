@@ -124,7 +124,7 @@ class Deer{
 	
 	public function addStatusEffect(statusEffect:DeerStatusEffect){
 		statusEffects.push(statusEffect);
-		updateStatuses();
+		updateStats();
 	}
 	
 	public function removeAllStatusEffects(){
@@ -283,7 +283,7 @@ class Deer{
 		randomizer.shuffle(statNames);
 		
 		if(distributions == null){
-			distributions = [[26, 50, 70, 86, 100]];
+			distributions = [[24, 47, 67, 86, 100]];
 		}
 		
 		var chosenDistribution:Array<Int> = distributions[randomizer.int(0, distributions.length - 1)];
