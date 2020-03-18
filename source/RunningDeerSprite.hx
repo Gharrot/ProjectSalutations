@@ -24,7 +24,7 @@ class RunningDeerSprite extends FlxSprite
 		actionTime = randomNums.float(2, 5);
 		running = true;
 		
-		runningSpeed = randomNums.float(40, 60);
+		runningSpeed = randomNums.float(60, 80);
 		
 		loadGraphic("assets/images/MaleDeer.png", true, 32, 32);
 		animation.add("running", [10, 11, 12, 13, 14], 8, true);

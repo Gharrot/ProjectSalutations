@@ -122,7 +122,7 @@ class DeerDisplay extends FlxObject
 		nameText.text = deer.name;
 	}
 
-    public function setupTexts() {
+    public function setupTexts(){
 		
         var statValues = [deer.str, deer.res, deer.dex, deer.int, deer.lck];
 		

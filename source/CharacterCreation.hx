@@ -16,7 +16,7 @@ class CharacterCreation extends FlxState
 
 	var nameBox:FlxInputText;
 
-	var characterSprite:FlxSprite;
+	var characterDisplay:DeerDisplay;
 
 	var statPointsRemaining:Int = 6;
 	var maxStatValue:Int = 5;
@@ -40,33 +40,48 @@ class CharacterCreation extends FlxState
 		nameBox = new FlxInputText(26,240,154, "Name", 16);
 		add(nameBox);
 
-		characterSprite = new FlxSprite(25, 90);
-		add(characterSprite);
+		characterDisplay = new DeerDisplay();
+		characterDisplay.moveDisplay(25, 90);
+		add(characterDisplay);
 
 		setupGenderButtons();
 		if(FlxG.random.bool(50)){
-			maleClicked();
+			maleClicked(false);
 			nameBox.text = NameGenerator.getRandomName("Male");
 		}else{
-			femaleClicked();
+			femaleClicked(false);
 			nameBox.text = NameGenerator.getRandomName("Female");
 		}
 
 		setupStats();
 
 		add(new FlxButton(370, 270, "Begin", startGame));
+		
+		updateDeer();
 	}
 
 	override public function update(elapsed:Float):Void
 	{
 		super.update(elapsed);
-		while(nameBox.text.length >= 12){
+		while(nameBox.text.length >= 13){
 			nameBox.text = nameBox.text.substring(0, nameBox.text.length - 1);
 			nameBox.caretIndex = nameBox.text.length;
 		}
+		
+		if(characterDisplay.nameText.text != nameBox.text){
+			characterDisplay.nameText.text = nameBox.text;
+		}
+	}
+	
+	private function updateDeer(){
+		var currentDeer:Deer = new Deer(nameBox.text, gender, Std.parseInt(statTexts[0].text), 
+										Std.parseInt(statTexts[1].text), Std.parseInt(statTexts[2].text),
+										Std.parseInt(statTexts[3].text), Std.parseInt(statTexts[4].text), 
+										true);
+		characterDisplay.updateDeer(currentDeer);
 	}
 
-	function startGame():Void{
+	private function startGame(){
 		GameVariables.instance.addDeer(new Deer(nameBox.text, gender, Std.parseInt(statTexts[0].text), 
 										Std.parseInt(statTexts[1].text), Std.parseInt(statTexts[2].text),
 										Std.parseInt(statTexts[3].text), Std.parseInt(statTexts[4].text), 
@@ -74,7 +89,7 @@ class CharacterCreation extends FlxState
 		FlxG.switchState(new MainGame());
 	}
 
-	function setupStats():Void{
+	private function setupStats(){
 		plusButtons = new Array();
 		for(i in 0...5){
 			plusButtons[i] = new FlxButton(428, 90+(i*30));
@@ -115,23 +130,25 @@ class CharacterCreation extends FlxState
 		add(pointsRemainingText);
 	}
 
-	function plusClicked(stat:Int):Void{
+	private function plusClicked(stat:Int){
 		if(statPointsRemaining > 0 && Std.parseInt(statTexts[stat].text) < maxStatValue){
 			statTexts[stat].text = Std.string(Std.parseInt(statTexts[stat].text)+1);
 			statPointsRemaining--;
 			pointsRemainingText.text = "Points remaining: " + statPointsRemaining;
 		}
+		updateDeer();
 	}
 
-	function minusClicked(stat:Int):Void{
+	private function minusClicked(stat:Int){
 		if(Std.parseInt(statTexts[stat].text) > 0){
 			statTexts[stat].text = Std.string(Std.parseInt(statTexts[stat].text)-1);
 			statPointsRemaining++;
 			pointsRemainingText.text = "Points remaining: " + statPointsRemaining;
 		}
+		updateDeer();
 	}
 	
-	function setupGenderButtons():Void{
+	private function setupGenderButtons(){
 		var maleText = new flixel.text.FlxText(50, 280, 0, "Male", 16);
 		maleText.color = 0xFF000000;
 		add(maleText);
@@ -140,37 +157,45 @@ class CharacterCreation extends FlxState
 		femaleText.color = 0xFF000000;
 		add(femaleText);
 
-        maleButton = new FlxButton(25, 280, "", maleClicked);
+        maleButton = new FlxButton(25, 280, "");
         maleButton.loadGraphic("assets/images/Checkbox.png", true, 128, 128);
         add(maleButton);
-		maleButton.scale.set(0.17,0.17);
+		maleButton.onUp.callback = maleClicked.bind();
+		maleButton.scale.set(0.17, 0.17);
 		maleButton.updateHitbox();
 
-		femaleButton = new FlxButton(25, 310, "", femaleClicked);
+		femaleButton = new FlxButton(25, 310, "");
         femaleButton.loadGraphic("assets/images/Checkbox.png", true, 128, 128);
         add(femaleButton);
+		femaleButton.onUp.callback = femaleClicked.bind();
 		femaleButton.scale.set(0.17,0.17);
 		femaleButton.updateHitbox();
 	}
 
-	function maleClicked():Void{
+	private function maleClicked(?updateDeerDisplay:Bool = true){
 		gender = "Male";
 		maleButton.loadGraphic("assets/images/CheckedCheckbox.png", false, 128, 128);
         femaleButton.loadGraphic("assets/images/Checkbox.png", true, 128, 128);
 		
 		maleButton.updateHitbox();
 		femaleButton.updateHitbox();
-		characterSprite.loadGraphic("assets/images/MaleSprite.png");
+		
+		if(updateDeerDisplay){
+			updateDeer();
+		}
 	}
 
-	function femaleClicked():Void{
+	private function femaleClicked(?updateDeerDisplay:Bool = true){
 		gender = "Female";
 		femaleButton.loadGraphic("assets/images/CheckedCheckbox.png", false, 128, 128);
         maleButton.loadGraphic("assets/images/Checkbox.png", true, 128, 128);
 		
 		maleButton.updateHitbox();
 		femaleButton.updateHitbox();
-		characterSprite.loadGraphic("assets/images/FemaleSprite.png");
+		
+		if(updateDeerDisplay){
+			updateDeer();
+		}
 	}
 
 }

@@ -58,6 +58,9 @@ class PlayState extends FlxState
 			var newRunningDeer:RunningDeerSprite = new RunningDeerSprite(-32, 600);
 			deerSprites[deerSprites.length] = newRunningDeer;
 			
+			newRunningDeer.scale.set(4, 4);
+			newRunningDeer.y += randomNums.int(0, 10);
+			
 			add(newRunningDeer);
 			
 			var i:Int = deerSprites.length - 1;
