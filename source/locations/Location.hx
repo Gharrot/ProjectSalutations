@@ -4,6 +4,7 @@ import flixel.ui.FlxButton;
 import flixel.text.FlxText;
 import flixel.util.FlxAxes;
 import flixel.util.FlxColor;
+import statuses.DeerStatusEffect;
 
 import flixel.addons.ui.FlxUIList;
 import flixel.addons.ui.FlxUIText;
@@ -214,17 +215,26 @@ class Location{
     }
 	
 	public function rest(deer:Array<Deer>) {
-		var result:String = "";
+		var result:Array<String> = new Array<String>();
 		for (i in 0...deer.length) {
 			var currentDeer:Deer = deer[i];
 			if(currentDeer.health == currentDeer.maxHealth){
-				result = result + currentDeer.name + " seems healthy and continues to rest.\n";
+				result.push(currentDeer.name + " seems healthy and continues to rest.");
 			}else{
 				currentDeer.heal(2);
-				result = result + currentDeer.name + " rests and is now " + currentDeer.getStatus() + ".\n";
+				result.push(currentDeer.name + " rests and is now " + currentDeer.getStatus() + ".");
+			}
+			
+			if(GameVariables.instance.rabbitFurBeddingMade){
+				currentDeer.addStatusEffect(new DeerStatusEffect("Lucky Bedding", 2, 0, 0, 0, 0, 1));
 			}
 		}
-		showResult([result]);
+		
+		if(GameVariables.instance.rabbitFurBeddingMade){
+			result.push("(+1 luck for rested deer tomorrow from rabbit fur bedding)");
+		}
+		
+		showResult(result);
     }
 	
 	public function defend(deer:Array<Deer>){
@@ -484,15 +494,29 @@ class Location{
 	}
 	
 	public function createItemDescriptions():Array<FlxText>{
+		var gameVariables:GameVariables = GameVariables.instance;
 		var texts:Array<FlxText> = new Array<FlxText>();
 		
-		var deerInDenText:FlxText = new FlxText(25, 140, 0, "Deer: " + GameVariables.instance.controlledDeer.length + "/" + GameVariables.instance.maxPackSize, 18);
+		var deerInDenText:FlxText = new FlxText(25, 140, 0, "Deer: " + gameVariables.controlledDeer.length + "/" + gameVariables.maxPackSize, 18);
 		deerInDenText.color = FlxColor.BLACK;
 		texts.push(deerInDenText);
 		
-		var kidsInDenText:FlxText = new FlxText(25, 140, 0, "Young Deer: " + GameVariables.instance.babyDeer.length + "/" + GameVariables.instance.maxBabyPackSize, 18);
+		var kidsInDenText:FlxText = new FlxText(25, 140, 0, "Young Deer: " + gameVariables.babyDeer.length + "/" + gameVariables.maxBabyPackSize, 18);
 		kidsInDenText.color = FlxColor.BLACK;
 		texts.push(kidsInDenText);
+		
+		var bunnyFurAmount:Int = gameVariables.rabbitFur;
+		if(bunnyFurAmount > 0){
+			var bunnyFurText:FlxText = new FlxText(25, 140, 0, "Rabbit fur: " + Std.string(bunnyFurAmount), 18);
+			bunnyFurText.color = FlxColor.BLACK;
+			texts.push(bunnyFurText);
+		}
+		
+		if(gameVariables.rabbitFurBeddingMade){
+			var bunnyFurText:FlxText = new FlxText(25, 140, 0, "Bedding: Rabbit fur", 18);
+			bunnyFurText.color = FlxColor.BLACK;
+			texts.push(bunnyFurText);
+		}
 		
 		return texts;
 	}

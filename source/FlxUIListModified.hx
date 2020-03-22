@@ -235,7 +235,7 @@ class FlxUIListModified extends FlxUIGroup
 		return Value;
 	}
 	
-	private function onClick(i:Int):Void {
+	public function onClick(i:Int):Void {
 		
 		if (group.members.indexOf(cast prevButton) != -1) {
 			remove(cast prevButton, true);

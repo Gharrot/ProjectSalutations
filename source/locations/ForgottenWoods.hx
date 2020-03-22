@@ -1124,18 +1124,4 @@ class ForgottenWoods extends Location
 			showResult(["Not willing to risk injury, you move on."]);
 		}
 	}
-
-	override public function createItemDescriptions():Array<FlxText>
-	{
-		var texts:Array<FlxText> = super.createItemDescriptions();
-
-		var bunnyFurAmount:Int = GameVariables.instance.unfamiliarWoodsDenRabbitFur;
-		if(bunnyFurAmount > 0){
-			var bunnyFurText:FlxText = new FlxText(25, 140, 0, "Rabbit fur: " + Std.string(bunnyFurAmount), 18);
-			bunnyFurText.color = FlxColor.BLACK;
-			texts.push(bunnyFurText);
-		}
-
-		return texts;
-	}
 }

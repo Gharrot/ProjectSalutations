@@ -21,8 +21,10 @@ class GameVariables {
     public var currentFood:Int;
     public var maxFood:Int;
 	
+	public var rabbitFur:Int;
+	public var rabbitFurBeddingMade:Bool;
+	
 	public var unfamiliarWoodsMaxFood:Int;
-	public var unfamiliarWoodsDenRabbitFur:Int;
     public var unfamiliarWoodsLostDeer:Array<Deer>;
     public var unfamiliarWoodsCaveFound:Bool;
     public var unfamiliarWoodsMedallionTaken:Bool;
@@ -51,7 +53,8 @@ class GameVariables {
         maxFood = 10;
 		
 		unfamiliarWoodsMaxFood = 10;
-		unfamiliarWoodsDenRabbitFur = 0;
+		rabbitFur = 0;
+		rabbitFurBeddingMade = false;
 		unfamiliarWoodsLostDeer = new Array<Deer>();
 		
 		abandonedFieldsMaxFood = 12;
@@ -203,9 +206,9 @@ class GameVariables {
 	}
 	
 	public function addUnfamiliarWoodsRabbitFur(){
-		unfamiliarWoodsDenRabbitFur++;
-		if(unfamiliarWoodsDenRabbitFur > 5){
-			unfamiliarWoodsDenRabbitFur = 5;
+		rabbitFur++;
+		if(rabbitFur > 5){
+			rabbitFur = 5;
 		}
 	}
 	
@@ -222,7 +225,7 @@ class GameVariables {
 		
 		//UnfamiliarWoods
 		unfamiliarWoodsMaxFood = 10;
-		unfamiliarWoodsDenRabbitFur = 0;
+		rabbitFur = 0;
 		unfamiliarWoodsLostDeer = new Array<Deer>();
 		unfamiliarWoodsCaveFound = true;
 		unfamiliarWoodsMedallionTaken = false;

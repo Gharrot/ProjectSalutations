@@ -34,6 +34,7 @@ class MainGame extends FlxState
     var interactButton:FlxButton;
     var improveButton:FlxButton;
     var breedButton:FlxButton;
+	var improvementBox:ImprovementBox;
 	var pairingBox:PairingBox;
 
     var herdButton:FlxButton;
@@ -265,7 +266,7 @@ class MainGame extends FlxState
 		}
 		
 		//den buttons
-		interactButton = new FlxButton(290, 140, "Interact", herdClicked);
+		interactButton = new FlxButton(290, 140, "Interact");
         interactButton.loadGraphic("assets/images/DenButton.png", true, 160, 56);
         interactButton.updateHitbox();
         interactButton.label.size = 22;
@@ -277,9 +278,9 @@ class MainGame extends FlxState
         interactButton.label.alpha = 1.0;
         interactButton.labelAlphas[0] = 1.0;
         interactButton.labelAlphas[2] = 1.0;
-        add(interactButton);
+        //add(interactButton);
 		
-		improveButton = new FlxButton(290, 216, "Improve", herdClicked);
+		improveButton = new FlxButton(290, 140, "Improve");
         improveButton.loadGraphic("assets/images/DenButton.png", true, 160, 56);
         improveButton.updateHitbox();
         improveButton.label.size = 22;
@@ -291,9 +292,10 @@ class MainGame extends FlxState
         improveButton.label.alpha = 1.0;
         improveButton.labelAlphas[0] = 1.0;
         improveButton.labelAlphas[2] = 1.0;
+		improveButton.onUp.callback = improvementMenu.bind();
         add(improveButton);
 		
-		breedButton = new FlxButton(290, 292, "Breeding", herdClicked);
+		breedButton = new FlxButton(290, 216, "Breeding");
         breedButton.loadGraphic("assets/images/DenButton.png", true, 160, 56);
         breedButton.updateHitbox();
         breedButton.label.size = 22;
@@ -305,7 +307,7 @@ class MainGame extends FlxState
         breedButton.label.alpha = 1.0;
         breedButton.labelAlphas[0] = 1.0;
         breedButton.labelAlphas[2] = 1.0;
-		breedButton.onUp.callback = pairing.bind();
+		breedButton.onUp.callback = pairingMenu.bind();
         add(breedButton);
 	}
 	
@@ -691,8 +693,13 @@ class MainGame extends FlxState
 		removeMap();
 	}
 	
-	function pairing(){
+	function pairingMenu(){
 		pairingBox = new PairingBox();
+		hide();
+	}
+	
+	function improvementMenu(){
+		improvementBox = new ImprovementBox();
 		hide();
 	}
 }

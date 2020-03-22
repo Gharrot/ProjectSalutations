@@ -82,7 +82,7 @@ class ConfirmationBox extends FlxObject{
         questionText.screenCenter();
         questionText.y = questionText.y - 175;
 		questionText.color = 0xFF000000;
-		questionText.alignment = "Center";
+		questionText.alignment = "center";
         FlxG.state.add(questionText);
     }
 }
