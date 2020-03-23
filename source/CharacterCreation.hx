@@ -6,6 +6,7 @@ import flixel.ui.FlxButton;
 import flixel.FlxSprite;
 import flixel.addons.ui.FlxInputText;
 import flixel.text.FlxText;
+import flixel.util.FlxAxes;
 import locations.Location;
 
 class CharacterCreation extends FlxState
@@ -25,6 +26,8 @@ class CharacterCreation extends FlxState
 	var statTexts:Array<FlxText>;
 	var minusButtons:Array<FlxButton>;
 	var pointsRemainingText:FlxText;
+	
+	var startButton:FlxButton;
 
 	override public function create():Void
 	{
@@ -55,7 +58,11 @@ class CharacterCreation extends FlxState
 
 		setupStats();
 
-		add(new FlxButton(370, 270, "Begin", startGame));
+		startButton = new FlxButton(370, 540, "Begin", startGame);
+		startButton.loadGraphic("assets/images/DenButton.png", true, 160, 56);
+		ButtonUtils.fixButtonText(startButton, 22, 10, 0);
+		startButton.screenCenter(FlxAxes.X);
+		add(startButton);
 		
 		updateDeer();
 	}
