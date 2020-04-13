@@ -11,6 +11,8 @@ import locations.Location;
 
 class CharacterCreation extends FlxState
 {
+	var bgSprite:FlxSprite;
+	
 	var gender:String;
 	var maleButton:FlxButton;
 	var femaleButton:FlxButton;
@@ -33,6 +35,9 @@ class CharacterCreation extends FlxState
 	{
 		super.create();
 		this.bgColor = 0xFFD8F6F3;
+		
+		bgSprite = new FlxSprite(0, 0, "assets/images/CharacterCreationBG.png");
+		add(bgSprite);
 
 		var titleText = new FlxText(0, 0, 0, "Create your Character", 30);
 		titleText.color = 0xFF000000;
@@ -58,9 +63,9 @@ class CharacterCreation extends FlxState
 
 		setupStats();
 
-		startButton = new FlxButton(370, 540, "Begin", startGame);
-		startButton.loadGraphic("assets/images/DenButton.png", true, 160, 56);
-		ButtonUtils.fixButtonText(startButton, 22, 10, 0);
+		startButton = new FlxButton(370, 520, "Begin", startGame);
+		startButton.loadGraphic("assets/images/OctaButton.png", true, 160, 74);
+		ButtonUtils.fixButtonText(startButton, 22, 18, 3);
 		startButton.screenCenter(FlxAxes.X);
 		add(startButton);
 		

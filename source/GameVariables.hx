@@ -3,18 +3,16 @@ package;
 import locations.*;
 import flixel.util.FlxArrayUtil;
 import flixel.util.FlxSave;
+import haxe.Serializer;
+import haxe.Unserializer;
 
 class GameVariables {
-	public var save:FlxSave;
-	
     public var controlledDeer:Array<Deer>;
 	public var maxPackSize:Int;
 	
     public var babyDeer:Array<Deer>;
 	public var maxBabyPackSize:Int;
-
-    public var mainGameMenu:MainGame;
-
+	
     public var currentLocation:Location;
     public var currentLocationName:String;
 
@@ -37,6 +35,8 @@ class GameVariables {
 	
 	public var abandonedFieldsMaxFood:Int;
     public var abandonedFieldsLostDeer:Array<Deer>;
+	
+	public var saveNum:Int;
 
     public static var instance(default, null):GameVariables = new GameVariables();
 
@@ -198,11 +198,20 @@ class GameVariables {
 	}
 	
 	public function loadFromSave(){
-		
+		SaveManager.loadSave("Save" + saveNum);
 	}
 	
 	public function saveGameData(){
+		//var serializer = new Serializer();
+		//serializer.useCache = true;
+		//serializer.serialize(this);
 		
+		//var save:FlxSave = new FlxSave();
+		//save.bind();
+		//save.data.gameVariables = this;
+		//save.flush();
+		
+		SaveManager.saveGame("Save" + saveNum);
 	}
 	
 	public function addUnfamiliarWoodsRabbitFur(){
@@ -238,4 +247,5 @@ class GameVariables {
 		
 		abandonedFieldsMaxFood = 12;
 	}
+	
 }

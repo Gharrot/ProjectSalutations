@@ -61,7 +61,7 @@ class DeerActionScreen extends FlxObject{
         FlxG.state.remove(dismissButton);
         FlxG.state.remove(banishButton);
 
-        GameVariables.instance.mainGameMenu.returnToMainScreen();
+        GameObjects.instance.mainGameMenu.returnToMainScreen();
         FlxG.state.remove(this);
     }
 

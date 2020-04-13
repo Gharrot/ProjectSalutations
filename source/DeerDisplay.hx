@@ -16,6 +16,8 @@ class DeerDisplay extends FlxObject
 
     public var nameText:FlxText;
     public var statNumbers:Array<FlxText>;
+	
+	public var emptied:Bool = false;
 
     public function new(?deer:Deer){
         super();
@@ -28,6 +30,8 @@ class DeerDisplay extends FlxObject
         }
         nameText.visible = false;
         deerSprite.visible = false;
+		
+		emptied = true;
 	}
 	
 	public function unemptyDisplay(){
@@ -36,6 +40,8 @@ class DeerDisplay extends FlxObject
         }
         nameText.visible = true;
         deerSprite.visible = true;
+		
+		emptied = false;
 	}
 
     public function destroyChildren(){
@@ -58,11 +64,15 @@ class DeerDisplay extends FlxObject
     }
 
     public function show(){
-        for(i in 0...5){
-            statNumbers[i].visible = true;
-        }
-        nameText.visible = true;
-		deerSprite.visible = true;
+		if(!emptied){
+			for(i in 0...5){
+				statNumbers[i].visible = true;
+			}
+			
+			nameText.visible = true;
+			deerSprite.visible = true;
+		}
+			
 		bgSprite.visible = true;
 		this.visible = true;
     }

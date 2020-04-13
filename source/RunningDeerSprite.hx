@@ -4,10 +4,10 @@ import flixel.FlxSprite;
 import flixel.system.FlxAssets.FlxGraphicAsset;
 import flixel.math.FlxRandom;
 import flixel.FlxG;
+import flixel.text.FlxText;
 
 class RunningDeerSprite extends FlxSprite
 {
-	
 	private var actionTime:Float;
 	
 	private var running:Bool = false;
@@ -15,6 +15,8 @@ class RunningDeerSprite extends FlxSprite
 	
 	private var looking:Bool = false;
 	private var monching:Bool = false;
+	
+	public var nameText:FlxText;
 	
 	public function new(?X:Float=0, ?Y:Float=0, ?SimpleGraphic:FlxGraphicAsset) 
 	{
@@ -30,7 +32,7 @@ class RunningDeerSprite extends FlxSprite
 		animation.add("running", [10, 11, 12, 13, 14], 8, true);
 		animation.add("looking", [0, 1, 1, 1, 1, 2, 2, 3, 3, 3, 3, 3, 4, 4, 4, 4, 4, 0, 0, 0, 0], 5, true);
 		animation.add("monching", [5, 6, 7, 7, 7, 8, 9, 0, 0, 0, 0, 0, 0,], 4, true);
-		 
+		
 		animation.play("running");
 	}
 	
@@ -45,6 +47,11 @@ class RunningDeerSprite extends FlxSprite
 		
 		if(running){
 			x += runningSpeed * elapsed;
+		}
+		
+		if(nameText != null){
+			nameText.x = x - 65;
+			nameText.y = y - 65;
 		}
 	}
 	
@@ -75,4 +82,18 @@ class RunningDeerSprite extends FlxSprite
 		}
 	}
 	
+	public function giveNameText(nameString:String){
+		nameText = new FlxText(0, 0, 160, nameString, 14);
+		nameText.alignment = "center";
+		nameText.color = 0xFF000000;
+		FlxG.state.add(nameText);
+		
+		nameText.x = x - 65;
+		nameText.y = y - 65;
+	}
+	
+	public function refreshNameText(){
+		FlxG.state.remove(nameText);
+		FlxG.state.add(nameText);
+	}
 }

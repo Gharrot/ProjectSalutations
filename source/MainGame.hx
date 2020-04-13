@@ -46,7 +46,7 @@ class MainGame extends FlxState
 		super.create();
 		this.bgColor = 0xFFD8F6F3;
 
-        GameVariables.instance.mainGameMenu = this;
+        GameObjects.instance.mainGameMenu = this;
 
         setupTopBar();
         setupDeerTiles();

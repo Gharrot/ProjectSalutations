@@ -914,8 +914,7 @@ class ForgottenWoods extends Location
 	public function insideCave(choice:String, deer:Deer)
 	{
 		var messages:Array<String> = new Array<String>();
-		messages.push("You head inside.");
-		messages.push("Following the cave as it curves rightwards, you soon come to a dead-end.");
+		messages.push("Heading inside you follow the cave as it curves rightwards, soon coming to a dead-end.");
 		messages.push("You stand in front of a smooth stone wall, featureless except for an arc of 5 clear stones embedded within it.");
 		
 		deerInCave.push(deer);
@@ -964,7 +963,7 @@ class ForgottenWoods extends Location
 		}
 		else
 		{
-			showChoice(messages, ["Wait around", "Head back"], [continueOnChoice, leaveCave], deer);
+			showChoice(messages, ["Wait around"], [continueOnChoice], deer);
 		}
 	}
 

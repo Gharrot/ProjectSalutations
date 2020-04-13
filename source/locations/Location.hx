@@ -408,6 +408,8 @@ class Location{
 		mainState.updateTopBar();
 		mainState.returnToMainScreen();
 		mainState.remove(actionText);
+		
+		GameVariables.instance.saveGameData();
 	}
 	
 	public function setActiveDeer(deer:Array<Deer>){

@@ -163,10 +163,10 @@ class FlxUIListModified extends FlxUIGroup
 		}
 		
 		if (prevButtonOffset == null) {
-			prevButtonOffset = FlxPoint.get(370, 280);
+			prevButtonOffset = FlxPoint.get(390, 280);
 		}
 		if (nextButtonOffset == null) {
-			nextButtonOffset = FlxPoint.get(370, 0);
+			nextButtonOffset = FlxPoint.get(390, 0);
 		}
 		_skipRefresh = false;
 		setSize(W, H);

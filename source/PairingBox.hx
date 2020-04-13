@@ -93,7 +93,7 @@ class PairingBox extends FlxObject
 		
         FlxG.state.remove(questionText);
 
-        GameVariables.instance.mainGameMenu.returnToMainScreen();
+        GameObjects.instance.mainGameMenu.returnToMainScreen();
         FlxG.state.remove(this);
     }
 	

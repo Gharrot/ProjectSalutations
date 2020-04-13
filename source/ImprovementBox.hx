@@ -52,7 +52,7 @@ class ImprovementBox extends FlxObject
 			FlxG.state.remove(optionButtons);
 		}
 
-        GameVariables.instance.mainGameMenu.returnToMainScreen();
+        GameObjects.instance.mainGameMenu.returnToMainScreen();
         FlxG.state.remove(this);
     }
 	
