@@ -60,11 +60,7 @@ class GameVariables {
 		abandonedFieldsMaxFood = 12;
     }
 	
-	public function changeLocation(targetLocation:String){
-		if(targetLocation == currentLocationName){
-			return;
-		}
-		
+	public function changeLocation(targetLocation:String){		
 		if(targetLocation == "Unfamiliar Woods"){
 			currentLocation = new ForgottenWoods();
 			maxFood = unfamiliarWoodsMaxFood;
@@ -236,14 +232,14 @@ class GameVariables {
 		unfamiliarWoodsMaxFood = 10;
 		rabbitFur = 0;
 		unfamiliarWoodsLostDeer = new Array<Deer>();
-		unfamiliarWoodsCaveFound = true;
+		unfamiliarWoodsCaveFound = false;
 		unfamiliarWoodsMedallionTaken = false;
-		unfamiliarWoodsDeepWoodsFound = true;
+		unfamiliarWoodsDeepWoodsFound = false;
 		unfamiliarWoodsDeepWoodsThicketNavigated = false;
 		unfamiliarWoodsDeepWoodsThicketCleared = false;
-		unfamiliarWoodsIntellectSpringFound = true;
-		unfamiliarWoodsInspiringViewFound = true;
-		unfamiliarWoodsSquirrelsOfGoodFortuneFound = true;
+		unfamiliarWoodsIntellectSpringFound = false;
+		unfamiliarWoodsInspiringViewFound = false;
+		unfamiliarWoodsSquirrelsOfGoodFortuneFound = false;
 		
 		abandonedFieldsMaxFood = 12;
 	}

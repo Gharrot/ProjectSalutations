@@ -371,7 +371,7 @@ class ForgottenWoods extends Location
 			message.push("They look up at you and chitter happily before scampering back up the tree to divide your gift.");
 			message.push("(+2 Luck for 2 days).");
 			
-			deer.addStatusEffect(new DeerStatusEffect("Luck of the Squirrels", 3, 0, 0, 0, 0, 1));
+			deer.addStatusEffect(new DeerStatusEffect("Luck of the Squirrels", 3, 0, 0, 0, 0, 2));
 		}
 		else
 		{

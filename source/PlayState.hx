@@ -33,6 +33,9 @@ class PlayState extends FlxState
 	var saves:Array<FlxSave>;
 	var saveSprites:Array<DeerDisplay>;
 	var saveStartButtons:Array<FlxButton>;
+	var saveDeleteButtons:Array<FlxButton>;
+	
+	var showDeleteButton:FlxButton;
 	
 	var rising:Bool;
 	var cameraScrollSpeed:Float = 10;
@@ -63,6 +66,7 @@ class PlayState extends FlxState
 		saves = new Array<FlxSave>();
 		saveSprites = new Array<DeerDisplay>();
 		saveStartButtons = new Array<FlxButton>();
+		saveDeleteButtons = new Array<FlxButton>();
 		for(i in 0...3){
 			saves.push(new FlxSave());
 			saves[i].bind("Save" + i);
@@ -78,6 +82,11 @@ class PlayState extends FlxState
 				saveStartButton.label.text = "Continue";
 				saveStartButton.onUp.callback = continueGame.bind(i);
 				saveDeerDisplay.updateDeer(saves[i].data.controlledDeer[0]);
+				
+				//get delete button ready
+				var saveDeleteButton = new FlxButton(41 + (159 * i), 435, "Delete Save");
+				saveDeleteButton.onUp.callback = deleteSave.bind(i);
+				saveDeleteButtons.push(saveDeleteButton);
 			}else{
 				saveStartButton.onUp.callback = startNewGame.bind(i);
 				saveDeerDisplay.emptyDisplay();
@@ -89,6 +98,13 @@ class PlayState extends FlxState
 			add(saveStartButton);
 			saveStartButton.visible = false;
 		}
+		
+		showDeleteButton = new FlxButton(330, 590, "Show Delete Buttons", showDeleteSaveButtons);
+		showDeleteButton.scale.set(1.5, 1.4);
+        showDeleteButton.updateHitbox();
+        showDeleteButton.label.offset.y -= 4;
+        showDeleteButton.label.fieldWidth = showDeleteButton.width;
+        showDeleteButton.label.alignment = "center";
 
 		newGameButton = new FlxButton(0, 290, "Continue", showSaves);
 		newGameButton.screenCenter(FlxAxes.X);
@@ -181,6 +197,10 @@ class PlayState extends FlxState
 			
 			saveSprites[i].show();
 		}
+		
+		if(saveDeleteButtons.length != 0){
+			add(showDeleteButton);
+		}
 	}
 	
 	function startNewGame(saveNum:Int){
@@ -212,6 +232,10 @@ class PlayState extends FlxState
 		for(i in 0...3){
 			remove(saveStartButtons[i]);
 		}
+		
+		for(i in 0...saveDeleteButtons.length){
+			remove(saveDeleteButtons[i]);
+		}
 	}
 	
 	function switchToCharacterCreation(){
@@ -230,6 +254,40 @@ class PlayState extends FlxState
 		
 		if(timeUntilNextSprite > 2){
 			timeUntilNextSprite = 2;
+		}
+	}
+	
+	function showDeleteSaveButtons(){
+		for(i in 0...saveDeleteButtons.length){
+			add(saveDeleteButtons[i]);
+		}
+		
+		showDeleteButton.onUp.callback = hideDeleteSaveButtons.bind();
+		showDeleteButton.label.text = "Hide Delete Buttons";
+	}
+	
+	function hideDeleteSaveButtons(){
+		for(i in 0...saveDeleteButtons.length){
+			remove(saveDeleteButtons[i]);
+		}
+		
+		showDeleteButton.onUp.callback = showDeleteSaveButtons.bind();
+		showDeleteButton.label.text = "Show Delete Buttons";
+	}
+	
+	function deleteSave(saveNum:Int){
+		saves[saveNum].erase();
+		saves[saveNum].bind("Save" + saveNum);
+		
+		saveSprites[saveNum].emptyDisplay();
+		saveStartButtons[saveNum].label.text = "New Game";
+		saveStartButtons[saveNum].onUp.callback = startNewGame.bind(saveNum);
+		
+		remove(saveDeleteButtons[saveNum]);
+		saveDeleteButtons.remove(saveDeleteButtons[saveNum]);
+		
+		if(saveDeleteButtons.length == 0){
+			remove(showDeleteButton);
 		}
 	}
 }
