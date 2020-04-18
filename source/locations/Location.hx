@@ -119,13 +119,7 @@ class Location{
 		}
 		
 		//Check for resters
-		var deerResters:Array<Deer> = new Array();
-		for (i in 0...gameVariables.controlledDeer.length) {
-			if (!gameVariables.controlledDeer[i].actedThisRound && gameVariables.controlledDeer[i].currentAction == "Resting") {
-				gameVariables.controlledDeer[i].actedThisRound = true;
-				deerResters.push(gameVariables.controlledDeer[i]);
-			}
-        }
+		var deerResters:Array<Deer> = gameVariables.getRestingDeer();
 		
 		if(deerResters.length > 0){
 			actionText.text = "Resting";

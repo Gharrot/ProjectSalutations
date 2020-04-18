@@ -786,7 +786,8 @@ class ForgottenWoods extends Location
 	{
 		var randomNums:FlxRandom = new FlxRandom();
 
-		if (GameVariables.instance.unfamiliarWoodsLostDeer.length > 0 && randomNums.int(0, 1) == 0)
+		//66% chance to find a deer you've previously lost
+		if (GameVariables.instance.unfamiliarWoodsLostDeer.length > 0 && randomNums.int(0, 2) <= 1)
 		{
 			foundDeer = GameVariables.instance.unfamiliarWoodsLostDeer[randomNums.int(0, GameVariables.instance.unfamiliarWoodsLostDeer.length - 1)];
 

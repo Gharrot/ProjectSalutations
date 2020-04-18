@@ -25,16 +25,22 @@ class GameVariables {
 	public var unfamiliarWoodsMaxFood:Int;
     public var unfamiliarWoodsLostDeer:Array<Deer>;
     public var unfamiliarWoodsCaveFound:Bool;
-    public var unfamiliarWoodsMedallionTaken:Bool;
     public var unfamiliarWoodsDeepWoodsFound:Bool;
     public var unfamiliarWoodsDeepWoodsThicketNavigated:Bool;
     public var unfamiliarWoodsDeepWoodsThicketCleared:Bool;
     public var unfamiliarWoodsIntellectSpringFound:Bool;
     public var unfamiliarWoodsInspiringViewFound:Bool;
     public var unfamiliarWoodsSquirrelsOfGoodFortuneFound:Bool;
+    public var unfamiliarWoodsMedallionTaken:Bool;
 	
 	public var abandonedFieldsMaxFood:Int;
-    public var abandonedFieldsLostDeer:Array<Deer>;
+	
+	public var darkForestMaxFood:Int;
+	public var darkForestTimeRemaining:Int;
+	public var darkForestWolfPackSize:Int;
+	public var darkForestFoodStoreFound:Bool;
+	public var darkForestFoodStoreBarricaded:Bool;
+    public var darkForestMedallionTaken:Bool;
 	
 	public var saveNum:Int;
 
@@ -140,13 +146,7 @@ class GameVariables {
 	}
 	
 	public function loseControlledDeer(deer:Deer){
-		if(currentLocationName == "Unfamiliar Woods"){
-			unfamiliarWoodsLostDeer[unfamiliarWoodsLostDeer.length] = deer;
-		}else if(currentLocationName == "Abandoned Fields"){
-			abandonedFieldsLostDeer[abandonedFieldsLostDeer.length] = deer;
-		}else{
-			unfamiliarWoodsLostDeer[unfamiliarWoodsLostDeer.length] = deer;
-		}
+		unfamiliarWoodsLostDeer[unfamiliarWoodsLostDeer.length] = deer;
 		deer.removeAllStatusEffects();
 		controlledDeer.remove(deer);
 	}
@@ -193,6 +193,19 @@ class GameVariables {
 		return femaleDeer;
 	}
 	
+	public function getRestingDeer():Array<Deer>{
+		var restingDeer:Array<Deer> = new Array<Deer>();
+		
+		for (i in 0...controlledDeer.length) {
+			if (!controlledDeer[i].actedThisRound && controlledDeer[i].currentAction == "Resting") {
+				controlledDeer[i].actedThisRound = true;
+				restingDeer.push(controlledDeer[i]);
+			}
+        }
+		
+		return restingDeer;
+	}
+	
 	public function loadFromSave(){
 		SaveManager.loadSave("Save" + saveNum);
 	}
@@ -228,7 +241,7 @@ class GameVariables {
         currentFood = 4;
         maxFood = 10;
 		
-		//UnfamiliarWoods
+		//Unfamiliar Woods
 		unfamiliarWoodsMaxFood = 10;
 		rabbitFur = 0;
 		unfamiliarWoodsLostDeer = new Array<Deer>();
@@ -241,7 +254,16 @@ class GameVariables {
 		unfamiliarWoodsInspiringViewFound = false;
 		unfamiliarWoodsSquirrelsOfGoodFortuneFound = false;
 		
+		//Abandoned Fields
 		abandonedFieldsMaxFood = 12;
+		
+		//Dark Forest
+		darkForestMaxFood = 8;
+		darkForestTimeRemaining = 10;
+		darkForestWolfPackSize = 2;
+		darkForestFoodStoreFound = false;
+		darkForestFoodStoreBarricaded = false;
+		darkForestMedallionTaken = false;
 	}
 	
 }
