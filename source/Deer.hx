@@ -277,6 +277,10 @@ class Deer{
 		return statNames;
 	}
 	
+	public function getName(){
+		return name;
+	}
+	
 	static public function buildADeer(totalStatPoints:Int, ?distributions:Array<Array<Int>>):Deer{
 		var randomizer:FlxRandom = new FlxRandom();
 		var statNames = ["Strength", "Resilience", "Dexterity", "Intellect", "Fortune"];

@@ -37,7 +37,7 @@ class GameVariables {
 	
 	public var darkForestMaxFood:Int;
 	public var darkForestTimeRemaining:Int;
-	public var darkForestWolfPackSize:Int;
+	public var darkForestWolves:Array<EnemyWolf>;
 	public var darkForestFoodStoreFound:Bool;
 	public var darkForestFoodStoreBarricaded:Bool;
     public var darkForestMedallionTaken:Bool;
@@ -66,7 +66,7 @@ class GameVariables {
 		abandonedFieldsMaxFood = 12;
     }
 	
-	public function changeLocation(targetLocation:String){		
+	public function changeLocation(targetLocation:String, ?resetLocationVariables:Bool = true){		
 		if(targetLocation == "Unfamiliar Woods"){
 			currentLocation = new ForgottenWoods();
 			maxFood = unfamiliarWoodsMaxFood;
@@ -74,6 +74,16 @@ class GameVariables {
 		else if(targetLocation == "Abandoned Fields"){
 			currentLocation = new AbandonedFields();
 			maxFood = abandonedFieldsMaxFood;
+		}
+		else if(targetLocation == "Dark Forest"){
+			currentLocation = new DarkForest();
+			maxFood = darkForestMaxFood;
+			
+			if(resetLocationVariables){
+				darkForestWolves = new Array<EnemyWolf>();
+				darkForestWolves.push(new EnemyWolf());
+				darkForestWolves.push(new EnemyWolf());
+			}
 		}
 		
 		currentLocationName = targetLocation;
@@ -260,7 +270,7 @@ class GameVariables {
 		//Dark Forest
 		darkForestMaxFood = 8;
 		darkForestTimeRemaining = 10;
-		darkForestWolfPackSize = 2;
+		darkForestWolves = new Array<EnemyWolf>();
 		darkForestFoodStoreFound = false;
 		darkForestFoodStoreBarricaded = false;
 		darkForestMedallionTaken = false;

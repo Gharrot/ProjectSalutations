@@ -8,7 +8,7 @@ class DarkForest extends Location
 {
 	public static var instance(default, null):DarkForest = new DarkForest();
 	
-	private var wolvesInAttack:Int;
+	private var wolvesInAttack:Array<EnemyWolf>;
 	
 	public function new(){
 		super();
@@ -46,7 +46,7 @@ class DarkForest extends Location
 		var restingDeer:Array<Deer> = gameVariables.getRestingDeer();
 		randomNums.shuffle(restingDeer);
 		
-		var enemyWolves:Int = gameVariables.darkForestWolfPackSize;
+		var enemyWolves:Int = gameVariables.darkForestWolves.length;
 		
 		var message:Array<String> = new Array<String>();
 		
@@ -72,33 +72,127 @@ class DarkForest extends Location
 				message.push("The pack gathers up " + foodStolen + " food and runs off.");
 				gameVariables.modifyFood(-1 * foodStolen);
 			}
-			showResult([message]);
+			showResult(message);
 		}
 		else
 		{
 			message.push("A pack of " + enemyWolves + " wolves arrives at your den");
 			
-			wolvesInAttack = enemyWolves;
-			showChoice([message], ["Attack", "Back off for the night"], [continuedAttack, backOffFromAttack], deer);
+			wolvesInAttack = gameVariables.darkForestWolves;
+			showChoiceMultipleDeer(message, ["Attack", "Back off for the night"], [continuedAttack, backOffFromAttack], deer);
 		}
 	}
 	
-	public function continuedAttack(deer:Array<Deer>){
+	public function continuedAttack(choice:String, deer:Array<Deer>){
+		var message:Array<String> = new Array<String>();
+		var randomNums:FlxRandom = new FlxRandom();
+		
+		//sort wolves by their dexterity
+        wolvesInAttack.sort(function(a:EnemyWolf, b:EnemyWolf) {
+           if(a.dex < b.dex) return -1;
+           else if(a.dex > b.dex) return 1;
+           else return 0;
+        });
+		
+		//sort deer by their dexterity
+        deer.sort(function(a:Deer, b:Deer) {
+           if(a.dex < b.dex) return -1;
+           else if(a.dex > b.dex) return 1;
+           else return 0;
+        });
+		
+		var wolfAttackIndex:Int = 0;
+		var deerAttackIndex:Int = 0;
+		while(wolfAttackIndex < wolvesInAttack.length || deerAttackIndex < deer.length){
+			var deerAttacking:Bool = false;
+			
+			if (wolfAttackIndex >= wolvesInAttack.length){
+				deerAttacking = true;
+			}
+			else if(deerAttackIndex < deer.length)
+			{
+				if(deer[deerAttackIndex].dex > wolvesInAttack[wolfAttackIndex].dex){
+					deerAttacking = true;
+				}
+				else if(deer[deerAttackIndex].dex == wolvesInAttack[wolfAttackIndex].dex){
+					deerAttacking = randomNums.bool();
+				}
+			}
+			
+			if (deerAttacking){
+				var deerAttacker:Deer = deer[deerAttackIndex];
+				var wolfTarget:EnemyWolf = wolvesInAttack[randomNums.int(0, wolvesInAttack.length)];
+				
+				//check for accuracy/speed
+				if(deerAttacker.dex + randomNums.int(0,3) >= wolfTarget.dex + randomNums.int(0,2)){
+					//check for damage (no damage, enough to scare off, or enough to remove)
+					var deerAttackStrength:Int = deerAttacker.str - wolfTarget.res + randomNums.int(0, 2);
+					
+					if(deerAttackStrength < 0){
+						message.push(deerAttacker.getName + " lands a kick on a wolf, but it seems unfazed.");
+					}
+					else if(deerAttackStrength <= 2)
+					{
+						message.push(deerAttacker.getName + " lands a kick on a wolf. It whimpers and backs off into the dark.");
+					}
+					else
+					{
+						message.push(deerAttacker.getName + " lands a solid kick on a wolf, sending them tumbling into the dark.");
+					}
+				}
+				else
+				{
+					message.push(deerAttacker.getName + " attempts to kick the wolf, but it dodges to the side.");
+				}
+			}
+			else
+			{
+				var wolfAttacker:EnemyWolf = wolvesInAttack[wolfAttackIndex];
+				var deerTarget:Deer = deer[randomNums.int(0, deer.length)];
+				
+				//check for accuracy/speed
+				if(wolfAttacker.dex + randomNums.int(0,3) >= deerTarget.dex + randomNums.int(0,2)){
+					//check for damage (no damage, enough to scare off, or enough to remove)
+					var deerAttackStrength:Int = deerAttacker.str - wolfTarget.res + randomNums.int(0, 2);
+					
+					if(deerAttackStrength < 0){
+						message.push(deerAttacker.getName + " lands a kick on a wolf, but it seems unfazed.");
+					}
+					else if(deerAttackStrength <= 2)
+					{
+						message.push(deerAttacker.getName + " lands a kick on a wolf. It whimpers and backs off into the dark.");
+					}
+					else
+					{
+						message.push(deerAttacker.getName + " lands a solid kick on a wolf, sending them tumbling into the dark.");
+					}
+				}
+				else
+				{
+					message.push(deerAttacker.getName + " attempts to kick the wolf, but it dodges to the side.");
+				}
+			}
+			
+			if(wolvesInAttack.length == 0 || deer.length == 0){
+				break;
+			}
+		}
 	}
 	
-	public function backOffFromAttack(deer:Array<Deer>){
+	public function backOffFromAttack(choice:String, deer:Array<Deer>){
+		var gameVariables:GameVariables = GameVariables.instance;
 		var message:Array<String> = new Array<String>();
 		
-		var foodStolen:Int = wolvesInAttack * 2;
+		var foodStolen:Int = wolvesInAttack.length * 2;
 		if(foodStolen > gameVariables.currentFood){
 			foodStolen = gameVariables.currentFood;
 		}
 		
 		message.push("Your defending deer back away from the den into the woods.");
-		message.push("The wolves do not persue you, and instead gather up " + foodStolen + " food and run off.");
+		message.push("The wolves do not persue, and instead gather up " + foodStolen + " food and run off.");
 		GameVariables.instance.modifyFood(-1 * foodStolen);
 		
-		showResult([message]);
+		showResult(message);
 	}
 	
 	override public function hunt(deer:Array<Deer>) {

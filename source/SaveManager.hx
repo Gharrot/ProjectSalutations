@@ -35,7 +35,7 @@ class SaveManager
 		gameVariables.abandonedFieldsMaxFood = save.data.abandonedFieldsMaxFood;
 		
 		//move to the correct location
-		gameVariables.changeLocation(gameVariables.currentLocationName);
+		gameVariables.changeLocation(gameVariables.currentLocationName, false);
 	}
 	
 	static public function saveGame(saveName:String){

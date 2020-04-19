@@ -247,7 +247,21 @@ class Location{
 
     }
 
-    public function showChoice(text:Array<String>, optionNames:Array<String>, resultFunction:Array<(String, Deer)->Void>, deer:Deer){
+    public function showChoice(text:Array<String>, optionNames:Array<String>, resultFunction:Array < (String, Deer)->Void > , deer:Deer){
+		spawnOptionButtons(text, optionNames);
+		for (i in 0...displayedOptions.length){
+			displayedOptions[i].onUp.callback = choiceChosen.bind(optionNames[i], resultFunction[i], deer);
+		}
+    }
+	
+    public function showChoiceMultipleDeer(text:Array<String>, optionNames:Array<String>, resultFunction:Array < (String, Array<Deer>)->Void > , deer:Array<Deer>){
+		spawnOptionButtons(text, optionNames);
+		for (i in 0...displayedOptions.length){
+			displayedOptions[i].onUp.callback = choiceChosenMultipleDeer.bind(optionNames[i], resultFunction[i], deer);
+		}
+    }
+	
+	private function spawnOptionButtons(text:Array<String>, optionNames:Array<String>){
 		displayedTextList = new FlxUIListModified(40, 110, null, 400, 280);
 		FlxG.state.add(displayedTextList);
 		
@@ -272,7 +286,6 @@ class Location{
 				displayedOptions[i].y += 148;
 			}
 			
-			displayedOptions[i].onUp.callback = choiceChosen.bind(optionNames[i], resultFunction[i], deer);
 			FlxG.state.add(displayedOptions[i]);
 			
 			if(i >= 4){
@@ -309,7 +322,7 @@ class Location{
 		}
 		
 		updateOptionScrollButtons();
-    }
+	}
 	
 	public function changeButtonPage(amount:Int){
 		for (i in optionIndex...cast(Math.min(optionIndex + 4, displayedOptions.length), Int)){
@@ -340,11 +353,20 @@ class Location{
 	}
 	
 	public function choiceChosen(choice:String, resultFunction:(String, Deer)->Void, deer:Deer){
+		clearOptionButtons();
+		resultFunction(choice, deer);
+	}
+	
+	public function choiceChosenMultipleDeer(choice:String, resultFunction:(String, Array<Deer>)->Void, deer:Array<Deer>){
+		clearOptionButtons();
+		resultFunction(choice, deer);
+	}
+	
+	private function clearOptionButtons(){
         for(i in 0...displayedOptions.length){
 			FlxG.state.remove(displayedOptions[i]);
         }
 		FlxG.state.remove(displayedTextList);
-		resultFunction(choice, deer);
 	}
 	
 	public function showResult(text:Array<String>, buttonText:String = "Continue"){
