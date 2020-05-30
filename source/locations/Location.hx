@@ -183,8 +183,8 @@ class Location{
 			showChoice(["You wake up alone in your den in the Unfamiliar Woods with a small pile of berries sitting at your side."], ["Continue on"], [wakeUp], deer);
 		}else if (choice == "Continue on") {
 			GameVariables.instance.currentFood = 1;
-			GameVariables.instance.loseAllDeer();
 			GameVariables.instance.changeLocation("Unfamiliar Woods");
+			GameVariables.instance.healAllDeer();
 			returnToDen();
 		}
 	}

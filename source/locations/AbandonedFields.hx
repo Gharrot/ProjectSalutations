@@ -10,6 +10,11 @@ class AbandonedFields extends Location
 	
 	public function new(){
 		super();
+		
+		name = "Abandoned Fields";
+		backgroundImageFile = "assets/images/LocationImages/AbandonedFields.png";
+		backgroundImageFileNoFrame = "assets/images/LocationImages/ForgottenWoodsNoFrame.png";
+		backgroundImageFileMiniFramed = "assets/images/LocationImages/ForgottenWoodsEmptyDeerTile.png";
 	}
 	
 	override public function forage(deer:Deer) {

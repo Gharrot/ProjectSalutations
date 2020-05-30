@@ -146,6 +146,15 @@ class GameVariables {
 		}
 	}
 	
+	public function healAllDeer()
+	{
+		for(i in 0...controlledDeer.length){
+			if(controlledDeer[i].health < controlledDeer[i].maxHealth){
+				controlledDeer[i].health = controlledDeer[i].maxHealth;
+			}
+		}
+	}
+	
 	public function loseAllDeer(){
 		//loop backwards through controlled deer
 		var originalLength:Int = controlledDeer.length;

@@ -168,6 +168,8 @@ class DeerTile extends FlxButton{
 
 		nameText.text = deer.name;
 		statusText.text = deer.currentAction;
+		
+		bgSprite.loadGraphic(GameVariables.instance.currentLocation.backgroundImageFileNoFrame);
 	}
 	
 	public function setupBgSprite(){

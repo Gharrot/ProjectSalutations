@@ -17,7 +17,8 @@ class ForgottenWoods extends Location
 	public function new()
 	{
 		super();
-		name = "Unfamiliar Woods";
+		
+		name = "Unfamiliar Forest";
 		backgroundImageFile = "assets/images/LocationImages/ForgottenWoods.png";
 		backgroundImageFileNoFrame = "assets/images/LocationImages/ForgottenWoodsNoFrame.png";
 		backgroundImageFileMiniFramed = "assets/images/LocationImages/ForgottenWoodsEmptyDeerTile.png";
@@ -64,7 +65,7 @@ class ForgottenWoods extends Location
 				}
 				else
 				{
-					resultMessage += ", but finding food to crunch on they quickly wander off.";
+					resultMessage += ", but after finding no food to munch on they quickly wander off.";
 				}
 			}
 			else
@@ -841,6 +842,7 @@ class ForgottenWoods extends Location
 
 	public function returningDeer(choice:String, deer:Deer)
 	{
+		GameVariables.instance.unfamiliarWoodsLostDeer.remove(foundDeer);
 		GameVariables.instance.addFoundDeer(foundDeer);
 
 		showResult(["After bowing to each other, you continue walking as " + foundDeer.name + " follows."]);

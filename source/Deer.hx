@@ -80,14 +80,32 @@ class Deer{
 		
 		if(health == maxHealth){
 			status = "in perfect health";
-		}else if (health == 1){
-			status = "barely conscious";
-		}else if (health == 2){
-			status = "barely standing";
-		}else if (health == 3){
-			status = "a bit worse for wear";
+		}else if (health <= 0){
+			status = "continuing to rest";
+		}else if (health <= 2){
+			status = "still weak, but able to move";
+		}else if (health <= 3){
+			status = "a bit roughed up, but able to move";
 		}else{
 			status = "in decent condition";
+		}
+		
+		return status;
+	}
+	
+	public function getHealthStatus():String{
+		var status:String = "";
+		
+		if(health == maxHealth){
+			status = "Healthy";
+		}else if (health <= 0){
+			status = "Injured";
+		}else if (health <= 2){
+			status = "Weak";
+		}else if (health <= 3){
+			status = "Fair";
+		}else{
+			status = "Decent";
 		}
 		
 		return status;
@@ -112,8 +130,8 @@ class Deer{
 	
 	public function takeDamage(amount:Int){
 		health -= amount;
-		if(health <= 0){
-			health = 0;
+		if(health < 0){
+			currentAction = "Resting";
 		}
 	}
 	
@@ -306,6 +324,9 @@ class Deer{
 		}
 		
 		newDeer.maxHealth = newDeer.res * 2;
+		if(newDeer.maxHealth == 0){
+			newDeer.maxHealth = 1;
+		}
 		newDeer.health = newDeer.maxHealth;
 			
 		if(randomizer.bool()){
@@ -377,6 +398,9 @@ class Deer{
 		}
 		
 		newDeer.maxHealth = newDeer.res * 2;
+		if(newDeer.maxHealth == 0){
+			newDeer.maxHealth = 1;
+		}
 		newDeer.health = newDeer.maxHealth;
 			
 		if(randomizer.bool()){

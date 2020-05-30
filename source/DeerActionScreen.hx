@@ -5,6 +5,7 @@ import flixel.text.FlxText;
 import flixel.FlxG;
 import flixel.FlxSprite;
 import flixel.FlxObject;
+import flixel.util.FlxAxes;
 
 class DeerActionScreen extends FlxObject{
     var deer:Deer;
@@ -16,6 +17,8 @@ class DeerActionScreen extends FlxObject{
     var statTexts:Array<FlxText>;
     var statNumbers:Array<FlxText>;
     
+	var healthStatusText:FlxText;
+	
     var statusText:FlxText;
     
 	var actionOptions:Array<FlxButton>;
@@ -53,6 +56,7 @@ class DeerActionScreen extends FlxObject{
 
         FlxG.state.remove(nameText);
         FlxG.state.remove(statusText);
+        FlxG.state.remove(healthStatusText);
         FlxG.state.remove(background);
         FlxG.state.remove(deerCharacterSprite);
         
@@ -142,6 +146,12 @@ class DeerActionScreen extends FlxObject{
 	}
 
     function actionOptionClicked(action:String, buttonIndex:Int){
+		//If the deer has no health, it must rest
+		if (deer.health <= 0)
+		{
+			return;
+		}
+		
 		for(i in 0...5){
             if(i == buttonIndex){
 			    actionOptions[i].loadGraphic("assets/images/CheckedCheckbox.png", false, 128, 128);
@@ -189,8 +199,19 @@ class DeerActionScreen extends FlxObject{
 		nameText.color = 0xFF000000;
         FlxG.state.add(nameText);
 
-        statusText = new FlxText(55, 260, 0, deer.currentAction, 22);
+        statusText = new FlxText(55, 315, 400, deer.currentAction, 22);
 		statusText.color = 0xFF000000;
+		statusText.alignment = "center";
+		statusText.screenCenter(FlxAxes.X);
         FlxG.state.add(statusText);
+		
+		if (deer.health <= 0)
+		{
+			statusText.text = "Resting (Injured)";
+		}
+		
+		healthStatusText = new FlxText(55, 265, 0, deer.getHealthStatus(), 22);
+		healthStatusText.color = 0xFF000000;
+        FlxG.state.add(healthStatusText);
     }
 }

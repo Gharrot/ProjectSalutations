@@ -473,6 +473,7 @@ class MainGame extends FlxState
 			}else{
 				locationSprite.visible = false;
 			}
+            locationSprite.loadGraphic(GameVariables.instance.currentLocation.backgroundImageFile, true, 190, 134);
         }
 		
 		updateDeerScrollButtons();
@@ -572,6 +573,7 @@ class MainGame extends FlxState
 			newButton.screenCenter();
 			newButton.x -= 150;
 			mapButtons[mapButtons.length] = newButton;
+			newButton.onUp.callback = locationMovement.bind("Dark Forest", 7);
 			add(newButton);
 			
 			//Unfamiliar Woods (current location)
@@ -602,8 +604,43 @@ class MainGame extends FlxState
 			mapButtons[mapButtons.length] = newButton;
 			newButton.onUp.callback = locationMovement.bind("Abandoned Fields", 5);
 			add(newButton);
-		}else{
+		}
+		else if (GameVariables.instance.currentLocationName == "Dark Forest")
+		{
 			//mapSprite.loadGraphic("assets/images/MapImages/MapWoods.png");
+			//Power Plant
+			var newButton:FlxButton;
+			newButton = new FlxButton(0, 0);
+			newButton.loadGraphic("assets/images/MapImages/LocationButton.png", true, 23, 23);
+			newButton.scale.set(3, 3);
+			newButton.updateHitbox();
+			newButton.screenCenter();
+			newButton.x -= 150;
+			newButton.y += 110;
+			mapButtons[mapButtons.length] = newButton;
+			add(newButton);
+			
+			//Dark Forest (current location)
+			var currentLocationSprite:FlxSprite = new FlxSprite(0, 0);
+			currentLocationSprite.loadGraphic("assets/images/MapImages/CurrentLocationMarker.png", true);
+			currentLocationSprite.scale.set(3, 3);
+			currentLocationSprite.screenCenter();
+			currentLocationSprite.y += 110;
+			mapSprites[mapSprites.length] = currentLocationSprite;
+			add(currentLocationSprite);
+			
+			//Unfamiliar Woods
+			newButton = new FlxButton(0, 0);
+			newButton.loadGraphic("assets/images/MapImages/LocationButton.png", true, 23, 23);
+			newButton.scale.set(3, 3);
+			newButton.updateHitbox();
+			newButton.screenCenter();
+			mapButtons[mapButtons.length] = newButton;
+			newButton.onUp.callback = locationMovement.bind("Unfamiliar Woods", 5);
+			add(newButton);
+		}
+		else
+		{
 			//mapSprite.loadGraphic("assets/images/MapImages/MapWoods.png");
 			//Power Plant
 			var newButton:FlxButton;
@@ -643,7 +680,7 @@ class MainGame extends FlxState
 			newButton.updateHitbox();
 			newButton.screenCenter();
 			mapButtons[mapButtons.length] = newButton;
-			newButton.onUp.callback = locationMovement.bind("Unfamiliar Woods", 5);
+			newButton.onUp.callback = locationMovement.bind("The Darkened Woods", 5);
 			add(newButton);
 		}
 		
