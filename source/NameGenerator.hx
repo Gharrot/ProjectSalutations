@@ -1,15 +1,37 @@
 package;
 
+import flixel.math.FlxRandom;
+
 class NameGenerator  
 {
-	public static function getRandomName(gender:String):String
+	private static var names:Array<String>;
+	
+	public static function getRandomName(?gender:String):String
 	{
-		if(gender == "Male"){
-			return "Tom Ato";
-		}else if(gender == "Female"){
-			return "Ann Chovy";
+		if(names == null){
+			setupNames();
 		}
-
-		return "Jeff";
+		
+		var randomNums:FlxRandom = new FlxRandom();
+		
+		return names[randomNums.int(0, names.length - 1)];
+	}
+	
+	private static function setupNames()
+	{
+		names = new Array<String>();
+		names.push("Tomato");
+		names.push("Anchovy");
+		names.push("Derth");
+		names.push("Bancho");
+		names.push("Bittles");
+		names.push("Vegle");
+		names.push("Marbe");
+		names.push("Rote");
+		names.push("Leaf");
+		names.push("Fleam");
+		names.push("Gilpie");
+		names.push("Flacks");
+		names.push("Sticks");
 	}
 }

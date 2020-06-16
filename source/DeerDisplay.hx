@@ -32,6 +32,7 @@ class DeerDisplay extends FlxObject
         }
         nameText.visible = false;
         deerSprite.visible = false;
+        healthStatusSprite.visible = false;
 		
 		emptied = true;
 	}
@@ -42,6 +43,7 @@ class DeerDisplay extends FlxObject
         }
         nameText.visible = true;
         deerSprite.visible = true;
+        healthStatusSprite.visible = true;
 		
 		emptied = false;
 	}

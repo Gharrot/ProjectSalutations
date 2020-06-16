@@ -148,7 +148,7 @@ class Deer{
 	
 	public function takeDamage(amount:Int){
 		health -= amount;
-		if(health < 0){
+		if(health <= 0){
 			currentAction = "Resting";
 		}
 	}
@@ -317,7 +317,7 @@ class Deer{
 		return name;
 	}
 	
-	static public function buildADeer(totalStatPoints:Int, ?distributions:Array<Array<Int>>):Deer{
+	static public function buildADeer(totalStatPoints:Int, ?maxStatValue:Int = -1, ?minStatValue:Int = 0, ?distributions:Array<Array<Int>>):Deer{
 		var randomizer:FlxRandom = new FlxRandom();
 		var statNames = ["Strength", "Resilience", "Dexterity", "Intellect", "Fortune"];
 		randomizer.shuffle(statNames);
@@ -329,13 +329,35 @@ class Deer{
 		var chosenDistribution:Array<Int> = distributions[randomizer.int(0, distributions.length - 1)];
 		
 		var newDeer:Deer = getNewBlankDeer();
+		var statsGiven:Int = 0;
 		
-		for (i in 0...totalStatPoints) {
+		//give base stats
+		for (i in 0...minStatValue)
+		{
+			for (j in 0...statNames.length) 
+			{
+				newDeer.modifyStatByName(statNames[j]);
+				statsGiven++;
+			}
+		}
+		
+		//give the other stats
+		while (statsGiven < totalStatPoints) {
 			var statRoll:Int = randomizer.int(0, 100);
+			statsGiven++;
 			
-			for (i in 0...chosenDistribution.length) {
-				if (statRoll <= chosenDistribution[i]) {
-					newDeer.modifyStatByName(statNames[i]);
+			for (i in 0...chosenDistribution.length) 
+			{
+				if (statRoll <= chosenDistribution[i]) 
+				{
+					if (maxStatValue == -1 || newDeer.getStatByName(statNames[i]) < maxStatValue)
+					{
+						newDeer.modifyStatByName(statNames[i]);
+					}
+					else
+					{
+						statsGiven--;
+					}
 					break;
 				}
 			}
@@ -414,6 +436,8 @@ class Deer{
 				newDeer.modifyStatByName(statNames[randomizer.int(0, statNames.length)], 1);
 			}
 		}
+		
+		trace(newDeer.getStatTotal());
 		
 		newDeer.maxHealth = newDeer.res * 2;
 		if(newDeer.maxHealth == 0){

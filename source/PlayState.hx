@@ -216,6 +216,8 @@ class PlayState extends FlxState
 		clearSavesButtons();
 		saveToStart = saveNum;
 		
+		showDeleteButton.visible = false;
+		
 		rising = true;
 	}
 	

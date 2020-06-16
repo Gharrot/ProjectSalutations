@@ -101,6 +101,10 @@ class MainGame extends FlxState
         mapButton.visible = false;
         denButton.visible = false;
         continueButton.visible = false;
+		
+		if(setOutDisabledText != null){
+			setOutDisabledText.visible = false;
+		}
     }
 	
 	public function updateContinueButton(){

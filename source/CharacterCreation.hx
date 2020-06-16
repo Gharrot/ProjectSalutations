@@ -8,6 +8,7 @@ import flixel.addons.ui.FlxInputText;
 import flixel.text.FlxText;
 import flixel.util.FlxAxes;
 import locations.Location;
+import flixel.math.FlxRandom;
 
 class CharacterCreation extends FlxState
 {
@@ -30,6 +31,8 @@ class CharacterCreation extends FlxState
 	var pointsRemainingText:FlxText;
 	
 	var startButton:FlxButton;
+	
+	var randomizeButton:FlxButton;
 
 	override public function create():Void
 	{
@@ -69,6 +72,11 @@ class CharacterCreation extends FlxState
 		startButton.screenCenter(FlxAxes.X);
 		add(startButton);
 		
+		randomizeButton = new FlxButton(250, 270, "Randomize", randomize);
+		randomizeButton.loadGraphic("assets/images/OctaButtonSkinny.png", true, 160, 74);
+		ButtonUtils.fixButtonText(randomizeButton, 14, 22, 1);
+		add(randomizeButton);
+		
 		updateDeer();
 	}
 
@@ -99,6 +107,30 @@ class CharacterCreation extends FlxState
 										Std.parseInt(statTexts[3].text), Std.parseInt(statTexts[4].text), 
 										true));
 		FlxG.switchState(new MainGame());
+	}
+	
+	private function randomize(){
+		var randoDeer:Deer = Deer.buildADeer(16, 5, 1, [[20, 40, 60, 80, 100]]);
+		
+		var statName = ["Strength", "Resilience", "Dexterity", "Intellect", "Fortune"];
+		for(i in 0...5){
+			statTexts[i].text = Std.string(randoDeer.getStatByName(statName[i]));
+		}
+		
+		nameBox.text = randoDeer.getName();
+		
+		if(FlxG.random.bool(50)){
+			maleClicked(false);
+			nameBox.text = NameGenerator.getRandomName("Male");
+		}else{
+			femaleClicked(false);
+			nameBox.text = NameGenerator.getRandomName("Female");
+		}
+		
+		statPointsRemaining = 0;
+		pointsRemainingText.text = "Points remaining: " + statPointsRemaining;
+		
+		updateDeer();
 	}
 
 	private function setupStats(){

@@ -136,6 +136,7 @@ class GameVariables {
 	
 	public function addBabyDeer(deer:Deer){
 		babyDeer.push(deer);
+		deer.currentAction = "Baby";
 	}
 	
 	public function prepareDeer(){
