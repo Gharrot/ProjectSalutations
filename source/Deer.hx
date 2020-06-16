@@ -111,6 +111,24 @@ class Deer{
 		return status;
 	}
 	
+	public function getHealthSpriteString():String{
+		var spriteString:String = "";
+		
+		if(health == maxHealth){
+			spriteString = "assets/images/DeerTileSprites/HealthMarkerTransparent.png";
+		}else if (health <= 0){
+			spriteString = "assets/images/DeerTileSprites/HealthMarkerRed.png";
+		}else if (health <= 2){
+			spriteString = "assets/images/DeerTileSprites/HealthMarkerOrange.png";
+		}else if (health <= 3){
+			spriteString = "assets/images/DeerTileSprites/HealthMarkerYellow.png";
+		}else{
+			spriteString = "assets/images/DeerTileSprites/HealthMarkerYellowGreen.png";
+		}
+		
+		return spriteString;
+	}
+	
 	public function isAvailable():Bool{
 		if(health <= 0){
 			return false;

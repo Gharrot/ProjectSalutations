@@ -105,6 +105,7 @@ class PlayState extends FlxState
         showDeleteButton.label.offset.y -= 4;
         showDeleteButton.label.fieldWidth = showDeleteButton.width;
         showDeleteButton.label.alignment = "center";
+		showDeleteButton.visible = false;
 
 		newGameButton = new FlxButton(0, 290, "Continue", showSaves);
 		newGameButton.screenCenter(FlxAxes.X);
@@ -185,6 +186,13 @@ class PlayState extends FlxState
 				for(i in 0...deerSprites.length){
 					deerSprites[i].refreshNameText();
 					add(deerSprites[i]);
+					remove(deerSprites[i]);
+					insert(this.length, deerSprites[i]);
+				}
+				
+				if (showDeleteButton != null){
+					remove(showDeleteButton);
+					insert(this.length, showDeleteButton);
 				}
 			}
 		}
@@ -200,6 +208,7 @@ class PlayState extends FlxState
 		
 		if(saveDeleteButtons.length != 0){
 			add(showDeleteButton);
+			showDeleteButton.visible = true;
 		}
 	}
 	

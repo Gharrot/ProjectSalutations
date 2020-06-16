@@ -69,14 +69,8 @@ class DarkForest extends Location
 			
 			message.push("A pack of " + enemyWolves + " wolves arrives at your undefended den");
 			
-			if (restingDeer.length > 0){
-				setActiveDeer(restingDeer);
-				message.push("The pack spots your resting deer and attacks");
-				message.push("They manage to escape, but are forced to flee back to the Forgotten Woods");
-			}else{
-				message.push("The pack gathers up " + foodStolen + " food and runs off.");
-				gameVariables.modifyFood(-1 * foodStolen);
-			}
+			message.push("The pack gathers up " + foodStolen + " food and runs off.");
+			gameVariables.modifyFood(-1 * foodStolen);
 			showResult(message);
 		}
 		else
@@ -126,7 +120,7 @@ class DarkForest extends Location
 			
 			if (deerAttacking){
 				var deerAttacker:Deer = deer[deerAttackIndex];
-				var wolfTarget:EnemyWolf = wolvesInAttack[randomNums.int(0, wolvesInAttack.length)];
+				var wolfTarget:EnemyWolf = wolvesInAttack[randomNums.int(0, wolvesInAttack.length - 1)];
 				
 				//check for accuracy/speed
 				if(deerAttacker.dex + randomNums.int(0,3) >= wolfTarget.dex + randomNums.int(0,2)){
@@ -134,11 +128,11 @@ class DarkForest extends Location
 					var deerAttackStrength:Int = deerAttacker.str - wolfTarget.res + randomNums.int(0, 2);
 					
 					if(deerAttackStrength < 0){
-						message.push(deerAttacker.getName + " lands a kick on a wolf, but it seems unfazed.");
+						message.push(deerAttacker.getName() + " lands a kick on a wolf, but it seems unfazed.");
 					}
 					else if(deerAttackStrength <= 2)
 					{
-						message.push(deerAttacker.getName + " lands a kick on a wolf. It whimpers and backs off into the dark.");
+						message.push(deerAttacker.getName() + " lands a kick on a wolf. It whimpers and backs off into the dark.");
 						
 						if(wolvesInAttack.indexOf(wolfTarget) < wolfAttackIndex){
 							wolfAttackIndex--;
@@ -147,7 +141,7 @@ class DarkForest extends Location
 					}
 					else
 					{
-						message.push(deerAttacker.getName + " lands a solid kick on a wolf, sending them tumbling into the dark.");
+						message.push(deerAttacker.getName() + " lands a solid kick on a wolf, sending them tumbling into the dark.");
 						
 						if(wolvesInAttack.indexOf(wolfTarget) < wolfAttackIndex){
 							wolfAttackIndex--;
@@ -158,13 +152,15 @@ class DarkForest extends Location
 				}
 				else
 				{
-					message.push(deerAttacker.getName + " attempts to kick the wolf, but it dodges to the side.");
+					message.push(deerAttacker.getName() + " attempts to kick the wolf, but it dodges to the side.");
 				}
+				
+				deerAttackIndex++;
 			}
 			else
 			{
 				var wolfAttacker:EnemyWolf = wolvesInAttack[wolfAttackIndex];
-				var deerTarget:Deer = deer[randomNums.int(0, deer.length)];
+				var deerTarget:Deer = deer[randomNums.int(0, deer.length - 1)];
 				
 				//check for accuracy/speed
 				if(wolfAttacker.dex + randomNums.int(0,3) >= deerTarget.dex + randomNums.int(0,2)){
@@ -181,12 +177,16 @@ class DarkForest extends Location
 					}
 					else
 					{
-						message.push("A wolf lunges at " + deerTarget.getName() + ", biting deeply into the them.");
+						message.push("A wolf lunges at " + deerTarget.getName() + ", biting deeply into them.");
 						deerTarget.takeDamage(2);
 					}
 					
 					if (deerTarget.health <= 0){
 						message.push(deerTarget.getName() + " is too injured to fight and stumbles back.");
+						
+						if(deer.indexOf(deerTarget) < deerAttackIndex){
+							deerAttackIndex--;
+						}
 						deer.remove(deerTarget);
 					}
 				}
@@ -194,6 +194,8 @@ class DarkForest extends Location
 				{
 					message.push("A wolf lunges at " + deerTarget.getName() + ", narrowly missing.");
 				}
+				
+				wolfAttackIndex++;
 			}
 			
 			if(wolvesInAttack.length == 0 || deer.length == 0){
@@ -201,7 +203,7 @@ class DarkForest extends Location
 			}
 		}
 		
-		if (wolvesInAttack.length == 0)
+		if (wolvesInAttack.length <= 1)
 		{
 			message.push("All the wolves have backed off; the fight is won.");
 			showResult(message);
@@ -211,8 +213,13 @@ class DarkForest extends Location
 			message.push("None of you are in any condition to keep fighting");
 			showChoiceMultipleDeer(message, ["Abandon the fight"], [backOffFromAttack], deer);
 		}
+		else
+		{
+			message.push(wolvesInAttack.length + " wolves remain.");
+			showChoiceMultipleDeer(message, ["Attack", "Abandon the fight"], [continuedAttack, backOffFromAttack], deer);
+		}
 		
-		showChoiceMultipleDeer(message, ["Attack", "Abandon the fight"], [continuedAttack, backOffFromAttack], deer);
+		setActiveDeer(deer);
 	}
 	
 	public function backOffFromAttack(choice:String, deer:Array<Deer>){

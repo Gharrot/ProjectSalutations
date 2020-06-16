@@ -615,7 +615,6 @@ class MainGame extends FlxState
 			newButton.scale.set(3, 3);
 			newButton.updateHitbox();
 			newButton.screenCenter();
-			newButton.x -= 150;
 			newButton.y += 110;
 			mapButtons[mapButtons.length] = newButton;
 			add(newButton);
@@ -625,7 +624,6 @@ class MainGame extends FlxState
 			currentLocationSprite.loadGraphic("assets/images/MapImages/CurrentLocationMarker.png", true);
 			currentLocationSprite.scale.set(3, 3);
 			currentLocationSprite.screenCenter();
-			currentLocationSprite.y += 110;
 			mapSprites[mapSprites.length] = currentLocationSprite;
 			add(currentLocationSprite);
 			
@@ -635,6 +633,7 @@ class MainGame extends FlxState
 			newButton.scale.set(3, 3);
 			newButton.updateHitbox();
 			newButton.screenCenter();
+			newButton.x += 110;
 			mapButtons[mapButtons.length] = newButton;
 			newButton.onUp.callback = locationMovement.bind("Unfamiliar Woods", 5);
 			add(newButton);

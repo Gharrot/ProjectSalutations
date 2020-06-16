@@ -14,6 +14,8 @@ class DeerTile extends FlxButton{
     public var nameText:FlxText;
     public var statTexts:Array<FlxText>;
     public var statNumbers:Array<FlxText>;
+	
+	public var healthStatusSprite:FlxSprite;
 
 	public var bgSprite:FlxSprite;
 	public var deerSprite:FlxSprite;
@@ -67,6 +69,7 @@ class DeerTile extends FlxButton{
         FlxG.state.remove(nameText);
         FlxG.state.remove(statusText);
         FlxG.state.remove(bgSprite);
+        FlxG.state.remove(healthStatusSprite);
         FlxG.state.remove(deerSprite);
     }
 
@@ -79,6 +82,7 @@ class DeerTile extends FlxButton{
         statusText.visible = false;
 		deerSprite.visible = false;
 		bgSprite.visible = false;
+		healthStatusSprite.visible = false;
 		this.visible = false;
     }
 
@@ -89,6 +93,7 @@ class DeerTile extends FlxButton{
         nameText.visible = true;
 		deerSprite.visible = true;
 		bgSprite.visible = true;
+		healthStatusSprite.visible = true;
 		this.visible = true;
     }
 
@@ -113,6 +118,10 @@ class DeerTile extends FlxButton{
 		
 		if(bgSprite == null){
 			setupBgSprite();
+		}
+		
+		if(healthStatusSprite == null){
+			setupHealthSprite();
 		}
 		
 		if(deerSprite == null){
@@ -143,6 +152,9 @@ class DeerTile extends FlxButton{
 		bgSprite.x = x + 10;
 		bgSprite.y = y + 10;
 		
+		healthStatusSprite.x = x + 15;
+		healthStatusSprite.y = y + 33;
+		
 		deerSprite.x = x + 79;
 		deerSprite.y = y + 74;
     }
@@ -170,12 +182,19 @@ class DeerTile extends FlxButton{
 		statusText.text = deer.currentAction;
 		
 		bgSprite.loadGraphic(GameVariables.instance.currentLocation.backgroundImageFileNoFrame);
+		healthStatusSprite.loadGraphic(deer.getHealthSpriteString());
 	}
 	
 	public function setupBgSprite(){
 		bgSprite = new FlxSprite(0, 0);
 		bgSprite.loadGraphic(GameVariables.instance.currentLocation.backgroundImageFileNoFrame);
 		FlxG.state.add(bgSprite);
+	}
+	
+	public function setupHealthSprite(){
+		healthStatusSprite = new FlxSprite(0, 0);
+		healthStatusSprite.loadGraphic(deer.getHealthSpriteString());
+		FlxG.state.add(healthStatusSprite);
 	}
 	
 	public function setupDeerSprite(){

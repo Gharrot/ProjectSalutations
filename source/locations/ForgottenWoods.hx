@@ -139,12 +139,14 @@ class ForgottenWoods extends Location
 		var randomNums:FlxRandom = new FlxRandom();
 		randomNums.shuffle(deer);
 
+		var result:Array<String> = new Array<String>();
+		
 		var thisExplorationNum = randomNums.int(0, 0);
 
 		//Rabbit
 		if (thisExplorationNum == 0)
 		{
-			var result:String = "Your hunting pack finds a small rabbit.\n";
+			result.push("Your hunting pack finds a small rabbit.\n");
 			var initialCatch:Bool = false;
 			for (i in 0...deer.length)
 			{
@@ -152,14 +154,14 @@ class ForgottenWoods extends Location
 				if (randomNums.int(0, 8) + (deer[i].dex*2) + (deer[i].lck - 2) >= 14)
 				{
 					initialCatch = true;
-					result += deer[i].name + " runs the rabbit down and trips it up. ";
+					result.push(deer[i].name + " runs the rabbit down and trips it up.");
 					break;
 				}
 			}
 
 			if (initialCatch)
 			{
-				var damageDealth:Int = 0;
+				var damageDealt:Int = 0;
 				for (i in 0...deer.length)
 				{
 					//Successful hit
@@ -169,52 +171,48 @@ class ForgottenWoods extends Location
 
 						if (hitStrength >= 15)
 						{
-							result += deer[i].name + " lands a critical blow on the rabbit. ";
-							damageDealth += 2;
+							result.push(deer[i].name + " lands a critical blow on the rabbit.");
+							damageDealt += 2;
 						}
 						else if (hitStrength >= 10)
 						{
-							result += deer[i].name + " deals a solid blow to the rabbit. ";
-							damageDealth += 1;
+							result.push(deer[i].name + " deals a solid blow to the rabbit.");
+							damageDealt += 1;
 						}
 						else
 						{
-							result += deer[i].name + " lands an ineffective attack on the rabbit. ";
+							result.push(deer[i].name + " lands an ineffective attack on the rabbit.");
 						}
 					}
 					else
 					{
-						result += deer[i].name + " fails to land their attack. ";
+						result.push(deer[i].name + " fails to land their attack.");
 					}
 
-					if (damageDealth >= 2)
+					if (damageDealt >= 2)
 					{
 						GameVariables.instance.modifyFood(3);
 						GameVariables.instance.addUnfamiliarWoodsRabbitFur();
-						result += "The rabbit lies defeated. You bring it to the den to use as food and bedding (+3 food).";
+						result.push("The rabbit lies defeated. You bring it to the den to use as food and bedding (+3 food).");
 						break;
 					}
 				}
 
-				if (damageDealth == 1)
+				if (damageDealt == 1)
 				{
-					result += "The rabbit bounds off with a few new scratches.";
+					result.push("The rabbit bounds off with a few new scratches.");
 				}
 				else
 				{
-					result += "The rabbit bounds off unharmed.";
+					result.push("The rabbit bounds off unharmed.");
 				}
 			}
 			else
 			{
-				result += "No one is able to keep up to the rabbit and it bounds off.";
+				result.push("No one is able to keep up to the rabbit and it bounds off.");
 			}
 
-			showResult([result]);
-		}
-		//Wolf
-		else if (thisExplorationNum == 1)
-		{
+			showResult(result);
 		}
 	}
 
@@ -329,9 +327,9 @@ class ForgottenWoods extends Location
 		message.push("Walking through the woods, you come a small pond.");
 		message.push("The pond seems to be fed by a natural spring flowing from some rocks nearby.");
 		message.push("You sit by the spring for a while, and feel a sense of calm flow over you.");
-		message.push("(+1 Intellect for 2 days).");
+		message.push("(+2 Intellect for 3 days).");
 		
-		deer.addStatusEffect(new DeerStatusEffect("Calmed", 3, 0, 0, 0, 1, 0));
+		deer.addStatusEffect(new DeerStatusEffect("Calmed", 4, 0, 0, 0, 2, 0));
 		
 		showResult(message);
 	}
@@ -344,9 +342,9 @@ class ForgottenWoods extends Location
 		message.push("The trail is longer than you expected, with many sections overgrown.");
 		message.push("Still, you push on and reach the top.");
 		message.push("You sit on the top of the hill admiring the view of the forest, happy that your efforts have paid off.");
-		message.push("(+1 Resilience for 2 days).");
+		message.push("(+2 Resilience for 3 days).");
 		
-		deer.addStatusEffect(new DeerStatusEffect("Inspired", 3, 0, 1, 0, 0, 0));
+		deer.addStatusEffect(new DeerStatusEffect("Inspired", 4, 0, 2, 0, 0, 0));
 		
 		showResult(message);
 	}
@@ -370,9 +368,9 @@ class ForgottenWoods extends Location
 			message.push("You place some of the food you brought for the day on the ground in front of you.");
 			message.push("A few squirrels run down the tree to collect the food.");
 			message.push("They look up at you and chitter happily before scampering back up the tree to divide your gift.");
-			message.push("(+2 Luck for 2 days).");
+			message.push("(+2 Luck for 3 days).");
 			
-			deer.addStatusEffect(new DeerStatusEffect("Luck of the Squirrels", 3, 0, 0, 0, 0, 2));
+			deer.addStatusEffect(new DeerStatusEffect("Luck of the Squirrels", 4, 0, 0, 0, 0, 2));
 		}
 		else
 		{

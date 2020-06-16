@@ -17,6 +17,8 @@ class DeerDisplay extends FlxObject
     public var nameText:FlxText;
     public var statNumbers:Array<FlxText>;
 	
+	public var healthStatusSprite:FlxSprite;
+	
 	public var emptied:Bool = false;
 
     public function new(?deer:Deer){
@@ -51,6 +53,7 @@ class DeerDisplay extends FlxObject
         FlxG.state.remove(nameText);
         FlxG.state.remove(deerSprite);
         FlxG.state.remove(bgSprite);
+        FlxG.state.remove(healthStatusSprite);
     }
 
     public function hide(){
@@ -60,6 +63,7 @@ class DeerDisplay extends FlxObject
         nameText.visible = false;
 		deerSprite.visible = false;
 		bgSprite.visible = false;
+		healthStatusSprite.visible = false;
 		this.visible = false;
     }
 
@@ -71,6 +75,7 @@ class DeerDisplay extends FlxObject
 			
 			nameText.visible = true;
 			deerSprite.visible = true;
+			healthStatusSprite.visible = true;
 		}
 			
 		bgSprite.visible = true;
@@ -95,6 +100,9 @@ class DeerDisplay extends FlxObject
 		
 		bgSprite.x = x;
 		bgSprite.y = y;
+		
+		healthStatusSprite.x = x + 15;
+		healthStatusSprite.y = y + 35;
 		
         deerSprite.x = x + 62; 
         deerSprite.y = y + 69;
@@ -130,6 +138,8 @@ class DeerDisplay extends FlxObject
 		deerSprite.animation.add("monching", [5, 6, 7, 7, 7, 8, 9, 0, 0, 0, 0, 0, 0], 4, false);
 
 		nameText.text = deer.name;
+		
+		healthStatusSprite.loadGraphic(deer.getHealthSpriteString());
 	}
 
     public function setupTexts(){
@@ -155,6 +165,10 @@ class DeerDisplay extends FlxObject
 		bgSprite = new FlxSprite(0, 0);
 		bgSprite.loadGraphic(GameVariables.instance.currentLocation.backgroundImageFileMiniFramed);
 		FlxG.state.add(bgSprite);
+		
+		healthStatusSprite = new FlxSprite(0, 0);
+		healthStatusSprite.loadGraphic(deer.getHealthSpriteString());
+		FlxG.state.add(healthStatusSprite);
 		
 		deerSprite = new FlxSprite(0, 0);
 		if(deer.gender == "Male"){
