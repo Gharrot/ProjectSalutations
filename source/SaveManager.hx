@@ -32,7 +32,17 @@ class SaveManager
 		gameVariables.unfamiliarWoodsInspiringViewFound = save.data.unfamiliarWoodsInspiringViewFound;
 		gameVariables.unfamiliarWoodsSquirrelsOfGoodFortuneFound = save.data.unfamiliarWoodsSquirrelsOfGoodFortuneFound;
 		
+		//AbandonedFields
 		gameVariables.abandonedFieldsMaxFood = save.data.abandonedFieldsMaxFood;
+		
+		//DarkForest
+		gameVariables.darkForestMaxFood = save.data.darkForestMaxFood;
+		gameVariables.darkForestTimeRemaining = save.data.darkForestTimeRemaining;
+		gameVariables.darkForestWolves = save.data.darkForestWolves;
+		gameVariables.darkForestFoodStoreFound = save.data.darkForestFoodStoreFound;
+		gameVariables.darkForestFoodStoreBarricaded = save.data.darkForestFoodStoreBarricaded;
+		gameVariables.darkForestPedestalRaised = save.data.darkForestPedestalRaised;
+		gameVariables.darkForestMedallionTaken = save.data.darkForestMedallionTaken;
 		
 		//move to the correct location
 		gameVariables.changeLocation(gameVariables.currentLocationName, false);
@@ -67,6 +77,15 @@ class SaveManager
 		
 		//AbandonedFields
 		save.data.abandonedFieldsMaxFood = gameVariables.abandonedFieldsMaxFood;
+		
+		//DarkForest
+		save.data.darkForestMaxFood = gameVariables.darkForestMaxFood;
+		save.data.darkForestTimeRemaining = gameVariables.darkForestTimeRemaining;
+		save.data.darkForestWolves = gameVariables.darkForestWolves;
+		save.data.darkForestFoodStoreFound = gameVariables.darkForestFoodStoreFound;
+		save.data.darkForestFoodStoreBarricaded = gameVariables.darkForestFoodStoreBarricaded;
+		save.data.darkForestPedestalRaised = gameVariables.darkForestPedestalRaised;
+		save.data.darkForestMedallionTaken = gameVariables.darkForestMedallionTaken;
 		
 		save.flush();
 	}

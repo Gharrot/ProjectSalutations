@@ -19,6 +19,79 @@ class DarkForest extends Location
 		backgroundImageFileMiniFramed = "assets/images/LocationImages/DarkForestEmptyDeerTile.png";
 	}
 	
+	override public function returnAfterDayEnd()
+	{
+		GameVariables.instance.darkForestWolves.push(new EnemyWolf());
+		GameVariables.instance.darkForestWolves.push(new EnemyWolf());
+		
+		if (GameVariables.instance.darkForestTimeRemaining > 0)
+		{
+			if (GameVariables.instance.darkForestTimeRemaining > 1)
+			{
+				showChoice(["As the night begins to end, you hear a bell toll " + GameVariables.instance.darkForestTimeRemaining + " times in the distance."], ["Continue"], [returnToDenChoice], null);
+			}
+			else
+			{
+				showChoice(["As the night begins to end, you hear a bell toll once in the distance."], ["Continue"], [returnToDenChoice], null);
+			}
+			GameVariables.instance.darkForestTimeRemaining--;
+		}
+		else
+		{
+			if (!GameVariables.instance.darkForestPedestalRaised)
+			{
+				//fight a powerful wolf for the medallion
+				GameVariables.instance.darkForestPedestalRaised = true;
+				showChoice(["As the night begins to end, a great pillar of fire erupts in the distance."], ["Continue"], [returnToDenChoice], null);
+			}
+			else if(!GameVariables.instance.darkForestMedallionTaken)
+			{
+				showChoice(["The great pillar of fire continues to shine in the distance."], ["Continue"], [returnToDenChoice], null);
+			}
+			else
+			{
+				returnToDen();
+			}
+		}
+	}
+	
+	override public function explore(deer:Deer)
+	{
+		continueCount = 0;
+
+		var exploreOptionNames:Array<String> = new Array<String>();
+		var exploreOptionFunctions:Array<(String, Deer)->Void> = new Array<(String, Deer)->Void>();
+
+		if (GameVariables.instance.darkForestPedestalRaised)
+		{
+			exploreOptionNames.push("The Flame");
+			exploreOptionFunctions.push(greatFlame);
+		}
+
+		exploreOptionNames.push("Wander Elsewhere");
+		exploreOptionFunctions.push(wander);
+
+		if (exploreOptionNames.length <= 1)
+		{
+			wander("", deer);
+		}
+		else
+		{
+			showChoice(["Where will you head to?"], exploreOptionNames, exploreOptionFunctions, deer);
+		}
+	}
+	
+	public function greatFlame(choice:String, deer:Deer)
+	{
+		GameVariables.instance.darkForestMedallionTaken = true;
+		continueOn();
+	}
+
+	public function wander(choice:String, deer:Deer)
+	{
+		continueOn();
+	}
+	
 	override public function forage(deer:Deer) {
 		var randomNums:FlxRandom = new FlxRandom();
 		var forageResult = (deer.int * 2) + (deer.lck) + randomNums.int(0, 10);
@@ -31,7 +104,7 @@ class DarkForest extends Location
 		}else if(forageResult <= 17){
 			GameVariables.instance.modifyFood(3);
 			showResult(["You find some turnips and dig them up (+3 food)."]);
-		}else {
+		}else{
 			var cropFound:Int = randomNums.int(0, 1);
 			GameVariables.instance.modifyFood(4);
 			

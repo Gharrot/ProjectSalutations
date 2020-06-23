@@ -33,5 +33,9 @@ class NameGenerator
 		names.push("Gilpie");
 		names.push("Flacks");
 		names.push("Sticks");
+		names.push("Glim");
+		names.push("Deft");
+		names.push("Ronoa");
+		names.push("Narmelon");
 	}
 }

@@ -40,6 +40,7 @@ class GameVariables {
 	public var darkForestWolves:Array<EnemyWolf>;
 	public var darkForestFoodStoreFound:Bool;
 	public var darkForestFoodStoreBarricaded:Bool;
+    public var darkForestPedestalRaised:Bool;
     public var darkForestMedallionTaken:Bool;
 	
 	public var saveNum:Int;
@@ -83,6 +84,10 @@ class GameVariables {
 				darkForestWolves = new Array<EnemyWolf>();
 				darkForestWolves.push(new EnemyWolf());
 				darkForestWolves.push(new EnemyWolf());
+				
+				if(!darkForestPedestalRaised){
+					darkForestTimeRemaining = 6;
+				}
 			}
 		}
 		
@@ -283,6 +288,7 @@ class GameVariables {
 		darkForestWolves = new Array<EnemyWolf>();
 		darkForestFoodStoreFound = false;
 		darkForestFoodStoreBarricaded = false;
+		darkForestPedestalRaised = false;
 		darkForestMedallionTaken = false;
 	}
 	

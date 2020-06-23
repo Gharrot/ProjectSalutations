@@ -165,8 +165,12 @@ class Location{
 			outOfFood(GameVariables.instance.getPlayerDeer());
 		}else{
 			//Return
-			returnToDen();
+			returnAfterDayEnd();
 		}
+	}
+	
+	public function returnAfterDayEnd(){
+		returnToDen();
 	}
 	
 	public function outOfFood(deer:Deer){
@@ -212,20 +216,27 @@ class Location{
 		var result:Array<String> = new Array<String>();
 		for (i in 0...deer.length) {
 			var currentDeer:Deer = deer[i];
+			var statusDetermined:Bool = false;
+			
 			if(currentDeer.health == currentDeer.maxHealth){
 				result.push(currentDeer.name + " seems healthy and continues to rest.");
-			}else{
-				currentDeer.heal(2);
-				result.push(currentDeer.name + " rests and is now " + currentDeer.getStatus() + ".");
+				statusDetermined = true;
 			}
 			
+			currentDeer.heal(2);
+			
 			if(GameVariables.instance.rabbitFurBeddingMade){
+				currentDeer.heal(1);
 				currentDeer.addStatusEffect(new DeerStatusEffect("Lucky Bedding", 2, 0, 0, 0, 0, 1));
+			}
+			
+			if(!statusDetermined){
+				result.push(currentDeer.name + " rests and is now " + currentDeer.getStatus() + ".");
 			}
 		}
 		
 		if(GameVariables.instance.rabbitFurBeddingMade){
-			result.push("(+1 luck for rested deer tomorrow from rabbit fur bedding)");
+			result.push("(+1 health restored and +1 luck tomorrow for rested deer from rabbit fur bedding)");
 		}
 		
 		showResult(result);
@@ -426,6 +437,10 @@ class Location{
 		mainState.remove(actionText);
 		
 		GameVariables.instance.saveGameData();
+	}
+	
+	public function returnToDenChoice(choice:String, deer:Deer){
+		returnToDen();
 	}
 	
 	public function setActiveDeer(deer:Array<Deer>){

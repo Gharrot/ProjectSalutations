@@ -10,36 +10,41 @@ import flixel.util.FlxAxes;
 
 class MainGame extends FlxState
 {
-    var dateText:FlxText;
-    var foodText:FlxText;
-
     var currentScreen:String;
     
 	var setOutDisabledText:FlxText;
     var continueButton:FlxButton;
 
+	//Topbar
+    var dateText:FlxText;
+    var foodText:FlxText;
+	
+    var herdButton:FlxButton;
+    var mapButton:FlxButton;
+    var denButton:FlxButton;
+	
+	//Herd
 	var deerTilePage:Int;
     var deerTiles:Array<DeerTile>;
     var locationSprites:Array<FlxSprite>;
 	var deerLeftButton:FlxButton;
 	var deerRightButton:FlxButton;
 	
+	//Map
 	var mapSprites:Array<FlxSprite>;
 	var mapButtons:Array<FlxButton>;
 	var travelConfirmation:TravelConfirmationBox;
 	
+	//Den
     var babyDeerTiles:Array<BabyDeerTile>;
     var babyLocationSprites:Array<FlxSprite>;
     var itemDescriptions:Array<FlxText>;
+    var medallions:Array<FlxSprite>;
     var interactButton:FlxButton;
     var improveButton:FlxButton;
     var breedButton:FlxButton;
 	var improvementBox:ImprovementBox;
 	var pairingBox:PairingBox;
-
-    var herdButton:FlxButton;
-    var mapButton:FlxButton;
-    var denButton:FlxButton;
 
 	override public function create()
 	{
@@ -195,6 +200,11 @@ class MainGame extends FlxState
 			remove(itemDescriptions[i]);
 		}
 		itemDescriptions = new Array();
+		
+		for(i in 0...medallions.length){
+			remove(medallions[i]);
+		}
+		medallions = new Array();
     }
 
     function hideHerd(){
@@ -269,6 +279,9 @@ class MainGame extends FlxState
 			itemDescriptions[i].y = 140 + (30 * i);
 		}
 		
+		//medallions
+		setupMedallions();
+		
 		//den buttons
 		interactButton = new FlxButton(290, 140, "Interact");
         interactButton.loadGraphic("assets/images/DenButton.png", true, 160, 56);
@@ -332,6 +345,10 @@ class MainGame extends FlxState
 		for(i in 0...itemDescriptions.length){
 			itemDescriptions[i].visible = true;
 		}
+		
+		for(i in 0...medallions.length){
+			medallions[i].visible = true;
+		}
 	}
 	
 	function hideDen(){
@@ -351,6 +368,10 @@ class MainGame extends FlxState
 		for(i in 0...itemDescriptions.length){
 			itemDescriptions[i].visible = false;
 		}
+		
+		for(i in 0...medallions.length){
+			medallions[i].visible = false;
+		}
     }
 	
 	function setupBabyDeerTiles(){
@@ -369,6 +390,28 @@ class MainGame extends FlxState
 				locationSprite.loadGraphic(GameVariables.instance.currentLocation.backgroundImageFile, true, 190, 134);
 				babyLocationSprites.push(locationSprite);
 			}
+		}
+	}
+	
+	function setupMedallions(){
+		medallions = new Array<FlxSprite>();
+		for(i in 0...6){
+			medallions.push(new FlxSprite(10 + (i * 70), 260));
+			add(medallions[i]);
+		}
+		refreshMedallions();
+	}
+	
+	function refreshMedallions(){
+		//Show medallions that have been earned
+		if (GameVariables.instance.unfamiliarWoodsMedallionTaken)
+		{
+			medallions[0].loadGraphic("assets/images/Medallions/ForgottenWoodsMedallion.png");
+		}
+		
+		if (GameVariables.instance.darkForestMedallionTaken)
+		{
+			medallions[1].loadGraphic("assets/images/Medallions/DarkForestMedallion.png");
 		}
 	}
 
