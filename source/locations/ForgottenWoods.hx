@@ -714,7 +714,7 @@ class ForgottenWoods extends Location
 					message.push("As you follow the path you soon end up walking through pitch darkness.");
 					message.push("Somehow you manage to keep walking unimpeded. After short while you stop and peer further ahead.");
 					message.push("A flickering light shines in the distance.");
-					showChoice(message, ["Walk forward"], [enterTheDarkenedWoods], deer);
+					showChoice(message, ["Move forward"], [enterTheDarkenedWoods], deer);
 				}
 				else
 				{
@@ -722,7 +722,7 @@ class ForgottenWoods extends Location
 					message.push("As you follow the path you soon end up walking through pitch darkness.");
 					message.push("After bumping into trees and tripping over roots, you end up turned around and back where you started.");
 					message.push("The path ahead of you leads deeper into the woods, growing darker and darker.");
-					showChoice(message, ["Walk forward", "Head back"], [deepWoodsMaze, deepWoodsMaze], deer);
+					showChoice(message, ["Move forward", "Head back"], [deepWoodsMaze, deepWoodsMaze], deer);
 				}
 			}
 		}
