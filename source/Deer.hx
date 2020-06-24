@@ -185,6 +185,7 @@ class Deer{
 				if(currentStatus.statusName == "Baby"){
 					GameVariables.instance.addDeer(this);
 					GameVariables.instance.babyDeer.remove(this);
+					currentAction = "Foraging";
 				}
 			}
 		}

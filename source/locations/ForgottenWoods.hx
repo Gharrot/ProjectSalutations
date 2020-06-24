@@ -684,7 +684,7 @@ class ForgottenWoods extends Location
 					message.push("You follow the path through the dense bushes.");
 					message.push("It takes some work, but you manage to push your way through.");
 					message.push("The path ahead of you leads deeper into the woods, growing darker and darker.");
-					showChoice(message, ["Walk forward", "Head back"], [deepWoodsMaze, deepWoodsMaze], deer);
+					showChoice(message, ["Move forward", "Head back"], [deepWoodsMaze, deepWoodsMaze], deer);
 				}
 				else
 				{
@@ -775,7 +775,7 @@ class ForgottenWoods extends Location
 
 		var message:Array<String> = new Array<String>();
 		message.push("As you approach the light it grows in intensity and you find yourself in front of a towering flame.");
-		message.push("The flame rises from a shallow silver pit, with no firewood in sight. A steep staircase made of the same material descends into the ground behind it.");
+		message.push("The flame rises from a shallow silver pit, with no firewood in sight.");
 		message.push("You hear wolves howl in the distance. The fire should keep them at bay, but you would rather get back to the den before they arrive.");
 		message.push("(You can now travel to The Darkened Woods using the map)");
 		showResult(message);
@@ -999,9 +999,11 @@ class ForgottenWoods extends Location
 	{
 		GameVariables.instance.unfamiliarWoodsMedallionTaken = true;
 		deerInCave = new Array<Deer>();
+		
+		GameVariables.instance.maxPackSize++;
 
 		var messages:Array<String> = new Array<String>();
-		messages.push("You walk forward and pick up the medallion.");
+		messages.push("You walk forward and pick up the medallion. (+1 max pack size)");
 		messages.push("Seeing nothing else of interest, you and the others head back.");
 		showResult(messages);
 	}

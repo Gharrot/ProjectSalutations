@@ -85,7 +85,7 @@ class PlayState extends FlxState
 				
 				//get delete button ready
 				var saveDeleteButton = new FlxButton(41 + (159 * i), 435, "Delete Save");
-				saveDeleteButton.onUp.callback = deleteSave.bind(i);
+				saveDeleteButton.onUp.callback = deleteSave.bind(i, saveDeleteButton);
 				saveDeleteButtons.push(saveDeleteButton);
 			}else{
 				saveStartButton.onUp.callback = startNewGame.bind(i);
@@ -286,7 +286,7 @@ class PlayState extends FlxState
 		showDeleteButton.label.text = "Show Delete Buttons";
 	}
 	
-	function deleteSave(saveNum:Int){
+	function deleteSave(saveNum:Int, deleteSaveButton:FlxButton){
 		saves[saveNum].erase();
 		saves[saveNum].bind("Save" + saveNum);
 		
@@ -294,8 +294,8 @@ class PlayState extends FlxState
 		saveStartButtons[saveNum].label.text = "New Game";
 		saveStartButtons[saveNum].onUp.callback = startNewGame.bind(saveNum);
 		
-		remove(saveDeleteButtons[saveNum]);
-		saveDeleteButtons.remove(saveDeleteButtons[saveNum]);
+		remove(deleteSaveButton);
+		saveDeleteButtons.remove(deleteSaveButton);
 		
 		if(saveDeleteButtons.length == 0){
 			remove(showDeleteButton);

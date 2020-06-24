@@ -396,7 +396,8 @@ class MainGame extends FlxState
 	function setupMedallions(){
 		medallions = new Array<FlxSprite>();
 		for(i in 0...6){
-			medallions.push(new FlxSprite(10 + (i * 70), 260));
+			medallions.push(new FlxSprite(30 + (i * 70), 320));
+			medallions[i].loadGraphic("assets/images/DeerTileSprites/HealthMarkerTransparent.png");
 			add(medallions[i]);
 		}
 		refreshMedallions();
