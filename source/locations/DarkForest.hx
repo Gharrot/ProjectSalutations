@@ -67,6 +67,24 @@ class DarkForest extends Location
 			exploreOptionNames.push("The Flame");
 			exploreOptionFunctions.push(greatFlame);
 		}
+		
+		if (GameVariables.instance.darkForestHealingSpringFound)
+		{
+			exploreOptionNames.push("The Fireflies");
+			exploreOptionFunctions.push(healingSpring);
+		}
+		
+		if (GameVariables.instance.darkForestHealingBerriesFound)
+		{
+			exploreOptionNames.push("The Berry Bushes");
+			exploreOptionFunctions.push(healingBerries);
+		}
+		
+		if (GameVariables.instance.darkForestSpeedHerbsFound)
+		{
+			exploreOptionNames.push("The Herb Patches");
+			exploreOptionFunctions.push(speedHerbs);
+		}
 
 		exploreOptionNames.push("Wander Elsewhere");
 		exploreOptionFunctions.push(wander);
@@ -81,15 +99,177 @@ class DarkForest extends Location
 		}
 	}
 	
+	public function wander(choice:String, deer:Deer)
+	{
+		var randomNums:FlxRandom = new FlxRandom();
+		var possibilities:Array<String> = new Array<String>();
+		
+		if (!GameVariables.instance.darkForestHealingSpringFound)
+		{
+			possibilities.push("The Fireflies");
+		}
+		
+		if (!GameVariables.instance.darkForestHealingBerriesFound)
+		{
+			possibilities.push("The Berries");
+		}
+		
+		if (!GameVariables.instance.darkForestSpeedHerbsFound)
+		{
+			possibilities.push("The Herbs");
+		}
+		
+		possibilities.push("Wander Elsewhere");
+
+		var resultingEvent:String = possibilities[randomNums.int(0, possibilities.length - 1)];
+		if (resultingEvent == "The Fireflies")
+		{
+			healingSpring("Fireflies", deer);
+		}
+		else if (resultingEvent == "The Berries")
+		{
+			healingBerries("Berries", deer);
+		}
+		else if (resultingEvent == "The Herbs")
+		{
+			speedHerbs("Herbs", deer);
+		}
+		else if (resultingEvent == "Wander Elsewhere")
+		{
+			aimlessWandering("Elsewhere", deer);
+		}
+	}
+	
 	public function greatFlame(choice:String, deer:Deer)
 	{
 		GameVariables.instance.darkForestMedallionTaken = true;
 		continueOn();
 	}
-
-	public function wander(choice:String, deer:Deer)
+	
+	public function healingSpring(choice:String, deer:Deer)
 	{
-		continueOn();
+		GameVariables.instance.darkForestHealingSpringFound = true;
+		
+		var message:Array<String> = new Array<String>();
+		message.push("Wandering through the darkness you come across a gathering of fireflies.");
+		message.push("The fireflies split up and you decide to follow one.");
+		showChoice(message, ["Follow one"], healingSpringResult, deer);
+	}
+	
+	public function healingSpringResult(choice:String, deer:Deer)
+	{
+		var randomNums:FlxRandom = new FlxRandom();
+		var springFindingSkill:Int = deer.lck + randomNums.int(0, 3);
+		
+		var message:Array<String> = new Array<String>();
+		
+		if (springFindingSkill >= 5)
+		{
+			message.push("The firefly you follow leads to a small spring surrounded by fireflies.");
+			message.push("After relaxing in the spring for a while, you feel completely refreshed.");
+			message.push("(You are fully healed)");
+			message.push("(+3 Resilience for 2 days)");
+			deer.fullyHeal();
+			deer.addStatusEffect(new DeerStatusEffect("Relaxed", 3, 0, 3, 0, 0, 0));
+		}
+		else
+		{
+			message.push("The firefly you follow leads to a smaller group of fireflies surrounding a small puddle.");
+			message.push("Disappointed, you head back.");
+		}
+		
+		showResult(message);
+	}
+	
+	public function healingBerries(choice:String, deer:Deer)
+	{
+		GameVariables.instance.darkForestHealingBerriesFound = true;
+		
+		var gameVariables:GameVariables = GameVariables.instance;
+		
+		var randomNums:FlxRandom = new FlxRandom();
+		var berryFindingSkill:Int = deer.lck * 2 + deer.int + randomNums.int(0, 3);
+		
+		var message:Array<String> = new Array<String>();
+		message.push("You stumble upon some berry bushes, all of which picked clean.");
+		
+		if (berryFindingSkill >= 13)
+		{
+			message.push("Looking around the area for any remaining berries, you manage to find a bush with more than enough for the whole herd.");
+			message.push("(+2 health for each deer)");
+			message.push("(+1 Food)");
+			for (i in 0...gameVariables.controlledDeer.length) {
+				gameVariables.controlledDeer[i].heal(2);
+			}
+			GameVariables.instance.modifyFood(1);
+        }
+		else if (berryFindingSkill >= 9)
+		{
+			message.push("Looking around the area for any remaining berries, you manage to find a bush with just enough remaining for the whole herd to have one.");
+			message.push("(+1 health for each deer)");
+			for (i in 0...gameVariables.controlledDeer.length) {
+				gameVariables.controlledDeer[i].heal(1);
+			}
+		}
+		else
+		{
+			message.push("You search around for any remaining berries, but aren't able to find any.");
+		}
+		
+		showResult(message);
+	}
+	
+	public function speedHerbs(choice:String, deer:Deer)
+	{
+		GameVariables.instance.darkForestSpeedHerbsFound = true;
+		
+		var gameVariables:GameVariables = GameVariables.instance;
+		
+		var randomNums:FlxRandom = new FlxRandom();
+		var monchingSkill:Int = deer.lck + randomNums.int(0, 3);
+		
+		var message:Array<String> = new Array<String>();
+		message.push("While absentmindedly munching on grass, you munch on an herb that's extremely bitter.");
+		message.push("It perks you up and you feel compelled to munch everything in the area in search of another.");
+		
+		if (monchingSkill >= 6)
+		{
+			message.push("The area around you happens to be full of these herbs, and you monch them all.");
+			message.push("(+3 Dexterity for 2 days)");
+			deer.addStatusEffect(new DeerStatusEffect("SpeedHerb", 3, 0, 0, 3, 0, 0));
+        }
+		else if (monchingSkill >= 3)
+		{
+			message.push("You munch on everything nearby, finding a few other similar herbs.");
+			message.push("(+2 Dexterity for 2 days)");
+			deer.addStatusEffect(new DeerStatusEffect("SpeedHerb", 3, 0, 0, 2, 0, 0));
+		}
+		else
+		{
+			message.push("You munch on everything nearby, but don't find any more of that herb.");
+			message.push("(+1 Dexterity for 2 days)");
+			deer.addStatusEffect(new DeerStatusEffect("SpeedHerb", 3, 0, 0, 1, 0, 0));
+		}
+		
+		message.push("(+1 Food)");
+		GameVariables.instance.modifyFood(1);
+		
+		showResult(message);
+	}
+	
+	public function aimlessWandering(choice:String, deer:Deer)
+	{
+		var randomNums:FlxRandom = new FlxRandom();
+		var springFindingSkill:Int = deer.lck + randomNums.int(0, 3);
+		
+		var message:Array<String> = new Array<String>();
+		
+		message.push("You wander around in the dark, not finding much of interest.");
+		message.push("Still, navigating through the dark .");
+		message.push("(+1 Strength, +1 Resilience, and +1 Dexterity for 2 days)");
+		deer.addStatusEffect(new DeerStatusEffect("Relaxed", 3, 1, 1, 1, 0, 0));
+		
+		showResult(message);
 	}
 	
 	override public function forage(deer:Deer) {

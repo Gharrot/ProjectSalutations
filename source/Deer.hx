@@ -146,6 +146,10 @@ class Deer{
 		}
 	}
 	
+	public function fullyHeal(){
+		health = maxHealth;
+	}
+	
 	public function takeDamage(amount:Int){
 		health -= amount;
 		if(health <= 0){

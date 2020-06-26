@@ -316,7 +316,23 @@ class ForgottenWoods extends Location
 		}
 		else if (resultingEvent == "Deer Friend")
 		{
-			findDeer("Find deer", deer);
+			if (GameVariables.instance.controlledDeer.length >= 2 && (!GameVariables.instance.unfamiliarWoodsCaveFound || !GameVariables.instance.unfamiliarWoodsDeepWoodsFound))
+			{
+				if (!GameVariables.instance.unfamiliarWoodsCaveFound)
+				{
+					//find the cave
+					cave("Cave enter", deer);
+				}
+				else
+				{
+					//find the woods
+					deepWoods("Deep woods entrance", deer);
+				}
+			}
+			else
+			{
+				findDeer("Find deer", deer);
+			}
 		}
 	}
 	

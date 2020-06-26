@@ -38,8 +38,9 @@ class GameVariables {
 	public var darkForestMaxFood:Int;
 	public var darkForestTimeRemaining:Int;
 	public var darkForestWolves:Array<EnemyWolf>;
-	public var darkForestFoodStoreFound:Bool;
-	public var darkForestFoodStoreBarricaded:Bool;
+	public var darkForestHealingSpringFound:Bool;
+	public var darkForestHealingBerriesFound:Bool;
+	public var darkForestSpeedHerbsFound:Bool;
     public var darkForestPedestalRaised:Bool;
     public var darkForestMedallionTaken:Bool;
 	
@@ -286,8 +287,9 @@ class GameVariables {
 		darkForestMaxFood = 8;
 		darkForestTimeRemaining = 10;
 		darkForestWolves = new Array<EnemyWolf>();
-		darkForestFoodStoreFound = false;
-		darkForestFoodStoreBarricaded = false;
+		darkForestHealingSpringFound = false;
+		darkForestHealingBerriesFound = false;
+		darkForestSpeedHerbsFound = false;
 		darkForestPedestalRaised = false;
 		darkForestMedallionTaken = false;
 	}
