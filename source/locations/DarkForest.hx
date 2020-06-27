@@ -493,66 +493,89 @@ class DarkForest extends Location
 	
 	override public function hunt(deer:Array<Deer>) {
 		var randomNums:FlxRandom = new FlxRandom();
-		randomNums.shuffle(deer);
+		var message:Array<String> = new Array<String>();
 		
-		var thisExplorationNum = randomNums.int(0, 0);
+		message.push("Your hunting pack comes across a clearing filled with fireflies.");
 		
-		//Rabbit
-		if(thisExplorationNum == 0){
-			var result:String = "Your hunting pack finds a small rabbit.\n";
-			var initialCatch:Bool = false;
-			for(i in 0...deer.length){
-				//Successful catch
-				if (randomNums.int(0, 8) + (deer[i].dex*2) + (deer[i].lck - 2) >= 12)
-				{
-					initialCatch = true;
-					result += deer[i].name + " runs the rabbit down and trips it up. ";
-					break;
-				}
-			}
+		var firefliesCaught:Int = 0;
+		for (i in deer.length)
+		{
+			var currentDeer:Deer = deer[i];
+			var fireflyCatchingSkill:Int = currentDeer.dex * 2 + currentDeer.lck + randomNums.int(0, 5);
 			
-			if (initialCatch) {
-				var damageDealth:Int = 0;
-				for(i in 0...deer.length){
-					//Successful hit
-					if (randomNums.int(0, 8) + (deer[i].dex*2) + (deer[i].lck - 2) >= 10)
-					{
-						var hitStrength:Int = randomNums.int(0, 8) + (deer[i].str * 2) + (deer[i].lck - 1);
-						
-						if(hitStrength >= 16){
-							result += deer[i].name + " lands a critical blow on the rabbit. ";
-							damageDealth += 2;
-						}else if(hitStrength >= 10){
-							result += deer[i].name + " deals a solid blow to the rabbit. ";
-							damageDealth += 1;
-						}else{
-							result += deer[i].name + " lands an ineffective attack on the rabbit. ";
-						}
-					}else{
-						result += deer[i].name + " fails to land their attack. ";
-					}
-					
-					if (damageDealth >= 2) {
-						GameVariables.instance.modifyFood(3);
-						GameVariables.instance.addUnfamiliarWoodsRabbitFur();
-						result += "The rabbit lies defeated. You return it to the den to use as food (+3 food) and bedding.";
-						break;
-					}
-				}
+			if (fireflyCatchingSkill < 10)
+			{
 				
-				if(damageDealth == 1){
-					result += "The rabbit bounds off with a few new scratches.";
-				}else{
-					result += "The rabbit bounds off unharmed.";
-				}
-			}else{
-				result += "No one is able to keep up to the rabbit and it bounds off.";
 			}
-			
-			showResult([result]);
+			else if (fireflyCatchingSkill >= 10)
+			{
+				message.push(currentDeer.getName() + " manages to catch a couple fireflies in their mouth.");
+				firefliesCaught += 1;
+			}
+			else if (fireflyCatchingSkill >= 13)
+			{
+				message.push(currentDeer.getName() + " manages to catch a good clump of fireflies in their mouth.");
+				firefliesCaught += 2;
+			}
+			else if (fireflyCatchingSkill >= 15)
+			{
+				message.push(currentDeer.getName() + " walks through the clearing, casually catching a few large clumps of fireflies in their mouth.");
+				firefliesCaught += 3;
+			}
+			else if (fireflyCatchingSkill >= 17)
+			{
+				message.push(currentDeer.getName() + " runs through the clearing, filling their mouth with fireflies.");
+				firefliesCaught += 4;
+			}
+			else if (fireflyCatchingSkill >= 19)
+			{
+				message.push(currentDeer.getName() + " runs through the clearing, filling their mouth with fireflies until their cheeks bulge out.");
+				firefliesCaught += 5;
+			}
 		}
-		//Wolf
-		else if(thisExplorationNum == 1){
+		
+		var thisRoundsDefenders:Array<Deer> = new Array();
+		for (i in 0...gameVariables.controlledDeer.length) {
+			if (gameVariables.controlledDeer[i].currentAction == "Defending") {
+				thisRoundsDefenders.push(gameVariables.controlledDeer[i]);
+			}
+        }
+		
+		var dexToGive:Int = 0;
+		if (firefliesCaught == 0)
+		{
+			message.push("Unable to catch any fireflies, your hunting pack heads back to the den.");
 		}
+		else if (firefliesCaught <= 2)
+		{
+			message.push("Your hunting pack catches some fireflies, but not enough to be of any use.");
+		}
+		else if (firefliesCaught >= 3)
+		{
+			message.push("Your hunting pack catches enough fireflies to dimly light a small area, which should make it a bit easier for your defenders to maneuver tonight.");
+			message.push("(+1 Dexterity for defending deer tonight)");
+			dexToGive = 1;
+		}
+		else if (firefliesCaught >= 5)
+		{
+			message.push("Your hunting pack catches enough fireflies to light up most of the area around your den, which should make it easier for your defenders to maneuver tonight.");
+			message.push("(+2 Dexterity for defending deer tonight)");
+			dexToGive = 2;
+		}
+		else if (firefliesCaught >= 8)
+		{
+			message.push("Your hunting pack catches enough fireflies to completely light up the area around your den; your defenders should have no trouble maneuvering tonight.");
+			message.push("(+3 Dexterity for defending deer tonight)");
+			dexToGive = 3;
+		}
+		
+		if (dexToGive > 0)
+		{
+			for (i in 0...thisRoundsDefenders.length) {
+				thisRoundsDefenders[i].addStatusEffect(new DeerStatusEffect("FireFlight", 1, 0, 0, dexToGive, 0, 0));
+			}
+		}
+		
+		randomNums.shuffle(deer);
 	}
 }
