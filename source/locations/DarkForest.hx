@@ -1,5 +1,7 @@
 package locations;
 
+import statuses.DeerStatusEffect;
+
 import flixel.math.FlxRandom;
 import flixel.text.FlxText;
 import flixel.util.FlxColor;
@@ -153,7 +155,7 @@ class DarkForest extends Location
 		var message:Array<String> = new Array<String>();
 		message.push("Wandering through the darkness you come across a gathering of fireflies.");
 		message.push("The fireflies split up and you decide to follow one.");
-		showChoice(message, ["Follow one"], healingSpringResult, deer);
+		showChoice(message, ["Follow one"], [healingSpringResult], deer);
 	}
 	
 	public function healingSpringResult(choice:String, deer:Deer)
@@ -498,7 +500,7 @@ class DarkForest extends Location
 		message.push("Your hunting pack comes across a clearing filled with fireflies.");
 		
 		var firefliesCaught:Int = 0;
-		for (i in deer.length)
+		for (i in 0...deer.length)
 		{
 			var currentDeer:Deer = deer[i];
 			var fireflyCatchingSkill:Int = currentDeer.dex * 2 + currentDeer.lck + randomNums.int(0, 5);
@@ -533,6 +535,8 @@ class DarkForest extends Location
 				firefliesCaught += 5;
 			}
 		}
+		
+		var gameVariables:GameVariables = GameVariables.instance;
 		
 		var thisRoundsDefenders:Array<Deer> = new Array();
 		for (i in 0...gameVariables.controlledDeer.length) {

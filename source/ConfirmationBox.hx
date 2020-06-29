@@ -9,8 +9,6 @@ import flixel.FlxObject;
 class ConfirmationBox extends FlxObject{
 	var transparentBG:FlxSprite;
 	var background:FlxSprite;
-
-	var deerCharacterSprite:FlxSprite;
 	
     var questionText:FlxText;
 
@@ -42,8 +40,6 @@ class ConfirmationBox extends FlxObject{
         FlxG.state.remove(confirmButton);
         FlxG.state.remove(cancelButton);
 		
-        FlxG.state.remove(deerCharacterSprite);
-		
         FlxG.state.remove(questionText);
 
         GameObjects.instance.mainGameMenu.returnToMainScreen();
@@ -71,16 +67,13 @@ class ConfirmationBox extends FlxObject{
     }
 
     public function setupGraphics() {
-        deerCharacterSprite = new FlxSprite(55, 128);
-        deerCharacterSprite.loadGraphic("assets/images/MaleDeerTileSprite.png", true, 190, 134);
-		deerCharacterSprite.screenCenter();
-		FlxG.state.add(deerCharacterSprite);
+		
     }
 
     public function setupTexts(){
         questionText = new FlxText(0, 0, 360, "Please confirm your action", 24);
         questionText.screenCenter();
-        questionText.y = questionText.y - 175;
+        questionText.y = questionText.y - 160;
 		questionText.color = 0xFF000000;
 		questionText.alignment = "center";
         FlxG.state.add(questionText);

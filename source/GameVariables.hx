@@ -294,4 +294,21 @@ class GameVariables {
 		darkForestMedallionTaken = false;
 	}
 	
+	public static function getLocationSpriteByName(locationName:String):String
+	{	
+		if (locationName == "Unfamiliar Woods")
+		{
+			return "assets/images/LocationImages/ForgottenWoods.png";
+		}
+		else if (locationName == "Abandoned Fields")
+		{
+			return "assets/images/LocationImages/AbandonedFields.png";
+		}
+		else if (locationName == "Dark Forest")
+		{
+			return "assets/images/LocationImages/DarkForest.png";
+		}
+		
+		return "dang";
+	}
 }

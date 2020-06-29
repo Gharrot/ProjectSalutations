@@ -82,15 +82,17 @@ class ImprovementBox extends FlxObject
 		var gameVariables:GameVariables = GameVariables.instance;
 		
 		optionDescriptions = new FlxUIListModified(70, 220, null, 400, 280);
-		optionButtons = new FlxUIListModified(330, 220, null, 400, 280);
+		optionButtons = new FlxUIListModified(265, 200, null, 400, 280);
 		
 		if(!gameVariables.rabbitFurBeddingMade){
-			var furText:FlxText = new FlxText(0, 0, 200, "Rabbit fur bedding:\nRabbit fur: " + gameVariables.rabbitFur + "/3", 14);
+			var furText:FlxText = new FlxText(0, 0, 200, "Rabbit fur bedding\nRabbit fur: " + gameVariables.rabbitFur + "/3", 15);
 			furText.alignment = "left";
 			furText.color = 0xFF000000;
 			optionDescriptions.add(furText);
 			
 			var furButton:FlxButton = new FlxButton(0, 0, "Make");
+			furButton.loadGraphic("assets/images/OctaButtonSkinny.png", true, 160, 74);
+			ButtonUtils.fixButtonText(furButton, 14, 23, 0);
 			if(gameVariables.rabbitFur >= 3){
 				furButton.onUp.callback = buildFurBeds.bind();
 			}

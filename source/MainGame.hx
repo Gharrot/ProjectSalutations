@@ -474,8 +474,7 @@ class MainGame extends FlxState
 				playerDeerTile = new DeerTile(null);
 			}
             add(playerDeerTile);
-            playerDeerTile.loadGraphic("assets/images/DeerTileSprite.png", true, 190, 134);
-            playerDeerTile.moveDisplay(35 + ((i%2)*220), 150 + (Std.int(i/2)*164));
+			playerDeerTile.moveDisplay(35 + ((i%2)*220), 150 + (Std.int(i/2)*164));
 			playerDeerTile.onUp.callback = deerTileClicked.bind(GameVariables.instance.controlledDeer[i]);
             deerTiles.push(playerDeerTile);
         }
@@ -619,7 +618,7 @@ class MainGame extends FlxState
 			newButton.scale.set(3, 3);
 			newButton.updateHitbox();
 			newButton.screenCenter();
-			newButton.x -= 150;
+			newButton.x -= 130;
 			mapButtons[mapButtons.length] = newButton;
 			newButton.onUp.callback = locationMovement.bind("Dark Forest", 7);
 			add(newButton);
@@ -640,7 +639,7 @@ class MainGame extends FlxState
 			newButton.screenCenter();
 			newButton.x += 110;
 			mapButtons[mapButtons.length] = newButton;
-			add(newButton);
+			//add(newButton);
 			
 			//Fields
 			newButton = new FlxButton(0, 0);
@@ -651,7 +650,7 @@ class MainGame extends FlxState
 			newButton.y += 110;
 			mapButtons[mapButtons.length] = newButton;
 			newButton.onUp.callback = locationMovement.bind("Abandoned Fields", 5);
-			add(newButton);
+			//add(newButton);
 		}
 		else if (GameVariables.instance.currentLocationName == "Dark Forest")
 		{
@@ -663,9 +662,9 @@ class MainGame extends FlxState
 			newButton.scale.set(3, 3);
 			newButton.updateHitbox();
 			newButton.screenCenter();
-			newButton.y += 110;
+			newButton.y += 130;
 			mapButtons[mapButtons.length] = newButton;
-			add(newButton);
+			//add(newButton);
 			
 			//Dark Forest (current location)
 			var currentLocationSprite:FlxSprite = new FlxSprite(0, 0);
@@ -681,9 +680,9 @@ class MainGame extends FlxState
 			newButton.scale.set(3, 3);
 			newButton.updateHitbox();
 			newButton.screenCenter();
-			newButton.x += 110;
+			newButton.x += 120;
 			mapButtons[mapButtons.length] = newButton;
-			newButton.onUp.callback = locationMovement.bind("Unfamiliar Woods", 5);
+			newButton.onUp.callback = locationMovement.bind("Unfamiliar Woods", 2);
 			add(newButton);
 		}
 		else
@@ -718,7 +717,7 @@ class MainGame extends FlxState
 			newButton.screenCenter();
 			newButton.x += 110;
 			mapButtons[mapButtons.length] = newButton;
-			add(newButton);
+			//add(newButton);
 			
 			//Unfamiliar Woods
 			newButton = new FlxButton(0, 0);
@@ -727,7 +726,7 @@ class MainGame extends FlxState
 			newButton.updateHitbox();
 			newButton.screenCenter();
 			mapButtons[mapButtons.length] = newButton;
-			newButton.onUp.callback = locationMovement.bind("The Darkened Woods", 5);
+			newButton.onUp.callback = locationMovement.bind("Unfamiliar Woods", 5);
 			add(newButton);
 		}
 		

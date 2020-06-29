@@ -10,9 +10,10 @@ import flixel.util.FlxAxes;
 class DeerActionScreen extends FlxObject{
     var deer:Deer;
 
+	var transparentBG:FlxSprite;
 	var background:FlxSprite;
 
-	var deerCharacterSprite:FlxSprite;
+	var deerCharacterSprite:DeerTile;
     var nameText:FlxText;
     var statTexts:Array<FlxText>;
     var statNumbers:Array<FlxText>;
@@ -33,6 +34,11 @@ class DeerActionScreen extends FlxObject{
         super();
 
         this.deer = deer;
+		
+		transparentBG = new FlxSprite(0, 0);
+		transparentBG.loadGraphic("assets/images/TransparentBG.png");
+		transparentBG.screenCenter();
+		FlxG.state.add(transparentBG);
 
         background = new FlxSprite(25, 25);
 		background.loadGraphic("assets/images/DeerScreenBG.png", false, 128, 128);
@@ -58,6 +64,8 @@ class DeerActionScreen extends FlxObject{
         FlxG.state.remove(statusText);
         FlxG.state.remove(healthStatusText);
         FlxG.state.remove(background);
+        FlxG.state.remove(transparentBG);
+		deerCharacterSprite.destroyChildren();
         FlxG.state.remove(deerCharacterSprite);
         
         FlxG.state.remove(xButton);
@@ -81,7 +89,7 @@ class DeerActionScreen extends FlxObject{
         var actionNameVerbs = ["Exploring", "Foraging", "Hunting", "Defending", "Resting"];
 		actionOptions = new Array();
 		for(i in 0...5){
-			actionOptions[i] = new FlxButton(70, 350+(i*45));
+			actionOptions[i] = new FlxButton(70, 355+(i*45));
 			actionOptions[i].onDown.callback = actionOptionClicked.bind(actionNameVerbs[i], i);
             if(deer.currentAction == actionNameVerbs[i]){
 			    actionOptions[i].loadGraphic("assets/images/CheckedCheckbox.png", false, 128, 128);
@@ -95,12 +103,12 @@ class DeerActionScreen extends FlxObject{
 
 		actionOptionLabels = new Array();
 		for(i in 0...5){
-			actionOptionLabels[i] = new FlxText(115, 353+(i*45), 0, actionNames[i], 24);
+			actionOptionLabels[i] = new FlxText(115, 358+(i*45), 0, actionNames[i], 24);
 			actionOptionLabels[i].color = 0xFF000000;
 			FlxG.state.add(actionOptionLabels[i]);
 		}
 		
-        dismissButton = new FlxButton(270, 455, "Dismiss");
+        dismissButton = new FlxButton(270, 460, "Dismiss");
 		if(deer.player){
 			dismissButton.loadGraphic("assets/images/DenButtonStatic.png", false);
 			dismissButton.labelAlphas[1] = 0.6;
@@ -166,8 +174,9 @@ class DeerActionScreen extends FlxObject{
     }
 
     function setupGraphics(){
-        deerCharacterSprite = new FlxSprite(55, 128);
-        deerCharacterSprite.loadGraphic("assets/images/MaleDeerTileSprite.png", true, 190, 134);
+        deerCharacterSprite = new DeerTile(deer);
+        deerCharacterSprite.moveDisplay(55, 128);
+        deerCharacterSprite.deerDisplayOnlyMode();
 		FlxG.state.add(deerCharacterSprite);
     }
 
@@ -199,7 +208,7 @@ class DeerActionScreen extends FlxObject{
 		nameText.color = 0xFF000000;
         FlxG.state.add(nameText);
 
-        statusText = new FlxText(55, 315, 400, deer.currentAction, 22);
+        statusText = new FlxText(55, 310, 400, deer.currentAction, 22);
 		statusText.color = 0xFF000000;
 		statusText.alignment = "center";
 		statusText.screenCenter(FlxAxes.X);

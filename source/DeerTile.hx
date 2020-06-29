@@ -32,6 +32,8 @@ class DeerTile extends FlxButton{
         this.onOver.callback = onHoverOver;
         this.onOut.callback = onHoverOut;
 		
+		loadGraphic("assets/images/DeerTileSprite.png", true, 190, 134);
+		
 		var randomNums:FlxRandom = new FlxRandom();
 		actionTime = randomNums.float(1, 7);
     }
@@ -72,6 +74,22 @@ class DeerTile extends FlxButton{
         FlxG.state.remove(healthStatusSprite);
         FlxG.state.remove(deerSprite);
     }
+	
+	public function deerDisplayOnlyMode()
+	{
+        for(i in 0...5){
+            statTexts[i].visible = false;
+            statNumbers[i].visible = false;
+        }
+        nameText.visible = false;
+        statusText.visible = false;
+		healthStatusSprite.visible = false;
+		
+        this.onOver.callback = null;
+        this.onOut.callback = null;
+		
+		loadGraphic("assets/images/DeerTileSpriteBorder.png", true, 190, 134);
+	}
 
     public function hide(){
         for(i in 0...5){
