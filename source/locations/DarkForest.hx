@@ -193,7 +193,7 @@ class DarkForest extends Location
 		var berryFindingSkill:Int = deer.lck * 2 + deer.int + randomNums.int(0, 3);
 		
 		var message:Array<String> = new Array<String>();
-		message.push("You stumble upon some berry bushes, all of which picked clean.");
+		message.push("You stumble upon some berry bushes, all of which had already been picked clean.");
 		
 		if (berryFindingSkill >= 13)
 		{
@@ -207,7 +207,7 @@ class DarkForest extends Location
         }
 		else if (berryFindingSkill >= 9)
 		{
-			message.push("Looking around the area for any remaining berries, you manage to find a bush with just enough remaining for the whole herd to have one.");
+			message.push("Looking around the area for any remaining berries, you manage to find a bush with just enough left for the whole herd to have one.");
 			message.push("(+1 health for each deer)");
 			for (i in 0...gameVariables.controlledDeer.length) {
 				gameVariables.controlledDeer[i].heal(1);
@@ -267,7 +267,7 @@ class DarkForest extends Location
 		var message:Array<String> = new Array<String>();
 		
 		message.push("You wander around in the dark, not finding much of interest.");
-		message.push("Still, navigating through the dark .");
+		message.push("You get a bit more used to navigating the dark and bumping into trees.");
 		message.push("(+1 Strength, +1 Resilience, and +1 Dexterity for 2 days)");
 		deer.addStatusEffect(new DeerStatusEffect("Relaxed", 3, 1, 1, 1, 0, 0));
 		
@@ -303,8 +303,6 @@ class DarkForest extends Location
 		var randomNums:FlxRandom = new FlxRandom();
 		
 		randomNums.shuffle(deer);
-		var restingDeer:Array<Deer> = gameVariables.getRestingDeer();
-		randomNums.shuffle(restingDeer);
 		
 		var enemyWolves:Int = gameVariables.darkForestWolves.length;
 		
@@ -312,7 +310,8 @@ class DarkForest extends Location
 		
 		//if no wolves attacking
 		if(enemyWolves < 2 || gameVariables.currentFood <= 0){
-			setOut();
+			continueOn();
+			return;
 		}
 		
 		//if no defending deer

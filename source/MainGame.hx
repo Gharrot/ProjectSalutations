@@ -49,8 +49,9 @@ class MainGame extends FlxState
 	override public function create()
 	{
 		super.create();
-		this.bgColor = 0xFFD8F6F3;
-
+		
+		GameVariables.instance.setBG();
+		
         GameObjects.instance.mainGameMenu = this;
 
         setupTopBar();

@@ -150,9 +150,17 @@ class Deer{
 		health = maxHealth;
 	}
 	
-	public function takeDamage(amount:Int){
+	public function takeDamage(amount:Int, canReachNegativeHealth:Bool = false){
+		if (!canReachNegativeHealth && health <= 0)
+		{
+			return;
+		}
+		
 		health -= amount;
-		if(health <= 0){
+		if (health <= 0){
+			if(!canReachNegativeHealth){
+				health = 0;
+			}
 			currentAction = "Resting";
 		}
 	}

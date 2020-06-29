@@ -408,9 +408,13 @@ class Location{
 	}
 	
 	public function continueOn(){
-        for(i in 0...displayedOptions.length){
-			FlxG.state.remove(displayedOptions[i]);
-        }
+		if (displayedOptions != null)
+		{
+			for(i in 0...displayedOptions.length){
+				FlxG.state.remove(displayedOptions[i]);
+			}
+		}
+		
 		FlxG.state.remove(displayedTextList);
 		setOut();
 	}

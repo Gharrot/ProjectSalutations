@@ -5,6 +5,7 @@ import flixel.util.FlxArrayUtil;
 import flixel.util.FlxSave;
 import haxe.Serializer;
 import haxe.Unserializer;
+import flixel.FlxG;
 
 class GameVariables {
     public var controlledDeer:Array<Deer>;
@@ -69,15 +70,18 @@ class GameVariables {
     }
 	
 	public function changeLocation(targetLocation:String, ?resetLocationVariables:Bool = true){		
-		if(targetLocation == "Unfamiliar Woods"){
+		if (targetLocation == "Unfamiliar Woods")
+		{
 			currentLocation = new ForgottenWoods();
 			maxFood = unfamiliarWoodsMaxFood;
 		}
-		else if(targetLocation == "Abandoned Fields"){
+		else if (targetLocation == "Abandoned Fields")
+		{
 			currentLocation = new AbandonedFields();
 			maxFood = abandonedFieldsMaxFood;
 		}
-		else if(targetLocation == "Dark Forest"){
+		else if (targetLocation == "Dark Forest")
+		{
 			currentLocation = new DarkForest();
 			maxFood = darkForestMaxFood;
 			
@@ -93,6 +97,8 @@ class GameVariables {
 		}
 		
 		currentLocationName = targetLocation;
+		setBG();
+		
 		checkVariables();
 	}
 	
@@ -310,5 +316,25 @@ class GameVariables {
 		}
 		
 		return "dang";
+	}
+	
+	public function setBG()
+	{
+		if (currentLocationName == "Unfamiliar Woods")
+		{
+			FlxG.state.bgColor = 0xFFD8F6F3;
+		}
+		else if (currentLocationName == "Abandoned Fields")
+		{
+			FlxG.state.bgColor = 0xFFD8F6F3;
+		}
+		else if (currentLocationName == "Dark Forest")
+		{
+			FlxG.state.bgColor = 0xFF363641;
+		}
+		else
+		{
+			FlxG.state.bgColor = 0xFFD8F6F3;
+		}
 	}
 }
