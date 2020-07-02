@@ -32,8 +32,6 @@ class Deer{
 	
 	public var pregnant:Bool;
 	public var baby:Bool;
-	
-	public var knowsTheDarkenedWoods:Bool;
 
     public function new(name:String, gender:String, str:Int, res:Int, dex:Int, int:Int, lck:Int, player:Bool = false) {
         this.name = name;
@@ -64,8 +62,6 @@ class Deer{
 		
 		pregnant = false;
 		baby = false;
-		
-		knowsTheDarkenedWoods = false;
     }
 	
 	static public function getNewBlankDeer():Deer{

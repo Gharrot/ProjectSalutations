@@ -31,6 +31,7 @@ class SaveManager
 		gameVariables.unfamiliarWoodsIntellectSpringFound = save.data.unfamiliarWoodsIntellectSpringFound;
 		gameVariables.unfamiliarWoodsInspiringViewFound = save.data.unfamiliarWoodsInspiringViewFound;
 		gameVariables.unfamiliarWoodsSquirrelsOfGoodFortuneFound = save.data.unfamiliarWoodsSquirrelsOfGoodFortuneFound;
+		gameVariables.unfamiliarWoodsPathToDarkWoodsFound = save.data.unfamiliarWoodsPathToDarkWoodsFound;
 		
 		//AbandonedFields
 		gameVariables.abandonedFieldsMaxFood = save.data.abandonedFieldsMaxFood;
@@ -72,6 +73,7 @@ class SaveManager
 		save.data.unfamiliarWoodsIntellectSpringFound = gameVariables.unfamiliarWoodsIntellectSpringFound;
 		save.data.unfamiliarWoodsInspiringViewFound = gameVariables.unfamiliarWoodsInspiringViewFound;
 		save.data.unfamiliarWoodsSquirrelsOfGoodFortuneFound = gameVariables.unfamiliarWoodsSquirrelsOfGoodFortuneFound;
+		save.data.unfamiliarWoodsPathToDarkWoodsFound = gameVariables.unfamiliarWoodsPathToDarkWoodsFound;
 		
 		//AbandonedFields
 		save.data.abandonedFieldsMaxFood = gameVariables.abandonedFieldsMaxFood;

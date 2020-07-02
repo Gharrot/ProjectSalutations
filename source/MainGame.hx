@@ -32,7 +32,7 @@ class MainGame extends FlxState
 	
 	//Map
 	var mapSprites:Array<FlxSprite>;
-	var mapButtons:Array<FlxButton>;
+	var mapButtons:Array<LocationButton>;
 	var travelConfirmation:TravelConfirmationBox;
 	
 	//Den
@@ -601,139 +601,49 @@ class MainGame extends FlxState
 		foodText.text += "/" + Std.string(GameVariables.instance.maxFood);
 	}
 	
-	function deerReplacement(){
-		
-	}
-	
 	function setupMap(){
 		mapSprites = new Array<FlxSprite>();
-		mapButtons = new Array<FlxButton>();
+		mapButtons = new Array<LocationButton>();
 		
-		//var mapSprite:FlxSprite = new FlxSprite(0, 0);
-		if(GameVariables.instance.currentLocationName == "Unfamiliar Woods"){
-			//mapSprite.loadGraphic("assets/images/MapImages/MapWoods.png");
-			//Dark Forest
-			var newButton:FlxButton;
-			newButton = new FlxButton(0, 0);
-			newButton.loadGraphic("assets/images/MapImages/LocationButton.png", true, 23, 23);
-			newButton.scale.set(3, 3);
-			newButton.updateHitbox();
-			newButton.screenCenter();
-			newButton.x -= 130;
-			mapButtons[mapButtons.length] = newButton;
-			newButton.onUp.callback = locationMovement.bind("Dark Forest", 7);
-			add(newButton);
-			
+		if (GameVariables.instance.currentLocationName == "Unfamiliar Woods")
+		{
 			//Unfamiliar Woods (current location)
 			var currentLocationSprite:FlxSprite = new FlxSprite(0, 0);
 			currentLocationSprite.loadGraphic("assets/images/MapImages/CurrentLocationMarker.png", true);
 			currentLocationSprite.scale.set(3, 3);
 			currentLocationSprite.screenCenter();
-			mapSprites[mapSprites.length] = currentLocationSprite;
+			mapSprites.push(currentLocationSprite);
 			add(currentLocationSprite);
 			
-			//River
-			newButton = new FlxButton(0, 0);
-			newButton.loadGraphic("assets/images/MapImages/LocationButton.png", true, 23, 23);
-			newButton.scale.set(3, 3);
-			newButton.updateHitbox();
+			//Dark Forest
+			var newButton:LocationButton = new LocationButton("Dark Forest", 7);
 			newButton.screenCenter();
-			newButton.x += 110;
-			mapButtons[mapButtons.length] = newButton;
-			//add(newButton);
+			newButton.x -= 130;
+			mapButtons.push(newButton);
+			add(newButton);
 			
-			//Fields
-			newButton = new FlxButton(0, 0);
-			newButton.loadGraphic("assets/images/MapImages/LocationButton.png", true, 23, 23);
-			newButton.scale.set(3, 3);
-			newButton.updateHitbox();
-			newButton.screenCenter();
-			newButton.y += 110;
-			mapButtons[mapButtons.length] = newButton;
-			newButton.onUp.callback = locationMovement.bind("Abandoned Fields", 5);
-			//add(newButton);
+			if (!GameVariables.instance.unfamiliarWoodsPathToDarkWoodsFound)
+			{
+				newButton.lock("You must explore and find a path before you can travel here");
+			}
 		}
 		else if (GameVariables.instance.currentLocationName == "Dark Forest")
 		{
-			//mapSprite.loadGraphic("assets/images/MapImages/MapWoods.png");
-			//Power Plant
-			var newButton:FlxButton;
-			newButton = new FlxButton(0, 0);
-			newButton.loadGraphic("assets/images/MapImages/LocationButton.png", true, 23, 23);
-			newButton.scale.set(3, 3);
-			newButton.updateHitbox();
-			newButton.screenCenter();
-			newButton.y += 130;
-			mapButtons[mapButtons.length] = newButton;
-			//add(newButton);
-			
 			//Dark Forest (current location)
 			var currentLocationSprite:FlxSprite = new FlxSprite(0, 0);
 			currentLocationSprite.loadGraphic("assets/images/MapImages/CurrentLocationMarker.png", true);
 			currentLocationSprite.scale.set(3, 3);
 			currentLocationSprite.screenCenter();
-			mapSprites[mapSprites.length] = currentLocationSprite;
+			mapSprites.push(currentLocationSprite);
 			add(currentLocationSprite);
 			
 			//Unfamiliar Woods
-			newButton = new FlxButton(0, 0);
-			newButton.loadGraphic("assets/images/MapImages/LocationButton.png", true, 23, 23);
-			newButton.scale.set(3, 3);
-			newButton.updateHitbox();
+			var newButton:LocationButton = new LocationButton("Unfamiliar Woods", 2);
 			newButton.screenCenter();
 			newButton.x += 120;
-			mapButtons[mapButtons.length] = newButton;
-			newButton.onUp.callback = locationMovement.bind("Unfamiliar Woods", 2);
+			mapButtons.push(newButton);
 			add(newButton);
 		}
-		else
-		{
-			//mapSprite.loadGraphic("assets/images/MapImages/MapWoods.png");
-			//Power Plant
-			var newButton:FlxButton;
-			newButton = new FlxButton(0, 0);
-			newButton.loadGraphic("assets/images/MapImages/LocationButton.png", true, 23, 23);
-			newButton.scale.set(3, 3);
-			newButton.updateHitbox();
-			newButton.screenCenter();
-			newButton.x -= 150;
-			newButton.y += 110;
-			mapButtons[mapButtons.length] = newButton;
-			add(newButton);
-			
-			//Abandoned Fields (current location)
-			var currentLocationSprite:FlxSprite = new FlxSprite(0, 0);
-			currentLocationSprite.loadGraphic("assets/images/MapImages/CurrentLocationMarker.png", true);
-			currentLocationSprite.scale.set(3, 3);
-			currentLocationSprite.screenCenter();
-			currentLocationSprite.y += 110;
-			mapSprites[mapSprites.length] = currentLocationSprite;
-			add(currentLocationSprite);
-			
-			//River
-			newButton = new FlxButton(0, 0);
-			newButton.loadGraphic("assets/images/MapImages/LocationButton.png", true, 23, 23);
-			newButton.scale.set(3, 3);
-			newButton.updateHitbox();
-			newButton.screenCenter();
-			newButton.x += 110;
-			mapButtons[mapButtons.length] = newButton;
-			//add(newButton);
-			
-			//Unfamiliar Woods
-			newButton = new FlxButton(0, 0);
-			newButton.loadGraphic("assets/images/MapImages/LocationButton.png", true, 23, 23);
-			newButton.scale.set(3, 3);
-			newButton.updateHitbox();
-			newButton.screenCenter();
-			mapButtons[mapButtons.length] = newButton;
-			newButton.onUp.callback = locationMovement.bind("Unfamiliar Woods", 5);
-			add(newButton);
-		}
-		
-		//mapSprite.screenCenter();
-		//add(mapSprite);
-		//mapSprites[mapSprites.length] = mapSprite;
 	}
 	
 	function hideMap(){
@@ -763,12 +673,15 @@ class MainGame extends FlxState
         }
 		
 		mapSprites = new Array<FlxSprite>();
-		mapButtons = new Array<FlxButton>();
+		mapButtons = new Array<LocationButton>();
 	}
 	
-	function locationMovement(locationName:String, cost:Int){
+	public function locationMovement(locationName:String, cost:Int, ?locked:Bool = false):TravelConfirmationBox
+	{
 		travelConfirmation = new TravelConfirmationBox(locationName, cost);
 		hide();
+		
+		return travelConfirmation;
 	}
 	
 	public function confirmMovement(locationName:String, cost:Int){

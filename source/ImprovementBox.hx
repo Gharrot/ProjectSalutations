@@ -85,18 +85,23 @@ class ImprovementBox extends FlxObject
 		optionButtons = new FlxUIListModified(265, 200, null, 400, 280);
 		
 		if(!gameVariables.rabbitFurBeddingMade){
-			var furText:FlxText = new FlxText(0, 0, 200, "Rabbit fur bedding\nRabbit fur: " + gameVariables.rabbitFur + "/3", 15);
+			var furText:FlxText = new FlxText(0, 0, 200, "Rabbit fur bedding\nRabbit fur: " + gameVariables.rabbitFur + "/2", 15);
 			furText.alignment = "left";
 			furText.color = 0xFF000000;
 			optionDescriptions.add(furText);
 			
 			var furButton:FlxButton = new FlxButton(0, 0, "Make");
 			furButton.loadGraphic("assets/images/OctaButtonSkinny.png", true, 160, 74);
-			ButtonUtils.fixButtonText(furButton, 14, 23, 0);
-			if(gameVariables.rabbitFur >= 3){
+			if (gameVariables.rabbitFur >= 2)
+			{
 				furButton.onUp.callback = buildFurBeds.bind();
+				ButtonUtils.fixButtonText(furButton, 14, 23, 0);
 			}
-			
+			else
+			{
+				furButton.label.text = "(Missing materials)";
+				ButtonUtils.fixButtonText(furButton, 8, 26, 0);
+			}
 			optionButtons.add(furButton);
 		}
 		
@@ -106,7 +111,7 @@ class ImprovementBox extends FlxObject
 	
 	public function buildFurBeds(){
 		var gameVariables:GameVariables = GameVariables.instance;
-		gameVariables.rabbitFur -= 3;
+		gameVariables.rabbitFur -= 2;
 		gameVariables.rabbitFurBeddingMade = true;
 	}
 }

@@ -10,7 +10,7 @@ class ConfirmationBox extends FlxObject{
 	var transparentBG:FlxSprite;
 	var background:FlxSprite;
 	
-    var questionText:FlxText;
+    public var questionText:FlxText;
 
     var confirmButton:FlxButton;
     var cancelButton:FlxButton;
@@ -54,14 +54,14 @@ class ConfirmationBox extends FlxObject{
         confirmButton = new FlxButton(200, 460, "Confirm");
 		confirmButton.screenCenter();
 		confirmButton.x -= 80;
-		confirmButton.y = 460;
+		confirmButton.y = 440;
 		confirmButton.onUp.callback = confirm.bind();
         FlxG.state.add(confirmButton);
 		
         cancelButton = new FlxButton(280, 460, "Cancel");
 		cancelButton.screenCenter();
 		cancelButton.x += 80;
-		cancelButton.y = 460;
+		cancelButton.y = 440;
 		cancelButton.onUp.callback = close.bind();
         FlxG.state.add(cancelButton);
     }

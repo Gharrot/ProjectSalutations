@@ -23,11 +23,15 @@ class DarkForest extends Location
 	
 	override public function returnAfterDayEnd()
 	{
-		GameVariables.instance.darkForestWolves.push(new EnemyWolf());
-		GameVariables.instance.darkForestWolves.push(new EnemyWolf());
-		
 		if (GameVariables.instance.darkForestTimeRemaining > 0)
 		{
+			GameVariables.instance.darkForestWolves.push(new EnemyWolf());
+			GameVariables.instance.darkForestWolves.push(new EnemyWolf());
+			if (GameVariables.instance.darkForestTimeRemaining <= 2)
+			{
+				GameVariables.instance.darkForestWolves.push(new EnemyWolf());
+			}
+			
 			if (GameVariables.instance.darkForestTimeRemaining > 1)
 			{
 				showChoice(["As the night begins to end, you hear a bell toll " + GameVariables.instance.darkForestTimeRemaining + " times in the distance."], ["Continue"], [returnToDenChoice], null);
@@ -144,8 +148,24 @@ class DarkForest extends Location
 	
 	public function greatFlame(choice:String, deer:Deer)
 	{
-		GameVariables.instance.darkForestMedallionTaken = true;
-		continueOn();
+		var message:Array<String> = new Array<String>();
+		message.push("The light of the pillar of fire guides you to a large clearing.");
+		message.push("The fire burns brightly in the center of the clearing, with no clue of its cause.");
+		
+		if (!GameVariables.instance.darkForestMedallionTaken)
+		{
+			message.push("A low stone pedestal stands in front of the fire, a black medallion resting on top.");
+			message.push("You step forward and pick up the medallion. (+1 max pack size)");
+			
+			GameVariables.instance.darkForestMedallionTaken = true;
+			GameVariables.instance.maxPackSize++;
+		}
+		else
+		{
+			message.push("A low stone pedestal stands in front of the fire, where you took a medallion from.");
+		}
+		
+		showResult(message);
 	}
 	
 	public function healingSpring(choice:String, deer:Deer)
@@ -386,12 +406,20 @@ class DarkForest extends Location
 					}
 					else if(deerAttackStrength <= 2)
 					{
-						message.push(deerAttacker.getName() + " lands a kick on a wolf. It whimpers and backs off into the dark.");
+						wolfTarget.hp--;
 						
-						if(wolvesInAttack.indexOf(wolfTarget) < wolfAttackIndex){
-							wolfAttackIndex--;
+						if (wolfTarget.hp > 0)
+						{
+							message.push(deerAttacker.getName() + " lands a kick on a wolf. It stumbles backwards, then slowly stands up.");
 						}
-						wolvesInAttack.remove(wolfTarget);
+						else
+						{
+							message.push(deerAttacker.getName() + " lands a kick on a wolf. It whimpers and backs off into the dark.");
+							if(wolvesInAttack.indexOf(wolfTarget) < wolfAttackIndex){
+								wolfAttackIndex--;
+							}
+							wolvesInAttack.remove(wolfTarget);
+						}
 					}
 					else
 					{

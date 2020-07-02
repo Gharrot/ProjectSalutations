@@ -10,7 +10,7 @@ class TravelConfirmationBox extends ConfirmationBox{
 	
 	var locationSprite:FlxSprite;
 	
-    public function new(locationName:String, travelCost:Int){
+    public function new(locationName:String, travelCost:Int, ?locked:Bool = false){
 		this.locationName = locationName;
 		this.travelCost = travelCost;
 		
@@ -19,15 +19,21 @@ class TravelConfirmationBox extends ConfirmationBox{
 		var currentFood:Int = GameVariables.instance.currentFood;
 		
 		questionText.text = "Travelling here will use up " + travelCost + " food.";
-		
 		confirmButton.text = "Set out";
-		if (currentFood < travelCost) {
+		cancelButton.text = "Stay put";
+		
+		if (currentFood < travelCost)
+		{
 			questionText.text += " You do not have enough.";
-			confirmButton.alpha = 0.7;
-			confirmButton.onUp.callback = null;
+			
+			locked = true;
 		}
 		
-		cancelButton.text = "Stay put";
+		if (locked)
+		{
+			cancelButton.screenCenter(FlxAxes.X);
+			FlxG.state.remove(confirmButton);
+		}
     }
 	
 	override public function close()

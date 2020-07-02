@@ -33,6 +33,7 @@ class GameVariables {
     public var unfamiliarWoodsInspiringViewFound:Bool;
     public var unfamiliarWoodsSquirrelsOfGoodFortuneFound:Bool;
     public var unfamiliarWoodsMedallionTaken:Bool;
+	public var unfamiliarWoodsPathToDarkWoodsFound:Bool;
 	
 	public var abandonedFieldsMaxFood:Int;
 	
@@ -91,7 +92,7 @@ class GameVariables {
 				darkForestWolves.push(new EnemyWolf());
 				
 				if(!darkForestPedestalRaised){
-					darkForestTimeRemaining = 6;
+					darkForestTimeRemaining = 5;
 				}
 			}
 		}
@@ -285,6 +286,7 @@ class GameVariables {
 		unfamiliarWoodsIntellectSpringFound = false;
 		unfamiliarWoodsInspiringViewFound = false;
 		unfamiliarWoodsSquirrelsOfGoodFortuneFound = false;
+		unfamiliarWoodsPathToDarkWoodsFound = false;
 		
 		//Abandoned Fields
 		abandonedFieldsMaxFood = 12;

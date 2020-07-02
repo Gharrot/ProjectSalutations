@@ -197,14 +197,17 @@ class ForgottenWoods extends Location
 						break;
 					}
 				}
-
-				if (damageDealt == 1)
+				
+				if (damageDealt < 2)
 				{
-					result.push("The rabbit bounds off with a few new scratches.");
-				}
-				else
-				{
-					result.push("The rabbit bounds off unharmed.");
+					if (damageDealt == 1)
+					{
+						result.push("The rabbit bounds off with a few new scratches.");
+					}
+					else
+					{
+						result.push("The rabbit bounds off unharmed.");
+					}
 				}
 			}
 			else
@@ -419,7 +422,7 @@ class ForgottenWoods extends Location
 			message.push("As you walk the woods grow darker around you. You soon come to a dense thicket.");
 			if (gameVariables.unfamiliarWoodsDeepWoodsThicketCleared)
 			{
-				message.push("You can see a clear path has been made through the thicket");
+				message.push("You can see a clear path has been made through the thicket.");
 				showChoice(message, ["Follow clear path", "Head back"], [deepWoods, deepWoods], deer);
 			}
 			else if (gameVariables.unfamiliarWoodsDeepWoodsThicketNavigated)
@@ -443,7 +446,6 @@ class ForgottenWoods extends Location
 				message.push("The branches of the thicket are too thick for you to push through, and you give up after getting a few cuts.");
 				message.push("You stand in front of the dense thicket.");
 				showChoice(message, ["Push through the thicket", "Navigate past the thicket", "Head back"], [deepWoods, deepWoods, deepWoods], deer);
-				deer.takeDamage(1);
 			}
 		}
 		else if (choice == "Navigate past the thicket")
@@ -591,8 +593,7 @@ class ForgottenWoods extends Location
 					message.push("You follow the path through the thorns.");
 					if (deer.res == 3)
 					{
-						message.push("The thorns cut deep, but you're able to push through the pain.");
-						deer.takeDamage(1);
+						message.push("The thorns cut deep, but you're able to push forward.");
 					}
 					else
 					{
@@ -608,7 +609,6 @@ class ForgottenWoods extends Location
 					message.push("The thorns cut deep, and you are soon forced to turn back.");
 					message.push("You stand in front of a path that continues through a patch of thorned branches.");
 					message.push("You see another path over to your right you could cut through to.");
-					deer.takeDamage(2);
 					showChoice(message, ["Move forward", "Head to the other path", "Head back"], [deepWoodsMaze, deepWoodsMaze, deepWoodsMaze], deer);
 					mazePosition = 3;
 				}
@@ -787,7 +787,7 @@ class ForgottenWoods extends Location
 
 	public function enterTheDarkenedWoods(choice:String, deer:Deer)
 	{
-		deer.knowsTheDarkenedWoods = true;
+		GameVariables.instance.unfamiliarWoodsPathToDarkWoodsFound = true;
 
 		var message:Array<String> = new Array<String>();
 		message.push("As you approach the light it grows in intensity and you find yourself in front of a towering flame.");
@@ -1058,7 +1058,7 @@ class ForgottenWoods extends Location
 				{
 					message += "after a lot of stuggling and cuts, you give up. You walk away covered in painful scratches.";
 				}
-				deer.takeDamage(3);
+				deer.takeDamage(2);
 			}
 			else if (resistancePower <= 13)
 			{
