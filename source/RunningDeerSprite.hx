@@ -51,7 +51,7 @@ class RunningDeerSprite extends FlxSprite
 		
 		if(nameText != null){
 			nameText.x = x - 65;
-			nameText.y = y - 65;
+			nameText.y = y - 80;
 		}
 	}
 	

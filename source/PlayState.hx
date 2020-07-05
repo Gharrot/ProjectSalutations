@@ -107,13 +107,27 @@ class PlayState extends FlxState
         showDeleteButton.label.alignment = "center";
 		showDeleteButton.visible = false;
 
-		newGameButton = new FlxButton(0, 290, "Continue", showSaves);
-		newGameButton.screenCenter(FlxAxes.X);
+		newGameButton = new FlxButton(0, 270, "- Begin -", showSaves);
+		newGameButton.loadGraphic("assets/images/DeerTileSprites/HealthMarkerTransparent.png");
 		add(newGameButton);
+		newGameButton.scale.set(12, 2.5);
+		ButtonUtils.fixButtonText(newGameButton, 30, 0, 0);
+        newGameButton.label.fieldWidth = newGameButton.width;
+		newGameButton.screenCenter(FlxAxes.X);
+		newGameButton.label.color = 0xFF000000;
+		newGameButton.onOver.callback = buttonHoverOver.bind(newGameButton);
+		newGameButton.onOut.callback = buttonHoverOut.bind(newGameButton);
 		
-		creditsButton = new FlxButton(0, 340, "Credits", startCredits);
-		creditsButton.screenCenter(FlxAxes.X);
+		creditsButton = new FlxButton(0, 325, "- Credits -", startCredits);
+		creditsButton.loadGraphic("assets/images/DeerTileSprites/HealthMarkerTransparent.png");
 		add(creditsButton);
+		creditsButton.scale.set(10, 2);
+		ButtonUtils.fixButtonText(creditsButton, 20, 0, 0);
+        creditsButton.label.fieldWidth = creditsButton.width;
+		creditsButton.screenCenter(FlxAxes.X);
+		creditsButton.label.color = 0xFF000000;
+		creditsButton.onOver.callback = buttonHoverOver.bind(creditsButton);
+		creditsButton.onOut.callback = buttonHoverOut.bind(creditsButton);
 		
 		timeUntilNextSprite = 1;
 		deerSprites = new Array<RunningDeerSprite>();
@@ -205,6 +219,8 @@ class PlayState extends FlxState
 			
 			saveSprites[i].show();
 		}
+		
+		playingCredits = false;
 		
 		if(saveDeleteButtons.length != 0){
 			add(showDeleteButton);
@@ -300,5 +316,15 @@ class PlayState extends FlxState
 		if(saveDeleteButtons.length == 0){
 			remove(showDeleteButton);
 		}
+	}
+	
+	function buttonHoverOver(button:FlxButton)
+	{
+		button.label.alpha = 0.8;
+	}
+	
+	function buttonHoverOut(button:FlxButton)
+	{
+		button.label.alpha = 1;
 	}
 }

@@ -10,7 +10,7 @@ class EnemyWolf
 	
 	public var hp:Int;
 	
-	public function new(?str:Int = 4, ?res:Int = 4, ?dex:Int = 4) 
+	public function new(?str:Int = 3, ?res:Int = 3, ?dex:Int = 3) 
 	{
 		/*var randomNums:FlxRandom = new FlxRandom();
 		str = randomNums.int(3, 5);

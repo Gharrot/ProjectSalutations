@@ -332,7 +332,7 @@ class Deer{
 		randomizer.shuffle(statNames);
 		
 		if(distributions == null){
-			distributions = [[24, 47, 67, 86, 100]];
+			distributions = [[26, 49, 69, 88, 100]];
 		}
 		
 		var chosenDistribution:Array<Int> = distributions[randomizer.int(0, distributions.length - 1)];

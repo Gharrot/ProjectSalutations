@@ -52,21 +52,26 @@ class ConfirmationBox extends FlxObject{
 
     public function setupButtons(){
         confirmButton = new FlxButton(200, 460, "Confirm");
+		confirmButton.loadGraphic("assets/images/OctaButtonSkinny.png", true, 160, 74);
+		ButtonUtils.fixButtonText(confirmButton, 14, 24, 1);
 		confirmButton.screenCenter();
 		confirmButton.x -= 80;
-		confirmButton.y = 440;
+		confirmButton.y = 410;
 		confirmButton.onUp.callback = confirm.bind();
         FlxG.state.add(confirmButton);
 		
         cancelButton = new FlxButton(280, 460, "Cancel");
+		cancelButton.loadGraphic("assets/images/OctaButtonSkinny.png", true, 160, 74);
+		ButtonUtils.fixButtonText(cancelButton, 14, 24, 1);
 		cancelButton.screenCenter();
 		cancelButton.x += 80;
-		cancelButton.y = 440;
+		cancelButton.y = 410;
 		cancelButton.onUp.callback = close.bind();
+		cancelButton.label.color = 0xFF000000;
         FlxG.state.add(cancelButton);
     }
 
-    public function setupGraphics() {
+    public function setupGraphics(){
 		
     }
 

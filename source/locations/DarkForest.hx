@@ -302,19 +302,13 @@ class DarkForest extends Location
 			showResult(["You are unable to find any food today."]);
 		}else if(forageResult <= 11){
 			GameVariables.instance.modifyFood(2);
-			showResult(["You find a lush field to graze on (+2 food)."]);
+			showResult(["You find a pile of acorns to eat (+2 food)."]);
 		}else if(forageResult <= 17){
 			GameVariables.instance.modifyFood(3);
 			showResult(["You find some turnips and dig them up (+3 food)."]);
 		}else{
-			var cropFound:Int = randomNums.int(0, 1);
 			GameVariables.instance.modifyFood(4);
-			
-			if(cropFound == 0){
-				showResult(["You find an overgrown patch of cabbage to munch on (+4 food)."]);
-			}else if(cropFound == 1){
-				showResult(["You find a cornfield, and gather as much as you can (+4 food)."]);
-			}
+			showResult(["You find a tree surrounded by fallen chestnuts and gather as many as you can (+4 food)."]);
 		}
 	}
 	
@@ -444,10 +438,17 @@ class DarkForest extends Location
 				var wolfAttacker:EnemyWolf = wolvesInAttack[wolfAttackIndex];
 				var deerTarget:Deer = deer[randomNums.int(0, deer.length - 1)];
 				
+				//make sure the wolf always has some chance to hit an attack
+				var maxBonusNeededToCatchDeer:Int = deerTarget.dex - wolfAttacker.dex + 1;
+				
 				//check for accuracy/speed
-				if(wolfAttacker.dex + randomNums.int(0,3) >= deerTarget.dex + randomNums.int(0,2)){
+				if (wolfAttacker.dex + randomNums.int(0, cast(Math.max(maxBonusNeededToCatchDeer, 3), Int)) >= deerTarget.dex + randomNums.int(0, 2)){
+					
+					//make sure the wolf always has some chance to deal damage
+					var maxBonusNeededToDealDamage:Int = deerTarget.res - wolfAttacker.str + 1;
+				
 					//check for damage (no damage, enough to scare off, or enough to remove)
-					var wolfAttackStrength:Int = wolfAttacker.str - deerTarget.res + randomNums.int(0, 2);
+					var wolfAttackStrength:Int = wolfAttacker.str + randomNums.int(0, cast(Math.max(maxBonusNeededToDealDamage, 2), Int)) - deerTarget.res;
 					
 					if(wolfAttackStrength < 0){
 						message.push("A wolf lunges at " + deerTarget.getName() + ", but gets knocked aside.");
@@ -485,7 +486,13 @@ class DarkForest extends Location
 			}
 		}
 		
-		if (wolvesInAttack.length <= 1)
+		if (wolvesInAttack.length == 1)
+		{
+			message.push("The last wolf backs off, not wanting to fight alone.");
+			message.push("All the wolves have backed off; the fight is won.");
+			showResult(message);
+		}
+		else if (wolvesInAttack.length == 0)
 		{
 			message.push("All the wolves have backed off; the fight is won.");
 			showResult(message);
@@ -608,5 +615,6 @@ class DarkForest extends Location
 		}
 		
 		randomNums.shuffle(deer);
+		showResult(message);
 	}
 }

@@ -256,7 +256,15 @@ class ForgottenWoods extends Location
 			exploreOptionFunctions.push(squirrelVisiting);
 		}
 
-		exploreOptionNames.push("Wander Elsewhere");
+		//If we've found all other options, replace the wander option
+		if (exploreOptionNames.length <= 4)
+		{
+			exploreOptionNames.push("Wander Elsewhere");
+		}
+		else
+		{
+			exploreOptionNames.push("Look for Deer");
+		}
 		exploreOptionFunctions.push(wander);
 
 		if (exploreOptionNames.length <= 1)
@@ -872,7 +880,7 @@ class ForgottenWoods extends Location
 	public function helpStuckDeer(choice:String, deer:Deer)
 	{
 		var randomNums:FlxRandom = new FlxRandom();
-		if (randomNums.int(0,5) + deer.str >= 6)
+		if (randomNums.int(0,5) + deer.str >= 5)
 		{
 			GameVariables.instance.addFoundDeer(foundDeer);
 			showResult(["You lift the fallen branch easily, allowing them to stand up.", "You continue on as they follow behind."]);

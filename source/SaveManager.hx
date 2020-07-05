@@ -44,6 +44,7 @@ class SaveManager
 		gameVariables.darkForestMedallionTaken = save.data.darkForestMedallionTaken;
 		
 		//move to the correct location
+		gameVariables.currentLocationName = save.data.currentLocationName;
 		gameVariables.changeLocation(gameVariables.currentLocationName, false);
 	}
 	
