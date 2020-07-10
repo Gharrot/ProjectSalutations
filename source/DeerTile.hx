@@ -6,8 +6,12 @@ import flixel.text.FlxText;
 import flixel.math.FlxPoint;
 import flixel.math.FlxRandom;
 import flixel.FlxG;
+import flixel.util.FlxColor;
 
 class DeerTile extends FlxButton{
+	private static var buffedStatColor:FlxColor = 0xFF009700;
+	private static var nerfedStatColor:FlxColor = 0xFFBF0020;
+	
     public var deer:Deer;
 
     public var statusText:FlxText;
@@ -183,8 +187,22 @@ class DeerTile extends FlxButton{
 		}
 		
         var statValues = [deer.str, deer.res, deer.dex, deer.int, deer.lck];
+        var baseStatValues = [deer.baseStr, deer.baseRes, deer.baseDex, deer.baseInt, deer.baseLck];
 		for(i in 0...statNumbers.length){
 			statNumbers[i].text = Std.string(statValues[i]);
+			
+			if (statValues[i] > baseStatValues[i])
+			{
+				statNumbers[i].color = buffedStatColor;
+			}
+			else if (statValues[i] < baseStatValues[i])
+			{
+				statNumbers[i].color = nerfedStatColor;
+			}
+			else
+			{
+				statNumbers[i].color = 0xFF000000;
+			}
 		}
 		
 		if(deer.gender == "Male"){
