@@ -226,46 +226,64 @@ class ForgottenWoods extends Location
 		var exploreOptionNames:Array<String> = new Array<String>();
 		var exploreOptionFunctions:Array<(String, Deer)->Void> = new Array<(String, Deer)->Void>();
 
+		//Cave
 		if (GameVariables.instance.unfamiliarWoodsCaveFound)
 		{
 			exploreOptionNames.push("The Cave");
-			exploreOptionFunctions.push(cave);
-		}
-
-		if (GameVariables.instance.unfamiliarWoodsDeepWoodsFound)
-		{
-			exploreOptionNames.push("The Deep Woods");
-			exploreOptionFunctions.push(deepWoods);
-		}
-		
-		if (GameVariables.instance.unfamiliarWoodsIntellectSpringFound)
-		{
-			exploreOptionNames.push("The Spring");
-			exploreOptionFunctions.push(intellectSpring);
-		}
-		
-		if (GameVariables.instance.unfamiliarWoodsInspiringViewFound)
-		{
-			exploreOptionNames.push("The Hill");
-			exploreOptionFunctions.push(inspiringView);
-		}
-		
-		if (GameVariables.instance.unfamiliarWoodsSquirrelsOfGoodFortuneFound)
-		{
-			exploreOptionNames.push("The Squirrels");
-			exploreOptionFunctions.push(squirrelVisiting);
-		}
-
-		//If we've found all other options, replace the wander option
-		if (exploreOptionNames.length <= 4)
-		{
-			exploreOptionNames.push("Wander Elsewhere");
 		}
 		else
 		{
-			exploreOptionNames.push("Look for Deer");
+			exploreOptionNames.push("???");
 		}
-		exploreOptionFunctions.push(wander);
+		exploreOptionFunctions.push(cave);
+
+		//Woods
+		if (GameVariables.instance.unfamiliarWoodsDeepWoodsFound)
+		{
+			exploreOptionNames.push("The Deep Woods");
+		}
+		else
+		{
+			exploreOptionNames.push("???");
+		}
+		exploreOptionFunctions.push(deepWoods);
+		
+		//Spring
+		if (GameVariables.instance.unfamiliarWoodsIntellectSpringFound)
+		{
+			exploreOptionNames.push("The Spring");
+		}
+		else
+		{
+			exploreOptionNames.push("???");
+		}
+		exploreOptionFunctions.push(intellectSpring);
+		
+		//Hill
+		if (GameVariables.instance.unfamiliarWoodsInspiringViewFound)
+		{
+			exploreOptionNames.push("The Hill");
+		}
+		else
+		{
+			exploreOptionNames.push("???");
+		}
+		exploreOptionFunctions.push(inspiringView);
+		
+		//Squirrels
+		if (GameVariables.instance.unfamiliarWoodsSquirrelsOfGoodFortuneFound)
+		{
+			exploreOptionNames.push("The Squirrels");
+		}
+		else
+		{
+			exploreOptionNames.push("???");
+		}
+		exploreOptionFunctions.push(squirrelVisiting);
+
+		//Deer
+		exploreOptionNames.push("Look for Deer");
+		exploreOptionFunctions.push(findDeer);
 
 		if (exploreOptionNames.length <= 1)
 		{
@@ -425,7 +443,7 @@ class ForgottenWoods extends Location
 
 		mazePosition = 0;
 
-		if (choice == "Deep woods entrance" || choice == "The Deep Woods")
+		if (choice == "Deep woods entrance" || choice == "The Deep Woods" || choice == "???")
 		{
 			message.push("As you walk the woods grow darker around you. You soon come to a dense thicket.");
 			if (gameVariables.unfamiliarWoodsDeepWoodsThicketCleared)

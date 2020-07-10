@@ -25,17 +25,22 @@ class NameGenerator
 		names.push("Derth");
 		names.push("Bancho");
 		names.push("Bittles");
-		names.push("Vegle");
+		names.push("Veebe");
 		names.push("Marbe");
 		names.push("Rote");
 		names.push("Leaf");
 		names.push("Fleam");
-		names.push("Gilpie");
+		names.push("Gilper");
 		names.push("Flacks");
 		names.push("Sticks");
 		names.push("Glim");
 		names.push("Deft");
 		names.push("Ronoa");
 		names.push("Narmelon");
+		names.push("Jube");
+		names.push("Ingo");
+		names.push("Stones");
+		names.push("Ruge");
+		names.push("Ferf");
 	}
 }

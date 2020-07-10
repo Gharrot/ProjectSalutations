@@ -82,7 +82,7 @@ class ImprovementBox extends FlxObject
 		var gameVariables:GameVariables = GameVariables.instance;
 		
 		optionDescriptions = new FlxUIListModified(70, 220, null, 400, 280);
-		optionButtons = new FlxUIListModified(265, 200, null, 400, 280);
+		optionButtons = new FlxUIListModified(265, 205, null, 400, 280);
 		
 		if(!gameVariables.rabbitFurBeddingMade){
 			var furText:FlxText = new FlxText(0, 0, 200, "Rabbit fur bedding\nRabbit fur: " + gameVariables.rabbitFur + "/2", 15);
@@ -113,5 +113,7 @@ class ImprovementBox extends FlxObject
 		var gameVariables:GameVariables = GameVariables.instance;
 		gameVariables.rabbitFur -= 2;
 		gameVariables.rabbitFurBeddingMade = true;
+		
+		close();
 	}
 }

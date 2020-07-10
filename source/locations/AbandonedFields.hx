@@ -50,7 +50,7 @@ class AbandonedFields extends Location
 			//rabbit attakk
 			var resultMessage:String = "A few wandering rabbits find your den";
 			if (deer.length == 0) {
-				if(GameVariables.instance.currentFood > 5){
+				if(GameVariables.instance.currentFood >= 8){
 					resultMessage += " and crunch away some of your food (-2 food).";
 					GameVariables.instance.modifyFood(-2);
 				}else if(GameVariables.instance.currentFood > 0){

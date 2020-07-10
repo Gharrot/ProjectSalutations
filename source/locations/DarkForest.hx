@@ -68,32 +68,48 @@ class DarkForest extends Location
 		var exploreOptionNames:Array<String> = new Array<String>();
 		var exploreOptionFunctions:Array<(String, Deer)->Void> = new Array<(String, Deer)->Void>();
 
+		//Flame
 		if (GameVariables.instance.darkForestPedestalRaised)
 		{
 			exploreOptionNames.push("The Flame");
 			exploreOptionFunctions.push(greatFlame);
 		}
 		
+		//Fireflies
 		if (GameVariables.instance.darkForestHealingSpringFound)
 		{
 			exploreOptionNames.push("The Fireflies");
-			exploreOptionFunctions.push(healingSpring);
 		}
+		else
+		{
+			exploreOptionNames.push("???");
+		}
+		exploreOptionFunctions.push(healingSpring);
 		
+		//Berries
 		if (GameVariables.instance.darkForestHealingBerriesFound)
 		{
 			exploreOptionNames.push("The Berry Bushes");
-			exploreOptionFunctions.push(healingBerries);
 		}
+		else
+		{
+			exploreOptionNames.push("???");
+		}
+		exploreOptionFunctions.push(healingBerries);
 		
+		//Herbs
 		if (GameVariables.instance.darkForestSpeedHerbsFound)
 		{
 			exploreOptionNames.push("The Herb Patches");
-			exploreOptionFunctions.push(speedHerbs);
 		}
+		else
+		{
+			exploreOptionNames.push("???");
+		}
+		exploreOptionFunctions.push(speedHerbs);
 
-		exploreOptionNames.push("Wander Elsewhere");
-		exploreOptionFunctions.push(wander);
+		exploreOptionNames.push("Practice");
+		exploreOptionFunctions.push(aimlessWandering);
 
 		if (exploreOptionNames.length <= 1)
 		{
@@ -164,6 +180,8 @@ class DarkForest extends Location
 		{
 			message.push("A low stone pedestal stands in front of the fire, where you took a medallion from.");
 		}
+		
+		message.push("(You've reached the end of this version of the game, congratulations!)");
 		
 		showResult(message);
 	}
@@ -286,7 +304,7 @@ class DarkForest extends Location
 		
 		var message:Array<String> = new Array<String>();
 		
-		message.push("You wander around in the dark, not finding much of interest.");
+		message.push("You wander around in the dark, trying to traverse the dark woods as well as you can.");
 		message.push("You get a bit more used to navigating the dark and bumping into trees.");
 		message.push("(+1 Strength, +1 Resilience, and +1 Dexterity for 2 days)");
 		deer.addStatusEffect(new DeerStatusEffect("Relaxed", 3, 1, 1, 1, 0, 0));

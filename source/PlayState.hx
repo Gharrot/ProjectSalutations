@@ -56,7 +56,7 @@ class PlayState extends FlxState
 		upperBgSprite = new FlxSprite(0, -640, "assets/images/CharacterCreationBG.png");
 		add(upperBgSprite);
 		
-		var text = new flixel.text.FlxText(0, 70, 0, "Dear\nSurvivors", 64);
+		var text = new flixel.text.FlxText(0, 70, 0, "Deer\nSurvivors", 64);
 		text.alignment = "center";
 		text.color = 0xFF000000;
 		text.screenCenter(FlxAxes.X);

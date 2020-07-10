@@ -578,19 +578,19 @@ class MainGame extends FlxState
 	}
 
 	function setupTopBar(){
-        dateText = new FlxText(5, 0, 0, "Fall Wk 1", 18);
+        dateText = new FlxText(5, 0, 0, "", 18);
 		dateText.color = 0xFF000000;
 		dateText.alignment = "left";
 		add(dateText);
 
-        foodText = new FlxText(315, 0, 160, "Food: " + Std.string(GameVariables.instance.currentFood) + "/" + Std.string(GameVariables.instance.maxFood), 18);
+        foodText = new FlxText(315, 1, 160, "Food: " + Std.string(GameVariables.instance.currentFood) + "/" + Std.string(GameVariables.instance.maxFood), 18);
 		foodText.color = 0xFF000000;
 		foodText.alignment = "right";
 		add(foodText);
     }
 	
 	public function updateTopBar(){
-        dateText.text = "Fall Wk 1";
+        dateText.text = "";
 		
         foodText.text = "Food: ";
 		if(GameVariables.instance.currentFood > GameVariables.instance.maxFood){
@@ -678,7 +678,7 @@ class MainGame extends FlxState
 	
 	public function locationMovement(locationName:String, cost:Int, ?locked:Bool = false):TravelConfirmationBox
 	{
-		travelConfirmation = new TravelConfirmationBox(locationName, cost);
+		travelConfirmation = new TravelConfirmationBox(locationName, cost, locked);
 		hide();
 		
 		return travelConfirmation;
