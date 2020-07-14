@@ -30,4 +30,4 @@
 -swf-version 11.8
 -swf export/flash/bin/ProjectSalutations.swf
 -cp export/flash/haxe
--debug
+-D final

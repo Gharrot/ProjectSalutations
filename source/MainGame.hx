@@ -24,7 +24,7 @@ class MainGame extends FlxState
     var denButton:FlxButton;
 	
 	//Herd
-	var deerTilePage:Int;
+	var deerTilePage:Int = 0;
     var deerTiles:Array<DeerTile>;
     var locationSprites:Array<FlxSprite>;
 	var deerLeftButton:FlxButton;
@@ -498,9 +498,6 @@ class MainGame extends FlxState
     }
 	
 	function updateDeerTiles(){
-		if(deerTilePage == null){
-			deerTilePage = 0;
-		}
 		var offSet:Int = deerTilePage * 4;
 		
         for (i in 0...4){
@@ -548,10 +545,6 @@ class MainGame extends FlxState
 			deerRightButton.updateHitbox();
 			add(deerRightButton);
 			deerRightButton.onUp.callback = changeDeerTilePage.bind(1);
-		}
-		
-		if(deerTilePage == null){
-			deerTilePage = 0;
 		}
 		
 		if(deerTilePage > 0){
@@ -626,10 +619,34 @@ class MainGame extends FlxState
 			{
 				newButton.lock("You must explore and find a path before you can travel here");
 			}
+			
+			//Ghost Town
+			var newButton:LocationButton = new LocationButton("Ghost Town", 6);
+			newButton.screenCenter();
+			newButton.x += 100;
+			mapButtons.push(newButton);
+			add(newButton);
 		}
 		else if (GameVariables.instance.currentLocationName == "Dark Forest")
 		{
 			//Dark Forest (current location)
+			var currentLocationSprite:FlxSprite = new FlxSprite(0, 0);
+			currentLocationSprite.loadGraphic("assets/images/MapImages/CurrentLocationMarker.png", true);
+			currentLocationSprite.scale.set(3, 3);
+			currentLocationSprite.screenCenter();
+			mapSprites.push(currentLocationSprite);
+			add(currentLocationSprite);
+			
+			//Unfamiliar Woods
+			var newButton:LocationButton = new LocationButton("Unfamiliar Woods", 2);
+			newButton.screenCenter();
+			newButton.x += 120;
+			mapButtons.push(newButton);
+			add(newButton);
+		}
+		else if (GameVariables.instance.currentLocationName == "Ghost Town")
+		{
+			//Ghost Town (current location)
 			var currentLocationSprite:FlxSprite = new FlxSprite(0, 0);
 			currentLocationSprite.loadGraphic("assets/images/MapImages/CurrentLocationMarker.png", true);
 			currentLocationSprite.scale.set(3, 3);

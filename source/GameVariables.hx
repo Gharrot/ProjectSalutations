@@ -23,6 +23,7 @@ class GameVariables {
 	public var rabbitFur:Int;
 	public var rabbitFurBeddingMade:Bool;
 	
+	//Unfamiliar Woods
 	public var unfamiliarWoodsMaxFood:Int;
     public var unfamiliarWoodsLostDeer:Array<Deer>;
     public var unfamiliarWoodsCaveFound:Bool;
@@ -35,8 +36,10 @@ class GameVariables {
     public var unfamiliarWoodsMedallionTaken:Bool;
 	public var unfamiliarWoodsPathToDarkWoodsFound:Bool;
 	
+	//Abandoned Fields
 	public var abandonedFieldsMaxFood:Int;
 	
+	//Dark Forest
 	public var darkForestMaxFood:Int;
 	public var darkForestTimeRemaining:Int;
 	public var darkForestWolves:Array<EnemyWolf>;
@@ -45,6 +48,12 @@ class GameVariables {
 	public var darkForestSpeedHerbsFound:Bool;
     public var darkForestPedestalRaised:Bool;
     public var darkForestMedallionTaken:Bool;
+	
+	//Ghost Town
+	public var ghostTownMaxFood:Int;
+	
+	//Underground City
+	public var undergroundCityReached:Bool;
 	
 	public var saveNum:Int;
 
@@ -95,6 +104,11 @@ class GameVariables {
 					darkForestTimeRemaining = 5;
 				}
 			}
+		}
+		else if (targetLocation == "Ghost Town")
+		{
+			currentLocation = new GhostTown();
+			maxFood = ghostTownMaxFood;
 		}
 		
 		currentLocationName = targetLocation;
@@ -300,6 +314,12 @@ class GameVariables {
 		darkForestSpeedHerbsFound = false;
 		darkForestPedestalRaised = false;
 		darkForestMedallionTaken = false;
+		
+		//Ghost Town
+		ghostTownMaxFood = 12;
+		
+		//Underground City
+		undergroundCityReached = false;
 	}
 	
 	public static function getLocationSpriteByName(locationName:String):String
@@ -315,6 +335,10 @@ class GameVariables {
 		else if (locationName == "Dark Forest")
 		{
 			return "assets/images/LocationImages/DarkForest.png";
+		}
+		else if (locationName == "Ghost Town")
+		{
+			return "assets/images/LocationImages/GhostTown.png";
 		}
 		
 		return "dang";

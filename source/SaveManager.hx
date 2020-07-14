@@ -19,7 +19,7 @@ class SaveManager
         gameVariables.currentFood = save.data.currentFood;
 		gameVariables.maxFood = save.data.maxFood;
 		
-		//UnfamiliarWoods
+		//Unfamiliar Woods
 		gameVariables.unfamiliarWoodsMaxFood = save.data.unfamiliarWoodsMaxFood;
 		gameVariables.rabbitFur = save.data.rabbitFur;
 		gameVariables.unfamiliarWoodsLostDeer = save.data.unfamiliarWoodsLostDeer;
@@ -33,15 +33,21 @@ class SaveManager
 		gameVariables.unfamiliarWoodsSquirrelsOfGoodFortuneFound = save.data.unfamiliarWoodsSquirrelsOfGoodFortuneFound;
 		gameVariables.unfamiliarWoodsPathToDarkWoodsFound = save.data.unfamiliarWoodsPathToDarkWoodsFound;
 		
-		//AbandonedFields
+		//Abandoned Fields
 		gameVariables.abandonedFieldsMaxFood = save.data.abandonedFieldsMaxFood;
 		
-		//DarkForest
+		//Dark Forest
 		gameVariables.darkForestMaxFood = save.data.darkForestMaxFood;
 		gameVariables.darkForestTimeRemaining = save.data.darkForestTimeRemaining;
 		gameVariables.darkForestWolves = save.data.darkForestWolves;
 		gameVariables.darkForestPedestalRaised = save.data.darkForestPedestalRaised;
 		gameVariables.darkForestMedallionTaken = save.data.darkForestMedallionTaken;
+		
+		//Ghost Town
+		gameVariables.ghostTownMaxFood = save.data.ghostTownMaxFood;
+		
+		//Underground City
+		gameVariables.undergroundCityReached = save.data.undergroundCityReached;
 		
 		//move to the correct location
 		gameVariables.currentLocationName = save.data.currentLocationName;
@@ -62,7 +68,7 @@ class SaveManager
 		save.data.currentLocationName = gameVariables.currentLocationName;
         save.data.currentFood = gameVariables.currentFood;
 		
-		//UnfamiliarWoods
+		//Unfamiliar Woods
 		save.data.unfamiliarWoodsMaxFood = gameVariables.unfamiliarWoodsMaxFood;
 		save.data.rabbitFur = gameVariables.rabbitFur;
 		save.data.unfamiliarWoodsLostDeer = gameVariables.unfamiliarWoodsLostDeer;
@@ -76,15 +82,21 @@ class SaveManager
 		save.data.unfamiliarWoodsSquirrelsOfGoodFortuneFound = gameVariables.unfamiliarWoodsSquirrelsOfGoodFortuneFound;
 		save.data.unfamiliarWoodsPathToDarkWoodsFound = gameVariables.unfamiliarWoodsPathToDarkWoodsFound;
 		
-		//AbandonedFields
+		//Abandoned Fields
 		save.data.abandonedFieldsMaxFood = gameVariables.abandonedFieldsMaxFood;
 		
-		//DarkForest
+		//Dark Forest
 		save.data.darkForestMaxFood = gameVariables.darkForestMaxFood;
 		save.data.darkForestTimeRemaining = gameVariables.darkForestTimeRemaining;
 		save.data.darkForestWolves = gameVariables.darkForestWolves;
 		save.data.darkForestPedestalRaised = gameVariables.darkForestPedestalRaised;
 		save.data.darkForestMedallionTaken = gameVariables.darkForestMedallionTaken;
+		
+		//Ghost Town
+		save.data.ghostTownMaxFood = gameVariables.ghostTownMaxFood;
+		
+		//Underground City
+		save.data.undergroundCityReached = gameVariables.undergroundCityReached;
 		
 		save.flush();
 	}
