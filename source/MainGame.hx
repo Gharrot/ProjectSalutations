@@ -657,7 +657,24 @@ class MainGame extends FlxState
 			//Unfamiliar Woods
 			var newButton:LocationButton = new LocationButton("Unfamiliar Woods", 2);
 			newButton.screenCenter();
-			newButton.x += 120;
+			newButton.x -= 100;
+			mapButtons.push(newButton);
+			add(newButton);
+		}
+		else if (GameVariables.instance.currentLocationName == "The Trail")
+		{
+			//The Trail (current location)
+			var currentLocationSprite:FlxSprite = new FlxSprite(0, 0);
+			currentLocationSprite.loadGraphic("assets/images/MapImages/CurrentLocationMarker.png", true);
+			currentLocationSprite.scale.set(3, 3);
+			currentLocationSprite.screenCenter();
+			mapSprites.push(currentLocationSprite);
+			add(currentLocationSprite);
+			
+			//Ghost Town
+			var newButton:LocationButton = new LocationButton("Ghost Town", 2);
+			newButton.screenCenter();
+			newButton.x -= 80;
 			mapButtons.push(newButton);
 			add(newButton);
 		}

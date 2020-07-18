@@ -46,6 +46,16 @@ class SaveManager
 		//Ghost Town
 		gameVariables.ghostTownMaxFood = save.data.ghostTownMaxFood;
 		
+		//The Trail
+		gameVariables.theTrailMaxFood = save.data.theTrailMaxFood;
+		gameVariables.theTrailDayNumber = save.data.theTrailDayNumber;
+		gameVariables.theTrailDayPlanksFound = save.data.theTrailDayPlanksFound;
+		gameVariables.theTrailDayStonesFound = save.data.theTrailDayStonesFound;
+		gameVariables.theTrailDayRopesFound = save.data.theTrailDayRopesFound;
+		gameVariables.theTrailDayStreamFound = save.data.theTrailDayStreamFound;
+		gameVariables.theTrailDayBridgeFound = save.data.theTrailDayBridgeFound;
+		gameVariables.theTrailDayMedallionTaken = save.data.theTrailDayMedallionTaken;
+		
 		//Underground City
 		gameVariables.undergroundCityReached = save.data.undergroundCityReached;
 		
@@ -94,6 +104,16 @@ class SaveManager
 		
 		//Ghost Town
 		save.data.ghostTownMaxFood = gameVariables.ghostTownMaxFood;
+		
+		//The Trail
+		save.data.theTrailMaxFood = gameVariables.theTrailMaxFood;
+		save.data.theTrailDayNumber = gameVariables.theTrailDayNumber;
+		save.data.theTrailDayPlanksFound = gameVariables.theTrailDayPlanksFound;
+		save.data.theTrailDayStonesFound = gameVariables.theTrailDayStonesFound;
+		save.data.theTrailDayRopesFound = gameVariables.theTrailDayRopesFound;
+		save.data.theTrailDayStreamFound = gameVariables.theTrailDayStreamFound;
+		save.data.theTrailDayBridgeFound = gameVariables.theTrailDayBridgeFound;
+		save.data.theTrailDayMedallionTaken = gameVariables.theTrailDayMedallionTaken;
 		
 		//Underground City
 		save.data.undergroundCityReached = gameVariables.undergroundCityReached;

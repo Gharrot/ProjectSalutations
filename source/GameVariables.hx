@@ -52,6 +52,16 @@ class GameVariables {
 	//Ghost Town
 	public var ghostTownMaxFood:Int;
 	
+	//The Trail
+	public var theTrailMaxFood:Int;
+	public var theTrailDayNumber:Int;
+	public var theTrailDayPlanksFound:Bool;
+	public var theTrailDayStonesFound:Bool;
+	public var theTrailDayRopesFound:Bool;
+	public var theTrailDayStreamFound:Bool;
+	public var theTrailDayBridgeFound:Bool;
+	public var theTrailDayMedallionTaken:Bool;
+	
 	//Underground City
 	public var undergroundCityReached:Bool;
 	
@@ -109,6 +119,15 @@ class GameVariables {
 		{
 			currentLocation = new GhostTown();
 			maxFood = ghostTownMaxFood;
+		}
+		else if (targetLocation == "The Trail")
+		{
+			currentLocation = new TheTrail();
+			maxFood = theTrailMaxFood;
+			
+			if (resetLocationVariables){
+				theTrailDayNumber = 1;
+			}
 		}
 		
 		currentLocationName = targetLocation;
@@ -317,6 +336,16 @@ class GameVariables {
 		
 		//Ghost Town
 		ghostTownMaxFood = 12;
+		
+		//The Trail
+		theTrailMaxFood = 12;
+		theTrailDayNumber = 1;
+		theTrailDayPlanksFound = false;
+		theTrailDayStonesFound = false;
+		theTrailDayRopesFound = false;
+		theTrailDayStreamFound = false;
+		theTrailDayBridgeFound = false;
+		theTrailDayMedallionTaken = false;
 		
 		//Underground City
 		undergroundCityReached = false;

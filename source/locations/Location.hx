@@ -144,6 +144,20 @@ class Location{
 	}
 	
 	public function endDay(){
+		resetDailyVariables();
+		
+		//Out of food
+		if (starved) {
+			starved = false;
+			outOfFood(GameVariables.instance.getPlayerDeer());
+		}else{
+			//Return
+			returnAfterDayEnd();
+		}
+	}
+	
+	public function resetDailyVariables()
+	{
 		//Reset deer
         for (i in 0...GameVariables.instance.controlledDeer.length) {
 			GameVariables.instance.controlledDeer[i].actedThisRound = false;
@@ -158,15 +172,6 @@ class Location{
 		GameVariables.instance.checkVariables();
 		
 		GameVariables.instance.advanceDay();
-		
-		//Out of food
-		if (starved) {
-			starved = false;
-			outOfFood(GameVariables.instance.getPlayerDeer());
-		}else{
-			//Return
-			returnAfterDayEnd();
-		}
 	}
 	
 	public function returnAfterDayEnd(){
