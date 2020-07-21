@@ -423,11 +423,6 @@ class Deer{
 		var parentsTotalStats = motherDeer.getStatTotal() + fatherDeer.getStatTotal();
 		var statDifference:Int = newDeer.getStatTotal() - Math.floor(parentsTotalStats / 2);
 		
-		trace(motherDeer.getStatTotal());
-		trace(fatherDeer.getStatTotal());
-		trace(newDeer.getStatTotal());
-		trace(statDifference);
-		
 		var statChanges:Int = cast(Math.abs(statDifference), Int);
 		
 		if(statDifference > 0){
@@ -465,5 +460,16 @@ class Deer{
 		newDeer.becomeABaby();
 		
 		return newDeer;
+	}
+	
+	public function checkForStatusByName(name:String):Bool
+	{
+		for (i in 0...statusEffects.length)
+		{
+			if (statusEffects[i].statusName == name)
+			{
+				return true;
+			}
+		}
 	}
 }

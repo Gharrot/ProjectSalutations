@@ -9,6 +9,10 @@ import flixel.util.FlxColor;
 class TheTrail extends Location
 {
 
+	var rabbitAttackReduction:Int = 0;
+	var planksPlaced:Bool = false;
+	var ropesPlaced:Bool = false;
+	
 	public function new(){
 		super();
 		
@@ -20,7 +24,79 @@ class TheTrail extends Location
 	
 	override public function returnAfterDayEnd()
 	{
+		var gameVariables:GameVariables = GameVariables.instance;
+		var message:Array<String> = new Array<String>();
 		
+		if (GameVariables.instance.theTrailDayNumber == 1)
+		{
+			damageEveryone(message, 2);
+			message.push("The trail ahead for today looks to be no tougher than yesterday's journey.");
+		}
+		else if (GameVariables.instance.theTrailDayNumber == 2)
+		{
+			damageEveryone(message, 2);
+			message.push("The trail ahead for today looks to be much tougher than today's.");
+		}
+		else if (GameVariables.instance.theTrailDayNumber == 3)
+		{
+			for (i in 0...gameVariables.controlledDeer)
+			{
+				if (gameVariables.controlledDeer[i].checkForStatusByName("Mountain's Rest"))
+				{
+					//we chillin
+				}
+				else if (gameVariables.controlledDeer[i].currentAction == "Resting")
+				{
+					gameVariables.controlledDeer[i].takeDamage(2);
+				}
+				else
+				{
+					gameVariables.controlledDeer[i].takeDamage(4);
+				}
+			}
+			
+			message.push("The trail heads uphill all day, draining the energy of your deer.");
+			message.push("(4 damage to all non-resting deer)");
+			message.push("(2 damage to all resting deer)");
+			
+			message.push("The trail ahead seems easy enough, but you can see many packs of rabbits wandering around.");
+			message.push("You should prepare to have your food stores attacked tonight.");
+		}
+		else if (GameVariables.instance.theTrailDayNumber == 4)
+		{
+			damageEveryone(message, 2);
+			message.push("The trail ahead seems kinder, and you feel like you've almost reached the end.");
+			message.push("As long as you gather enough food for tonight you should be able to complete your journey.");
+		}
+		else if (GameVariables.instance.theTrailDayNumber == 5)
+		{
+			message.push("After a short hike through some rocky terrain, you round a corner and your compulsion to travel washes away.");
+			message.push("Before you seems to be a stone door carved into the side of a cliff.");
+			message.push("The trail continues a bit further downhill to the entrance of some sort of settlement. A dozen or so log buildings sit on the plateau below you.");
+			showResult(message);
+		}
+		
+		if (GameVariables.instance.theTrailDayNumber < 5)
+		{
+			GameVariables.instance.theTrailDayNumber++;
+			showResult(message);
+		}
+	}
+	
+	public function damageEveryone(message:Array<String>, amount:Int)
+	{
+		var gameVariables:GameVariables = GameVariables.instance;
+		
+		for (i in 0...gameVariables.controlledDeer)
+		{
+			if (gameVariables.controlledDeer[i].currentAction != "Resting")
+			{
+				gameVariables.controlledDeer[i].takeDamage(amount);
+			}
+		}
+		
+		message.push("The trail continues onwards, draining the energy of your deer.");
+		message.push("(2 damage to all non-resting deer)");
 	}
 	
 	override public function explore(deer:Deer)
@@ -128,6 +204,8 @@ class TheTrail extends Location
 	
 	public function gettingPlanks(choice:String, deer:Deer)
 	{
+		GameVariables.instance.theTrailDayPlanksFound = true;
+		
 		var message:Array<String> = new Array<String>();
 		message.push("You come across a large pile of planks sitting by an empty shed.");
 		message.push("Taking some will make the journey harder, but you might find some use for them.");
@@ -146,6 +224,8 @@ class TheTrail extends Location
 	
 	public function trainingDexterity(choice:String, deer:Deer)
 	{
+		GameVariables.instance.theTrailDayStonesFound = true;
+		
 		deer.addStatusEffect(new DeerStatusEffect("Stone Stepper", 3, 0, 0, 2, 0, 0));
 		
 		var message:Array<String> = new Array<String>();
@@ -157,6 +237,8 @@ class TheTrail extends Location
 	
 	public function gettingRopes(choice:String, deer:Deer)
 	{
+		GameVariables.instance.theTrailDayRopesFound = true;
+		
 		var message:Array<String> = new Array<String>();
 		message.push("You come across a bundle of ropes washed up on the side of creek.");
 		message.push("Taking some will make the journey harder, but you might find some use for them.");
@@ -175,6 +257,8 @@ class TheTrail extends Location
 	
 	public function trainingIntellect(choice:String, deer:Deer)
 	{
+		GameVariables.instance.theTrailDayStreamFound = true;
+		
 		deer.addStatusEffect(new DeerStatusEffect("Creek Watcher", 3, 0, 0, 0, 2, 0));
 		
 		var message:Array<String> = new Array<String>();
@@ -191,14 +275,14 @@ class TheTrail extends Location
 		
 		if (deer.dex >= 4)
 		{
-			deer.addStatusEffect(new DeerStatusEffect("Mountain's Rest", 1, 0, 0, 0, 0, 0));
+			deer.addStatusEffect(new DeerStatusEffect("Mountain's Rest", 3, 0, 0, 0, 0, 0));
 			message.push("The path to the spring is steep and crumbling, but you eventually get there and spend the rest of the day relaxing within it.");
 			message.push("(You are fully healed and wont lose health while travelling today).");
 			deer.fullyHeal();
 		}
 		else
 		{
-			message.push("The path to the spring is steep and crumbling, and you aren't able to make it up to the spring.");
+			message.push("The path to the spring is steep and crumbling, and you aren't able to make it up.");
 		}
 		
 		showResult(message);
@@ -209,31 +293,219 @@ class TheTrail extends Location
 		var message:Array<String> = new Array<String>();
 		message.push("The path leads through some mountains, and you pass by a warm pond fed from above.");
 		
-		deer.addStatusEffect(new DeerStatusEffect("Mountain's Rest", 1, 0, 0, 0, 0, 0));
+		deer.addStatusEffect(new DeerStatusEffect("Mountain's Rest", 3, 0, 0, 0, 0, 0));
 		message.push("You step into the warm pond and relax for a while.");
-		message.push("(You wont lose health while travelling today).");
+		
+		deer.heal(1);
+		message.push("(+1 health, You wont lose health while travelling today).");
 		
 		showResult(message);
 	}
 	
 	public function diplomacyZone(choice:String, deer:Deer)
 	{
+		var message:Array<String> = new Array<String>();
+		message.push("You head to an open area where a group of highstanding rabbits have gathered.");
+		message.push("You can attempt to convince them not to attack tonight through discussion, or try bribing them with food.");
 		
+		showChoice(message, ["Discussion", "Bribery (-1 food)"], [diplomaticChoice, briberyChoice], deer);
+	}
+	
+	public function diplomaticChoice(choice:String, deer:Deer)
+	{
+		var message:Array<String> = new Array<String>();
+		var randomNums:FlxRandom = new FlxRandom();
+		
+		var diplomacySkill:Int = deer.int * 2 + deer.lck - randomNums.int(0, 5);
+		
+		if (diplomacySkill >= 10)
+		{
+			rabbitAttackReduction += 3;
+			message.push("You converse with the rabbits for some time, discussing many things of great importance to rabbits.");
+			message.push("You expect that few rabbits will attack tonight, if any.");
+		}
+		else if (diplomacySkill >= 8)
+		{
+			rabbitAttackReduction += 2;
+			message.push("You converse with the rabbits for some time, discussing the harm that their attacks would cause you.");
+			message.push("You expect that at least this group of rabbits and anyone they can convince wont attack tonight.");
+		}
+		else if (diplomacySkill >= 6)
+		{
+			rabbitAttackReduction += 1;
+			message.push("You converse with the rabbits for some time, discussing the weather and such.");
+			message.push("You expect that at least their group wont attack tonight.");
+		}
+		else
+		{
+			message.push("You try to converse with the rabbits but they keep cutting you off and turning away.");
+			message.push("You expect that you had no effect on their decision to attack tonight.");
+		}
+		
+		showResult(message);
+	}
+	
+	public function briberyChoice(choice:String, deer:Deer)
+	{
+		var message:Array<String> = new Array<String>();
+		
+		if (GameVariables.instance.currentFood > 0)
+		{
+			GameVariables.instance.modifyFood(-1);
+			message.push("You hand over a small bundle of food to the group of rabbits.");
+			message.push("The rabbits take the food, look at you for a moment, then scurry away.");
+			message.push("You expect that at least their group wont attack tonight.");
+			
+			rabbitAttackReduction++;
+		}
+		else
+		{
+			message.push("You step forward to offer some food to the rabbits, then realize you don't have any.");
+			message.push("The rabbits look at you for a moment, then scurry away.");
+		}
+		
+		showResult(message);
 	}
 	
 	public function screamingZone(choice:String, deer:Deer)
 	{
+		var message:Array<String> = new Array<String>();
+		var randomNums:FlxRandom = new FlxRandom();
 		
+		message.push("You walk up to a group of rabbits and scream as loud as you can.");
+		var screamingSkill:Int = deer.str * 2 + deer.res - randomNums.int(0, 5);
+		
+		if (screamingSkill >= 10)
+		{
+			rabbitAttackReduction += 3;
+			message.push("The rabbits stare at you in terror as you roar in front of them; then quickly run away.");
+			message.push("You expect that few rabbits will attack tonight, if any.");
+		}
+		else if (screamingSkill >= 8)
+		{
+			rabbitAttackReduction += 2;
+			message.push("The rabbits quickly bound off as you run after them screaming.");
+			message.push("You expect that at least this group of rabbits and any others they warn of you wont be attacking tonight.");
+		}
+		else if (screamingSkill >= 6)
+		{
+			rabbitAttackReduction += 1;
+			message.push("The rabbits slowly back away from you before bounding off as you screech towards them.");
+			message.push("You expect that at least their group wont attack tonight.");
+		}
+		else
+		{
+			message.push("The rabbits stand around and watch as you try to scream, but moreso just squawk in their direction.");
+			message.push("You expect that you had no effect on their decision to attack tonight.");
+		}
+		
+		showResult(message);
 	}
 	
 	public function theRavine(choice:String, deer:Deer)
 	{
+		GameVariables.instance.theTrailDayBridgeFound = true;
+		var message:Array<String> = new Array<String>();
 		
+		if (!GameVariables.instance.theTrailDayMedallionTaken)
+		{
+			message.push("You walk up to a small ravine. A small piece of land juts out of the cliff on the other side, a pedestal with a medallion on it stands there.");
+			
+			if (planksPlaced)
+			{
+				if (deer.checkForStatusByName("Carrying Ropes"))
+				{
+					message.push("A pile of planks sits by the edge, using the rope you're carrying you should have enough to make a makeshift bridge.");
+					showChoice(message, ["Build bridge"], [crossingTheRavine], deer);
+				}
+				else
+				{
+					message.push("A pile of planks sits by the edge, there would be enough to make a bridge if you had some rope.");
+					showResult(message);
+				}
+			}
+			else if (ropesPlaced)
+			{
+				if (deer.checkForStatusByName("Carrying Planks"))
+				{
+					message.push("A pile of ropes sits by the edge, using the planks you're carrying you should have enough to make a makeshift bridge.");
+					showChoice(message, ["Build bridge"], [crossingTheRavine], deer);
+				}
+				else
+				{
+					message.push("A pile of ropes sits by the edge, there would be enough to make a bridge if you had some planks.");
+					showResult(message);
+				}
+			}
+			else
+			{
+				if (deer.checkForStatusByName("Carrying Planks") && deer.checkForStatusByName("Carrying Ropes"))
+				{
+					message.push("Using the planks and the rope you're carrying you should have enough to make a makeshift bridge across.");
+					showChoice(message, ["Build bridge"], [crossingTheRavine], deer);
+				}
+				else if (deer.checkForStatusByName("Carrying Planks"))
+				{
+					message.push("You could build a bridge across using your planks if you had some rope.");
+					showChoice(message, ["Dropoff Planks"], [dropoffPlanks], deer);
+				}
+				else if (deer.checkForStatusByName("Carrying Ropes"))
+				{
+					message.push("You could build a bridge across using your ropes if you had some planks.");
+					showChoice(message, ["Dropoff Ropes"], [dropoffRope], deer);
+				}
+				else
+				{
+					message.push("There's no way of getting across it without any way to build a bridge.");
+					showResult(message);
+				}
+			}
+		}
+		else
+		{
+			message.push("You walk up to a small ravine. A suspension bridge leads across it to a small piece of land jutting out of the cliff on the other side.");
+			message.push("A pedestal stands on the other side where you once took a medallion from.");
+			showResult(message);
+		}
+	}
+	
+	public function dropoffPlanks(choice:String, deer:Deer)
+	{
+		planksPlaced = true;
+		var message:Array<String> = new Array<String>();
+		message.push("You drop off the planks by the ravine. They should be helpful if someone comes by with some rope.");
+		showResult(message);
+	}
+	
+	public function dropoffRope(choice:String, deer:Deer)
+	{
+		ropesPlaced = true;
+		var message:Array<String> = new Array<String>();
+		message.push("You drop off the ropes by the ravine. They should be helpful if someone comes by with some planks.");
+		showResult(message);
+	}
+	
+	public function crossingTheRavine(choice:String, deer:Deer)
+	{
+		GameVariables.instance.theTrailDayMedallionTaken = true;
+		
+		var message:Array<String> = new Array<String>();
+		message.push("You put the ropes and planks together and make a suspension bridge over the ravine.");
+		message.push("After a comfortable walk across, you take the medallion off the pedestal then head back over and continue on the trail.");
+		showResult(message);
 	}
 	
 	public function theRelaxingWalk(choice:String, deer:Deer)
 	{
+		var message:Array<String> = new Array<String>();
+		message.push("You wander around during the day just off the trail you've been following.");
+		message.push("Walking through some less travelled areas lets you munch on some berries as you walk.");
+		message.push("(+2 food, +1 health).");
 		
+		GameVariables.instance.modifyFood(2);
+		deer.heal(1);
+		
+		showResult(message);
 	}
 	
 	override public function forage(deer:Deer) {
