@@ -5,6 +5,7 @@ import flixel.text.FlxText;
 import flixel.util.FlxAxes;
 import flixel.util.FlxColor;
 import statuses.DeerStatusEffect;
+import flixel.math.FlxRandom;
 
 import flixel.addons.ui.FlxUIList;
 import flixel.addons.ui.FlxUIText;
@@ -111,6 +112,9 @@ class Location{
         }
 		
 		if(!defended){
+			var randomNums:FlxRandom = new FlxRandom();
+			randomNums.shuffle(deerDefenders);
+			
 			actionText.text = "Defending";
 			defended = true;
 			setActiveDeer(deerDefenders);

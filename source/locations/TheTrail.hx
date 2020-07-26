@@ -39,7 +39,7 @@ class TheTrail extends Location
 		}
 		else if (GameVariables.instance.theTrailDayNumber == 3)
 		{
-			for (i in 0...gameVariables.controlledDeer)
+			for (i in 0...gameVariables.controlledDeer.length)
 			{
 				if (gameVariables.controlledDeer[i].checkForStatusByName("Mountain's Rest"))
 				{
@@ -73,7 +73,7 @@ class TheTrail extends Location
 			message.push("After a short hike through some rocky terrain, you round a corner and your compulsion to travel washes away.");
 			message.push("Before you seems to be a stone door carved into the side of a cliff.");
 			message.push("The trail continues a bit further downhill to the entrance of some sort of settlement. A dozen or so log buildings sit on the plateau below you.");
-			showResult(message);
+			showChoice(message, ["Continue"], [finishingTheTrail], gameVariables.getPlayerDeer());
 		}
 		
 		if (GameVariables.instance.theTrailDayNumber < 5)
@@ -83,11 +83,18 @@ class TheTrail extends Location
 		}
 	}
 	
+	public function finishingTheTrail(choice:String, deer:Deer)
+	{
+		GameVariables.instance.changeLocation("Stone Stronghold Entrance");
+		resetDailyVariables();
+		returnAfterDayEnd();
+	}
+	
 	public function damageEveryone(message:Array<String>, amount:Int)
 	{
 		var gameVariables:GameVariables = GameVariables.instance;
 		
-		for (i in 0...gameVariables.controlledDeer)
+		for (i in 0...gameVariables.controlledDeer.length)
 		{
 			if (gameVariables.controlledDeer[i].currentAction != "Resting")
 			{
@@ -528,12 +535,169 @@ class TheTrail extends Location
 	
 	override public function defend(deer:Array<Deer>)
 	{
-		
+		if (GameVariables.instance.theTrailDayNumber == 4)
+		{			
+			var randomNums:FlxRandom = new FlxRandom();
+			var message:Array<String> = new Array<String>();
+			
+			if (rabbitAttackReduction >= 8)
+			{
+				message.push("The night comes and no rabbits show up to your den.");
+				message.push("Your interactions with the rabbit gangs have paid off.");
+			}
+			else
+			{
+				if (rabbitAttackReduction >= 6)
+				{
+					message.push("A few rabbits approach your den.");
+				}
+				else if (rabbitAttackReduction >= 4)
+				{
+					message.push("A group of rabbits approaches your den.");
+				}
+				else if (rabbitAttackReduction >= 2)
+				{
+					message.push("A large group of rabbits approach your den.");
+				}
+				else
+				{
+					message.push("A horde of rabbits   approaches your den.");
+				}
+				
+				for (i in 0...deer.length)
+				{
+					var rabbitScaringSkill:Int = deer[i].dex * 2 + deer[i].lck + randomNums.int(0, 5);
+					var currentDeer:Deer = deer[i];
+					
+					if (rabbitScaringSkill >= 19)
+					{
+						message.push(currentDeer.getName() + " dashes around the den, scaring away any rabbit they come across.");
+						rabbitAttackReduction += 5;
+					}
+					else if (rabbitScaringSkill >= 17)
+					{
+						message.push(currentDeer.getName() + " dashes around the den, scaring off most of the rabbits the come across.");
+						rabbitAttackReduction += 4;
+					}
+					else if (rabbitScaringSkill >= 15)
+					{
+						message.push(currentDeer.getName() + " chases after some rabbits, and scares off a large group of them.");
+						rabbitAttackReduction += 3;
+					}
+					else if (rabbitScaringSkill >= 13)
+					{
+						message.push(currentDeer.getName() + " chases after some rabbits, and scares off a bunch of them.");
+						rabbitAttackReduction += 2;
+					}
+					else if (rabbitScaringSkill >= 10)
+					{
+						message.push(currentDeer.getName() + " chases after some rabbits, but only manages to catch and scare off a couple of them.");
+						rabbitAttackReduction += 1;
+					}
+					else
+					{
+						message.push(currentDeer.getName() + " chases after some rabbits, but can't catch up to any of them.");
+					}
+				}
+				
+				if (rabbitAttackReduction >= 8)
+				{
+					message.push("When all is said and done you lose none of your food to the rabbits.");
+				}
+				else if (rabbitAttackReduction >= 6)
+				{
+					message.push("You stopped most of the rabbits from stealing your food, but still lose some scraps.");
+					message.push("(-2 food)");
+					GameVariables.instance.modifyFood(-2);
+				}
+				else if (rabbitAttackReduction >= 4)
+				{
+					message.push("You stopped some of the rabbits from stealing your food, but still lose plenty.");
+					message.push("(-5 food)");
+					GameVariables.instance.modifyFood(-5);
+				}
+				else if (rabbitAttackReduction >= 2)
+				{
+					message.push("You barely managed to hinder the rabbits' attempts to steal your food.");
+					message.push("(-8 food)");
+					GameVariables.instance.modifyFood(-8);
+				}
+				else
+				{
+					message.push("The rabbits end up taking as much food as they want.");
+					message.push("(-12 food)");
+					GameVariables.instance.modifyFood(-10);
+				}
+			}
+			
+			showResult(message);
+		}
+		else if(deer.length > 0)
+		{
+			showResult(["On at least this part of the trail there are no animals looking to attack your den."]);
+		}
+		else
+		{
+			setOut();
+		}
 	}
 	
 	override public function hunt(deer:Array<Deer>) {
 		var randomNums:FlxRandom = new FlxRandom();
 		var message:Array<String> = new Array<String>();
+		
+		randomNums.shuffle(deer);
+		
+		//Rabbit
+		message.push("Your hunting pack finds a small rabbit.");
+		var initialCatch:Bool = false;
+		for(i in 0...deer.length){
+			//Successful catch
+			if (randomNums.int(0, 8) + (deer[i].dex*2) + (deer[i].lck - 2) >= 12)
+			{
+				initialCatch = true;
+				message.push(deer[i].name + " runs the rabbit down and trips it up.");
+				break;
+			}
+		}
+		
+		if (initialCatch) {
+			var damageDealth:Int = 0;
+			for(i in 0...deer.length){
+				//Successful hit
+				if (randomNums.int(0, 8) + (deer[i].dex*2) + (deer[i].lck - 1) >= 10)
+				{
+					var hitStrength:Int = randomNums.int(0, 8) + (deer[i].str * 2) + (deer[i].lck - 1);
+					
+					if(hitStrength >= 16){
+						message.push(deer[i].name + " lands a critical blow on the rabbit.");
+						damageDealth += 2;
+					}else if(hitStrength >= 10){
+						message.push(deer[i].name + " deals a solid blow to the rabbit.");
+						damageDealth += 1;
+					}else{
+						message.push(deer[i].name + " lands an ineffective attack on the rabbit.");
+					}
+				}else{
+					message.push(deer[i].name + " fails to land their attack.");
+				}
+				
+				if (damageDealth >= 2) {
+					GameVariables.instance.modifyFood(3);
+					GameVariables.instance.addUnfamiliarWoodsRabbitFur();
+					message.push("The rabbit lies defeated. You return it to the den to use as food (+3 food) and bedding.");
+					break;
+				}
+			}
+			
+			if(damageDealth == 1){
+				message.push("The rabbit bounds off with a few new scratches.");
+			}else{
+				message.push("The rabbit bounds off unharmed.");
+			}
+		}else{
+			message.push("No one is able to keep up to the rabbit and it bounds off.");
+		}
 		
 		showResult(message);
 	}

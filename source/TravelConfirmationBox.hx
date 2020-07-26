@@ -4,7 +4,8 @@ import flixel.FlxState;
 import flixel.FlxG;
 import flixel.util.FlxAxes;
 
-class TravelConfirmationBox extends ConfirmationBox{
+class TravelConfirmationBox extends ConfirmationBox
+{
 	var locationName:String;
 	var travelCost:Int;
 	

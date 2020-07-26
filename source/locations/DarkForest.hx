@@ -557,34 +557,34 @@ class DarkForest extends Location
 			var currentDeer:Deer = deer[i];
 			var fireflyCatchingSkill:Int = currentDeer.dex * 2 + currentDeer.lck + randomNums.int(0, 5);
 			
-			if (fireflyCatchingSkill < 10)
+			if (fireflyCatchingSkill >= 19)
 			{
-				
-			}
-			else if (fireflyCatchingSkill >= 10)
-			{
-				message.push(currentDeer.getName() + " manages to catch a couple fireflies in their mouth.");
-				firefliesCaught += 1;
-			}
-			else if (fireflyCatchingSkill >= 13)
-			{
-				message.push(currentDeer.getName() + " manages to catch a good clump of fireflies in their mouth.");
-				firefliesCaught += 2;
-			}
-			else if (fireflyCatchingSkill >= 15)
-			{
-				message.push(currentDeer.getName() + " walks through the clearing, casually catching a few large clumps of fireflies in their mouth.");
-				firefliesCaught += 3;
+				message.push(currentDeer.getName() + " runs through the clearing, filling their mouth with fireflies until their cheeks bulge out.");
+				firefliesCaught += 5;
 			}
 			else if (fireflyCatchingSkill >= 17)
 			{
 				message.push(currentDeer.getName() + " runs through the clearing, filling their mouth with fireflies.");
 				firefliesCaught += 4;
 			}
-			else if (fireflyCatchingSkill >= 19)
+			else if (fireflyCatchingSkill >= 15)
 			{
-				message.push(currentDeer.getName() + " runs through the clearing, filling their mouth with fireflies until their cheeks bulge out.");
-				firefliesCaught += 5;
+				message.push(currentDeer.getName() + " walks through the clearing, casually catching a few large clumps of fireflies in their mouth.");
+				firefliesCaught += 3;
+			}
+			else if (fireflyCatchingSkill >= 13)
+			{
+				message.push(currentDeer.getName() + " manages to catch a good clump of fireflies in their mouth.");
+				firefliesCaught += 2;
+			}
+			else if (fireflyCatchingSkill >= 10)
+			{
+				message.push(currentDeer.getName() + " manages to catch a couple fireflies in their mouth.");
+				firefliesCaught += 1;
+			}
+			else
+			{
+				message.push(currentDeer.getName() + " fails to catch any fireflies.");
 			}
 		}
 		

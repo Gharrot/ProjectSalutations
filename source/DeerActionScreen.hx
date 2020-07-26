@@ -21,10 +21,13 @@ class DeerActionScreen extends FlxObject{
 	var healthStatusText:FlxText;
 	
     var statusText:FlxText;
+	
+	var renamingBox:DeerRenamingBox;
     
 	var actionOptions:Array<FlxButton>;
 	var actionOptionLabels:Array<FlxText>;
 	
+    var renameButton:FlxButton;
     var dismissButton:FlxButton;
     var banishButton:FlxButton;
 
@@ -49,7 +52,8 @@ class DeerActionScreen extends FlxObject{
         setupButtons();
     }
 
-    function close(){
+    public function close()
+	{
 		for(i in 0...5){
 			FlxG.state.remove(statTexts[i]);
 			FlxG.state.remove(statNumbers[i]);
@@ -70,14 +74,74 @@ class DeerActionScreen extends FlxObject{
         
         FlxG.state.remove(xButton);
 		
+        FlxG.state.remove(renameButton);
         FlxG.state.remove(dismissButton);
         FlxG.state.remove(banishButton);
+		
+        FlxG.state.remove(renamingBox);
 
         GameObjects.instance.mainGameMenu.returnToMainScreen();
         FlxG.state.remove(this);
     }
+	
+	public function hide()
+	{
+		for(i in 0...5){
+			statTexts[i].visible = false;
+			statNumbers[i].visible = false;
+		}
 
-    function setupButtons(){
+        for(i in 0...5){
+			actionOptions[i].visible = false;
+			actionOptionLabels[i].visible = false;
+        }
+
+        nameText.visible = false;
+        statusText.visible = false;
+        healthStatusText.visible = false;
+        background.visible = false;
+        transparentBG.visible = false;
+		
+		deerCharacterSprite.hide();
+        deerCharacterSprite.visible = false;
+        
+        xButton.visible = false;
+		
+		renameButton.visible = false;
+        dismissButton.visible = false;
+        banishButton.visible = false;
+	}
+	
+	public function show()
+	{
+		for(i in 0...5){
+			statTexts[i].visible = true;
+			statNumbers[i].visible = true;
+		}
+
+        for(i in 0...5){
+			actionOptions[i].visible = true;
+			actionOptionLabels[i].visible = true;
+        }
+
+        nameText.visible = true;
+        statusText.visible = true;
+        healthStatusText.visible = true;
+        background.visible = true;
+        transparentBG.visible = true;
+		
+		deerCharacterSprite.show();
+        deerCharacterSprite.visible = true;
+        
+        xButton.visible = true;
+		
+		renameButton.visible = true;
+        dismissButton.visible = true;
+        banishButton.visible = true;
+	}
+
+    function setupButtons()
+	{
         xButton = new FlxButton(400, 50);
 		xButton.loadGraphic("assets/images/XButton.png", true, 64, 64);
         xButton.scale.set(0.5,0.5);
@@ -107,6 +171,13 @@ class DeerActionScreen extends FlxObject{
 			actionOptionLabels[i].color = 0xFF000000;
 			FlxG.state.add(actionOptionLabels[i]);
 		}
+		
+		renameButton = new FlxButton(270, 400, "Rename");
+		renameButton.loadGraphic("assets/images/DenButton.png", true, 160, 56);
+		renameButton.onUp.callback = renameDeer.bind();
+		renameButton.scale.set(0.9, 0.9);
+		ButtonUtils.fixButtonText(renameButton, 22, 7, -7);
+        FlxG.state.add(renameButton);
 		
         dismissButton = new FlxButton(270, 460, "Dismiss");
 		if(deer.player){
@@ -143,17 +214,34 @@ class DeerActionScreen extends FlxObject{
         FlxG.state.add(banishButton);
     }
 	
-	function dismissDeer(){
+	function renameDeer()
+	{
+		hide();
+		
+		renamingBox = new DeerRenamingBox(deer, this);
+		FlxG.state.add(renamingBox);
+	}
+	
+	function dismissDeer()
+	{
 		GameVariables.instance.loseControlledDeer(deer);
 		close();
 	}
 	
-	function banishDeer(){
+	function banishDeer()
+	{
 		GameVariables.instance.banishControlledDeer(deer);
 		close();
 	}
+	
+	public function updateName()
+	{
+		nameText.text = deer.name;
+		//deerCharacterSprite.updateDeer();
+	}
 
-    function actionOptionClicked(action:String, buttonIndex:Int){
+    function actionOptionClicked(action:String, buttonIndex:Int)
+	{
 		//If the deer has no health, it must rest
 		if (deer.health <= 0)
 		{
@@ -173,14 +261,16 @@ class DeerActionScreen extends FlxObject{
 		}
     }
 
-    function setupGraphics(){
+    function setupGraphics()
+	{
         deerCharacterSprite = new DeerTile(deer);
         deerCharacterSprite.moveDisplay(55, 128);
         deerCharacterSprite.deerDisplayOnlyMode();
 		FlxG.state.add(deerCharacterSprite);
     }
 
-    function setupStats(){
+    function setupStats()
+	{
         var statName = ["Strength", "Resilience", "Dexterity", "Intellect", "Fortune"];
         var statValues = [deer.str, deer.res, deer.dex, deer.int, deer.lck];
         

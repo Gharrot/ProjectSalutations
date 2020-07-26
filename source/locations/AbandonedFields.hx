@@ -72,66 +72,61 @@ class AbandonedFields extends Location
 	
 	override public function hunt(deer:Array<Deer>) {
 		var randomNums:FlxRandom = new FlxRandom();
+		var message:Array<String> = new Array<String>();
+		
 		randomNums.shuffle(deer);
 		
-		var thisExplorationNum = randomNums.int(0, 0);
-		
 		//Rabbit
-		if(thisExplorationNum == 0){
-			var result:String = "Your hunting pack finds a small rabbit.\n";
-			var initialCatch:Bool = false;
+		message.push("Your hunting pack finds a small rabbit.");
+		var initialCatch:Bool = false;
+		for(i in 0...deer.length){
+			//Successful catch
+			if (randomNums.int(0, 8) + (deer[i].dex*2) + (deer[i].lck - 2) >= 12)
+			{
+				initialCatch = true;
+				message.push(deer[i].name + " runs the rabbit down and trips it up. ");
+				break;
+			}
+		}
+		
+		if (initialCatch) {
+			var damageDealth:Int = 0;
 			for(i in 0...deer.length){
-				//Successful catch
-				if (randomNums.int(0, 8) + (deer[i].dex*2) + (deer[i].lck - 2) >= 12)
+				//Successful hit
+				if (randomNums.int(0, 8) + (deer[i].dex*2) + (deer[i].lck - 2) >= 10)
 				{
-					initialCatch = true;
-					result += deer[i].name + " runs the rabbit down and trips it up. ";
+					var hitStrength:Int = randomNums.int(0, 8) + (deer[i].str * 2) + (deer[i].lck - 1);
+					
+					if(hitStrength >= 16){
+						message.push(deer[i].name + " lands a critical blow on the rabbit.");
+						damageDealth += 2;
+					}else if(hitStrength >= 10){
+						message.push(deer[i].name + " deals a solid blow to the rabbit.");
+						damageDealth += 1;
+					}else{
+						message.push(deer[i].name + " lands an ineffective attack on the rabbit.");
+					}
+				}else{
+					message.push(deer[i].name + " fails to land their attack.");
+				}
+				
+				if (damageDealth >= 2) {
+					GameVariables.instance.modifyFood(3);
+					GameVariables.instance.addUnfamiliarWoodsRabbitFur();
+					message.push("The rabbit lies defeated. You return it to the den to use as food (+3 food) and bedding.");
 					break;
 				}
 			}
 			
-			if (initialCatch) {
-				var damageDealth:Int = 0;
-				for(i in 0...deer.length){
-					//Successful hit
-					if (randomNums.int(0, 8) + (deer[i].dex*2) + (deer[i].lck - 2) >= 10)
-					{
-						var hitStrength:Int = randomNums.int(0, 8) + (deer[i].str * 2) + (deer[i].lck - 1);
-						
-						if(hitStrength >= 16){
-							result += deer[i].name + " lands a critical blow on the rabbit. ";
-							damageDealth += 2;
-						}else if(hitStrength >= 10){
-							result += deer[i].name + " deals a solid blow to the rabbit. ";
-							damageDealth += 1;
-						}else{
-							result += deer[i].name + " lands an ineffective attack on the rabbit. ";
-						}
-					}else{
-						result += deer[i].name + " fails to land their attack. ";
-					}
-					
-					if (damageDealth >= 2) {
-						GameVariables.instance.modifyFood(3);
-						GameVariables.instance.addUnfamiliarWoodsRabbitFur();
-						result += "The rabbit lies defeated. You return it to the den to use as food (+3 food) and bedding.";
-						break;
-					}
-				}
-				
-				if(damageDealth == 1){
-					result += "The rabbit bounds off with a few new scratches.";
-				}else{
-					result += "The rabbit bounds off unharmed.";
-				}
+			if(damageDealth == 1){
+				message.push("The rabbit bounds off with a few new scratches.");
 			}else{
-				result += "No one is able to keep up to the rabbit and it bounds off.";
+				message.push("The rabbit bounds off unharmed.");
 			}
-			
-			showResult([result]);
+		}else{
+			message.push("No one is able to keep up to the rabbit and it bounds off.");
 		}
-		//Wolf
-		else if(thisExplorationNum == 1){
-		}
+		
+		showResult(message);
 	}
 }

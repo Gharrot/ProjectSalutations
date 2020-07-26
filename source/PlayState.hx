@@ -39,7 +39,7 @@ class PlayState extends FlxState
 	
 	var rising:Bool;
 	var cameraScrollSpeed:Float = 10;
-	var cameraScrollMaxSpeed:Float = 300;
+	var cameraScrollMaxSpeed:Float = 340;
 	var cameraScrollAcceleration:Float = 180;
 	var cameraMaxY:Float = 140;
 	

@@ -471,5 +471,7 @@ class Deer{
 				return true;
 			}
 		}
+		
+		return false;
 	}
 }

@@ -48,7 +48,7 @@ class CharacterCreation extends FlxState
 		titleText.y = 30;
 		add(titleText);
 
-		nameBox = new FlxInputText(26,240,154, "Name", 16);
+		nameBox = new FlxInputText(26, 240, 154, "Name", 16);
 		add(nameBox);
 
 		characterDisplay = new DeerDisplay();
@@ -83,7 +83,7 @@ class CharacterCreation extends FlxState
 	override public function update(elapsed:Float):Void
 	{
 		super.update(elapsed);
-		while(nameBox.text.length >= 13){
+		while(nameBox.text.length >= 11){
 			nameBox.text = nameBox.text.substring(0, nameBox.text.length - 1);
 			nameBox.caretIndex = nameBox.text.length;
 		}
