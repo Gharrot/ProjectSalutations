@@ -236,8 +236,16 @@ class DeerActionScreen extends FlxObject{
 	
 	public function updateName()
 	{
-		nameText.text = deer.name;
-		//deerCharacterSprite.updateDeer();
+        FlxG.state.remove(nameText);
+		
+		nameText = new FlxText(9, 9, 0, deer.name, 32);
+        nameText.screenCenter();
+        nameText.y = nameText.y - 240;
+		nameText.color = 0xFF000000;
+        FlxG.state.insert(FlxG.state.length, nameText);
+		nameText.visible = true;
+		
+        deerCharacterSprite.deerDisplayOnlyMode();
 	}
 
     function actionOptionClicked(action:String, buttonIndex:Int)

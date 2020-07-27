@@ -64,6 +64,8 @@ class MainGame extends FlxState
         herdButton.loadGraphic("assets/images/HerdButtonSelected.png", false);
         currentScreen = "Setup";
 		herdClicked();
+		
+		GameVariables.instance.saveGameData();
 	}
 
 	override public function update(elapsed:Float)
