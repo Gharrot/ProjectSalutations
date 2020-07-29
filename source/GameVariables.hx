@@ -11,6 +11,8 @@ class GameVariables {
     public var controlledDeer:Array<Deer>;
 	public var maxPackSize:Int;
 	
+    public var undergroundCityDeer:Array<Deer>;
+	
     public var babyDeer:Array<Deer>;
 	public var maxBabyPackSize:Int;
 	
@@ -64,6 +66,7 @@ class GameVariables {
 	
 	//Underground City
 	public var undergroundCityReached:Bool;
+	public var undergroundCityOpened:Bool;
 	
 	public var saveNum:Int;
 
@@ -128,6 +131,25 @@ class GameVariables {
 			if (resetLocationVariables){
 				theTrailDayNumber = 1;
 			}
+		}
+		else if (targetLocation == "The Trail")
+		{
+			currentLocation = new TheTrail();
+			maxFood = theTrailMaxFood;
+			
+			if (resetLocationVariables){
+				theTrailDayNumber = 1;
+			}
+		}
+		else if (targetLocation == "Stone Stronghold Entrance")
+		{
+			currentLocation = new StoneStrongholdEntrance();
+			maxFood = theTrailMaxFood;
+		}
+		else if (targetLocation == "Underground City")
+		{
+			currentLocation = new StoneStrongholdEntrance();
+			maxFood = theTrailMaxFood;
 		}
 		
 		currentLocationName = targetLocation;
@@ -231,6 +253,29 @@ class GameVariables {
 		return Deer.getNewBlankDeer();
 	}
 	
+	public function getControlledDeer(?includePlayer:Bool = true):Array<Deer>{
+		var deer:Array<Deer> = new Array<Deer>();
+		
+		for (i in 0...controlledDeer.length){
+			if (includePlayer || !controlledDeer[i].player)
+			{
+				deer.push(controlledDeer[i]);
+			}
+		}
+		
+		return deer;
+	}
+	
+	public function getUndergroundCityDeer():Array<Deer>{
+		var deer:Array<Deer> = new Array<Deer>();
+		
+		for (i in 0...undergroundCityDeer.length){
+			deer.push(undergroundCityDeer[i]);
+		}
+		
+		return deer;
+	}
+	
 	public function getMaleDeer(?available:Bool = true):Array<Deer>{
 		var maleDeer:Array<Deer> = new Array<Deer>();
 		
@@ -296,11 +341,35 @@ class GameVariables {
 		}
 	}
 	
+	public function getMedallionCount():Int
+	{
+		var medallionCount:Int;
+		
+		if (unfamiliarWoodsMedallionTaken)
+		{
+			medallionCount++;
+		}
+		
+		if (darkForestMedallionTaken)
+		{
+			medallionCount++;
+		}
+		
+		if (theTrailDayMedallionTaken)
+		{
+			medallionCount++;
+		}
+		
+		return medallionCount;
+	}
+	
 	public function initializeVariables(){
         controlledDeer = new Array();
 		maxPackSize = 4;
         babyDeer = new Array();
 		maxBabyPackSize = 2;
+		
+        undergroundCityDeer = new Array();
 		
         currentLocation = new ForgottenWoods();
 		currentLocationName = "Unfamiliar Woods";
@@ -349,6 +418,7 @@ class GameVariables {
 		
 		//Underground City
 		undergroundCityReached = false;
+		undergroundCityOpened = false;
 	}
 	
 	public static function getLocationSpriteByName(locationName:String):String

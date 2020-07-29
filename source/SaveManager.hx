@@ -15,6 +15,8 @@ class SaveManager
 		gameVariables.maxPackSize = save.data.maxPackSize;
         gameVariables.babyDeer = save.data.babyDeer;
 		gameVariables.maxBabyPackSize = save.data.maxBabyPackSize;
+		
+        gameVariables.undergroundCityDeer = save.data.undergroundCityDeer;
 
         gameVariables.currentFood = save.data.currentFood;
 		gameVariables.maxFood = save.data.maxFood;
@@ -74,6 +76,8 @@ class SaveManager
 		save.data.maxPackSize = gameVariables.maxPackSize;
         save.data.babyDeer = gameVariables.babyDeer;
 		save.data.maxBabyPackSize = gameVariables.maxBabyPackSize;
+		
+        save.data.undergroundCityDeer = gameVariables.undergroundCityDeer;
 
 		save.data.currentLocationName = gameVariables.currentLocationName;
         save.data.currentFood = gameVariables.currentFood;

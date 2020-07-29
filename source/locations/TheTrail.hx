@@ -79,7 +79,7 @@ class TheTrail extends Location
 		if (GameVariables.instance.theTrailDayNumber < 5)
 		{
 			GameVariables.instance.theTrailDayNumber++;
-			showResult(message);
+			showChoice(message, ["Continue"], [returnToDenChoice], null);
 		}
 	}
 	
@@ -625,8 +625,8 @@ class TheTrail extends Location
 				else
 				{
 					message.push("The rabbits end up taking as much food as they want.");
-					message.push("(-12 food)");
-					GameVariables.instance.modifyFood(-10);
+					message.push("(-" + GameVariables.instance.currentFood + " food)");
+					GameVariables.instance.modifyFood(-1 * GameVariables.instance.currentFood);
 				}
 			}
 			

@@ -8,7 +8,6 @@ import flixel.util.FlxColor;
 
 class GhostTown extends Location
 {
-
 	public function new(){
 		super();
 		

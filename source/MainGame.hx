@@ -40,9 +40,13 @@ class MainGame extends FlxState
     var babyLocationSprites:Array<FlxSprite>;
     var itemDescriptions:Array<FlxText>;
     var medallions:Array<FlxSprite>;
+	
     var interactButton:FlxButton;
+    var dropoffButton:FlxButton;
     var improveButton:FlxButton;
     var breedButton:FlxButton;
+	
+	var dropoffMenu:DropoffMenu;
 	var improvementBox:ImprovementBox;
 	var pairingBox:PairingBox;
 
@@ -198,6 +202,7 @@ class MainGame extends FlxState
 		remove(interactButton);
 		remove(improveButton);
 		remove(breedButton);
+		remove(dropoffButton);
 		
 		for(i in 0...itemDescriptions.length){
 			remove(itemDescriptions[i]);
@@ -300,6 +305,21 @@ class MainGame extends FlxState
         interactButton.labelAlphas[2] = 1.0;
         //add(interactButton);
 		
+		dropoffButton = new FlxButton(290, 292, "Drop off");
+        dropoffButton.loadGraphic("assets/images/DenButton.png", true, 160, 56);
+        dropoffButton.updateHitbox();
+        dropoffButton.label.size = 22;
+        dropoffButton.label.color = 0xFF000000;
+        dropoffButton.label.alignment = "center";
+        for(offsets in dropoffButton.labelOffsets){
+            offsets.y += 10;
+        }
+        dropoffButton.label.alpha = 1.0;
+        dropoffButton.labelAlphas[0] = 1.0;
+        dropoffButton.labelAlphas[2] = 1.0;
+		dropoffButton.onUp.callback = openDropoffMenu.bind();
+        add(dropoffButton);
+		
 		improveButton = new FlxButton(290, 140, "Improve");
         improveButton.loadGraphic("assets/images/DenButton.png", true, 160, 56);
         improveButton.updateHitbox();
@@ -344,6 +364,7 @@ class MainGame extends FlxState
 		interactButton.visible = true;
 		improveButton.visible = true;
 		breedButton.visible = true;
+		dropoffButton.visible = true;
 		
 		for(i in 0...itemDescriptions.length){
 			itemDescriptions[i].visible = true;
@@ -367,6 +388,7 @@ class MainGame extends FlxState
 		interactButton.visible = false;
 		improveButton.visible = false;
 		breedButton.visible = false;
+		dropoffButton.visible = false;
 		
 		for(i in 0...itemDescriptions.length){
 			itemDescriptions[i].visible = false;
@@ -724,6 +746,12 @@ class MainGame extends FlxState
 		GameVariables.instance.currentFood -= cost;
 		GameVariables.instance.changeLocation(locationName);
 		removeMap();
+	}
+	
+	function openDropoffMenu()
+	{
+		dropoffMenu = new DropoffMenu();
+		hide();
 	}
 	
 	function pairingMenu(){
