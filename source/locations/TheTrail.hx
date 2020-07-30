@@ -22,6 +22,40 @@ class TheTrail extends Location
 		backgroundImageFileMiniFramed = "assets/images/LocationImages/AbandonedFieldsEmptyDeerTile.png";
 	}
 	
+	public function updateBackgroundImages()
+	{
+		if (GameVariables.instance.theTrailDayNumber == 1)
+		{
+			backgroundImageFile = "assets/images/LocationImages/AbandonedFields.png";
+			backgroundImageFileNoFrame = "assets/images/LocationImages/AbandonedFieldsNoFrame.png";
+			backgroundImageFileMiniFramed = "assets/images/LocationImages/AbandonedFieldsEmptyDeerTile.png";
+		}
+		else if (GameVariables.instance.theTrailDayNumber == 2)
+		{
+			backgroundImageFile = "assets/images/LocationImages/TheTrailDay2.png";
+			backgroundImageFileNoFrame = "assets/images/LocationImages/TheTrailDay2NoFrame.png";
+			backgroundImageFileMiniFramed = "assets/images/LocationImages/TheTrailDay2EmptyDeerTile.png";
+		}
+		else if (GameVariables.instance.theTrailDayNumber == 3)
+		{
+			backgroundImageFile = "assets/images/LocationImages/TheTrailDay3.png";
+			backgroundImageFileNoFrame = "assets/images/LocationImages/TheTrailDay3NoFrame.png";
+			backgroundImageFileMiniFramed = "assets/images/LocationImages/TheTrailDay3EmptyDeerTile.png";
+		}
+		else if (GameVariables.instance.theTrailDayNumber == 4)
+		{
+			backgroundImageFile = "assets/images/LocationImages/TheTrailDay4.png";
+			backgroundImageFileNoFrame = "assets/images/LocationImages/TheTrailDay4NoFrame.png";
+			backgroundImageFileMiniFramed = "assets/images/LocationImages/TheTrailDay4EmptyDeerTile.png";
+		}
+		else if (GameVariables.instance.theTrailDayNumber == 5)
+		{
+			backgroundImageFile = "assets/images/LocationImages/TheTrailDay5.png";
+			backgroundImageFileNoFrame = "assets/images/LocationImages/TheTrailDay5NoFrame.png";
+			backgroundImageFileMiniFramed = "assets/images/LocationImages/TheTrailDay5EmptyDeerTile.png";
+		}
+	}
+	
 	override public function returnAfterDayEnd()
 	{
 		var gameVariables:GameVariables = GameVariables.instance;
@@ -80,6 +114,7 @@ class TheTrail extends Location
 		{
 			GameVariables.instance.theTrailDayNumber++;
 			showChoice(message, ["Continue"], [returnToDenChoice], null);
+			updateBackgroundImages();
 		}
 	}
 	

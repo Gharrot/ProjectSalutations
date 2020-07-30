@@ -85,8 +85,8 @@ class GhostTown extends Location
 	override public function forage(deer:Deer) {
 		var randomNums:FlxRandom = new FlxRandom();
 		
-		GameVariables.instance.modifyFood(5);
-		showResult(["You gather plenty of food from one of the town's many overgrown gardens (+5 food)."]);
+		GameVariables.instance.modifyFood(4);
+		showResult(["You gather plenty of food from one of the town's many overgrown gardens (+4 food)."]);
 	}
 	
 	override public function defend(deer:Array<Deer>)

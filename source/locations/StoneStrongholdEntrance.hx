@@ -70,19 +70,58 @@ class StoneStrongholdEntrance extends Location
 		
 		if (GameVariables.instance.undergroundCityOpened)
 		{
-			
+			message.push("As you walk up to the pedestal it slides back, revealing the entrance to the underground city.");
+			showChoice(message, ["Head into the city", "Head back outside"], [enterTheUndergroundCity, continueOnChoice], deer);
 		}
 		else
 		{
 			if (GameVariables.instance.getMedallionCount() >= 1)
 			{
-				
+				message.push("The stone pedestal is bare other than shallow circular indentation on top.");
+				showChoice(message, ["Place a medallion"], [placingAMedallion], deer);
 			}
 			else
 			{
-				
+				message.push("The stone pedestal is bare other than shallow circular indentation on top.");
+				message.push("There doesn't seem to be any way to interact with it.");
+				showResult(message);
 			}
 		}
+	}
+	
+	function placingAMedallion(choice:String, deer:Deer)
+	{
+		message.push("You place a medallion on the pedestal and it begins to glow softly.");
+		message.push("You pick the medallion up off the pedestal and it continues to glow.");
+		message.push("The pedestal slides back, revealing a stone staircase descending into the ground.");
+		showChoice(message, ["Head down the stairs"], [discoveringTheUndergroundCity], deer);
+	}
+	
+	function discoveringTheUndergroundCity(choice:String, deer:Deer)
+	{
+		GameVariables.instance.undergroundCityOpened = true;
+		
+		message.push("The stairs and dimly lit and continue downwards for quite a distance, descending deep into the earth.");
+		message.push("After some time the stairs level off and you're breifly blinded as you hear hundreds of lights switch on.");
+		message.push("You step forward into a massive open area carved underground filled with stone buildings.");
+		showChoice(message, ["Look around a bit"], [explainingTheUndergroundCity], deer);
+	}
+	
+	function explainingTheUndergroundCity(choice:String, deer:Deer)
+	{
+		message.push("As you walk along the streets the doors of buildings you pass slide open.");
+		message.push("Looking inside a few of them, you find a walk-in cold storage area filled with produce in each one.");
+		message.push("Each building also a room with bedding, and another with a fountain of water.");
+		message.push("Any deer you leave here should be safe, well fed, and happy to wait around for you.");
+		message.push("(You can leave deer here and pick them up later using the 'drop off' button found on the den menu)");
+		showChoice(message, ["Continue"], [enterTheUndergroundCity], deer);
+	}
+	
+	function enterTheUndergroundCity(choice:String, deer:Deer)
+	{
+		GameVariables.instance.changeLocation("Underground City");
+		resetDailyVariables();
+		returnAfterDayEnd();
 	}
 	
 	public function theWoodenVillage(choice:String, deer:Deer)

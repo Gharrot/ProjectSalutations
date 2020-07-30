@@ -131,15 +131,8 @@ class GameVariables {
 			if (resetLocationVariables){
 				theTrailDayNumber = 1;
 			}
-		}
-		else if (targetLocation == "The Trail")
-		{
-			currentLocation = new TheTrail();
-			maxFood = theTrailMaxFood;
 			
-			if (resetLocationVariables){
-				theTrailDayNumber = 1;
-			}
+			cast(currentLocation, TheTrail).updateBackgroundImages();
 		}
 		else if (targetLocation == "Stone Stronghold Entrance")
 		{
@@ -148,7 +141,7 @@ class GameVariables {
 		}
 		else if (targetLocation == "Underground City")
 		{
-			currentLocation = new StoneStrongholdEntrance();
+			currentLocation = new UndergroundCity();
 			maxFood = theTrailMaxFood;
 		}
 		
