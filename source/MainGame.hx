@@ -373,6 +373,11 @@ class MainGame extends FlxState
 		for(i in 0...medallions.length){
 			medallions[i].visible = true;
 		}
+		
+		if (GameVariables.instance.currentLocation.name != "Underground City")
+		{
+			dropoffButton.visible = false;
+		}
 	}
 	
 	function hideDen(){
@@ -698,7 +703,61 @@ class MainGame extends FlxState
 			//Ghost Town
 			var newButton:LocationButton = new LocationButton("Ghost Town", 2);
 			newButton.screenCenter();
-			newButton.x -= 80;
+			newButton.x -= 90;
+			mapButtons.push(newButton);
+			add(newButton);
+		}
+		else if (GameVariables.instance.currentLocationName == "Stone Stronghold Entrance")
+		{
+			//Stronghold Entrance (current location)
+			var currentLocationSprite:FlxSprite = new FlxSprite(0, 0);
+			currentLocationSprite.loadGraphic("assets/images/MapImages/CurrentLocationMarker.png", true);
+			currentLocationSprite.scale.set(3, 3);
+			currentLocationSprite.screenCenter();
+			mapSprites.push(currentLocationSprite);
+			add(currentLocationSprite);
+			
+			//Ghost Town
+			if (GameVariables.instance.undergroundCityReached)
+			{
+				var newButton:LocationButton = new LocationButton("Ghost Town", 0);
+				newButton.screenCenter();
+				newButton.x -= 180;
+				mapButtons.push(newButton);
+				add(newButton);
+			}
+			
+			//Underground City
+			if (GameVariables.instance.undergroundCityOpened)
+			{
+				var newButton:LocationButton = new LocationButton("Underground City", 0);
+				newButton.screenCenter();
+				newButton.y += 70;
+				mapButtons.push(newButton);
+				add(newButton);
+			}
+		}
+		else if (GameVariables.instance.currentLocationName == "Underground City")
+		{
+			//Underground City (current location)
+			var currentLocationSprite:FlxSprite = new FlxSprite(0, 0);
+			currentLocationSprite.loadGraphic("assets/images/MapImages/CurrentLocationMarker.png", true);
+			currentLocationSprite.scale.set(3, 3);
+			currentLocationSprite.screenCenter();
+			currentLocationSprite.y += 70;
+			mapSprites.push(currentLocationSprite);
+			add(currentLocationSprite);
+			
+			//Ghost Town
+			var newButton:LocationButton = new LocationButton("Ghost Town", 0);
+			newButton.screenCenter();
+			newButton.x -= 180;
+			mapButtons.push(newButton);
+			add(newButton);
+			
+			//Stone Stronghold Entrance
+			var newButton:LocationButton = new LocationButton("Stone Stronghold Entrance", 0);
+			newButton.screenCenter();
 			mapButtons.push(newButton);
 			add(newButton);
 		}

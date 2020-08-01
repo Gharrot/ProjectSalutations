@@ -22,6 +22,7 @@ class DeerDisplay extends FlxObject
     public var statNumbers:Array<FlxText>;
 	
 	public var healthStatusSprite:FlxSprite;
+	public var otherStatusSprites:Array<FlxSprite>;
 	
 	public var emptied:Bool = false;
 
@@ -38,6 +39,10 @@ class DeerDisplay extends FlxObject
         deerSprite.visible = false;
         healthStatusSprite.visible = false;
 		
+        for(i in 0...otherStatusSprites.length){
+            otherStatusSprites[i].visible = false;
+        }
+		
 		emptied = true;
 	}
 	
@@ -48,6 +53,10 @@ class DeerDisplay extends FlxObject
         nameText.visible = true;
         deerSprite.visible = true;
         healthStatusSprite.visible = true;
+		
+        for(i in 0...otherStatusSprites.length){
+            otherStatusSprites[i].visible = true;
+        }
 		
 		emptied = false;
 	}
@@ -60,6 +69,10 @@ class DeerDisplay extends FlxObject
         FlxG.state.remove(deerSprite);
         FlxG.state.remove(bgSprite);
         FlxG.state.remove(healthStatusSprite);
+		
+		for(i in 0...otherStatusSprites.length){
+            FlxG.state.remove(otherStatusSprites[i]);
+        }
     }
 
     public function hide(){
@@ -71,6 +84,10 @@ class DeerDisplay extends FlxObject
 		bgSprite.visible = false;
 		healthStatusSprite.visible = false;
 		this.visible = false;
+		
+        for(i in 0...otherStatusSprites.length){
+            otherStatusSprites[i].visible = false;
+        }
     }
 
     public function show(){
@@ -82,6 +99,10 @@ class DeerDisplay extends FlxObject
 			nameText.visible = true;
 			deerSprite.visible = true;
 			healthStatusSprite.visible = true;
+			
+			for(i in 0...otherStatusSprites.length){
+				otherStatusSprites[i].visible = true;
+			}
 		}
 			
 		bgSprite.visible = true;
@@ -109,6 +130,11 @@ class DeerDisplay extends FlxObject
 		
 		healthStatusSprite.x = x + 15;
 		healthStatusSprite.y = y + 35;
+		
+		for(i in 0...otherStatusSprites.length){
+			otherStatusSprites[i].x = x + 33 + (i*18);
+			otherStatusSprites[i].y = y + 35;
+		}
 		
         deerSprite.x = x + 62; 
         deerSprite.y = y + 69;
@@ -160,6 +186,7 @@ class DeerDisplay extends FlxObject
 		nameText.text = deer.name;
 		
 		healthStatusSprite.loadGraphic(deer.getHealthSpriteString());
+		updateDeerStatusIcons();
 	}
 
     public function setupTexts(){
@@ -202,5 +229,28 @@ class DeerDisplay extends FlxObject
 		
 		deerSprite.scale.set(2, 2);
 		FlxG.state.add(deerSprite);
+		
+		updateDeerStatusIcons();
+	}
+	
+	function updateDeerStatusIcons()
+	{
+		if (otherStatusSprites != null)
+		{
+			for(i in 0...otherStatusSprites.length){
+				FlxG.state.remove(otherStatusSprites[i]);
+			}
+		}
+		
+		otherStatusSprites = deer.getStatusIcons();
+		
+        for(i in 0...otherStatusSprites.length){
+            FlxG.state.add(otherStatusSprites[i]);
+		}
+		
+		for(i in 0...otherStatusSprites.length){
+			otherStatusSprites[i].x = x + 33 + (i*18);
+			otherStatusSprites[i].y = y + 35;
+		}
 	}
 }

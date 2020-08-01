@@ -10,9 +10,9 @@ class StoneStrongholdEntrance extends Location
 		super();
 		
 		name = "Stone Stronghold Entrance";
-		backgroundImageFile = "assets/images/LocationImages/GhostTown.png";
-		backgroundImageFileNoFrame = "assets/images/LocationImages/GhostTownNoFrame.png";
-		backgroundImageFileMiniFramed = "assets/images/LocationImages/GhostTownEmptyDeerTile.png";
+		backgroundImageFile = "assets/images/LocationImages/StoneStrongholdEntrance.png";
+		backgroundImageFileNoFrame = "assets/images/LocationImages/StoneStrongholdEntranceNoFrame.png";
+		backgroundImageFileMiniFramed = "assets/images/LocationImages/StoneStrongholdEntranceEmptyDeerTile.png";
 	}
 	
 	override public function explore(deer:Deer)
@@ -22,11 +22,11 @@ class StoneStrongholdEntrance extends Location
 
 		//The Stone Door 
 		exploreOptionNames.push("The Stone Door");
-		exploreOptionFunctions.push(theBar);
+		exploreOptionFunctions.push(theStoreDoor);
 		
 		//The Wooden Village
 		exploreOptionNames.push("The Wooden Village");
-		exploreOptionFunctions.push(theTrail); 
+		exploreOptionFunctions.push(theWoodenVillage); 
 
 		showChoice(["Where will you head to?"], exploreOptionNames, exploreOptionFunctions, deer);
 	}
@@ -91,6 +91,7 @@ class StoneStrongholdEntrance extends Location
 	
 	function placingAMedallion(choice:String, deer:Deer)
 	{
+		var message:Array<String> = new Array<String>();
 		message.push("You place a medallion on the pedestal and it begins to glow softly.");
 		message.push("You pick the medallion up off the pedestal and it continues to glow.");
 		message.push("The pedestal slides back, revealing a stone staircase descending into the ground.");
@@ -99,6 +100,7 @@ class StoneStrongholdEntrance extends Location
 	
 	function discoveringTheUndergroundCity(choice:String, deer:Deer)
 	{
+		var message:Array<String> = new Array<String>();
 		GameVariables.instance.undergroundCityOpened = true;
 		
 		message.push("The stairs and dimly lit and continue downwards for quite a distance, descending deep into the earth.");
@@ -109,6 +111,7 @@ class StoneStrongholdEntrance extends Location
 	
 	function explainingTheUndergroundCity(choice:String, deer:Deer)
 	{
+		var message:Array<String> = new Array<String>();
 		message.push("As you walk along the streets the doors of buildings you pass slide open.");
 		message.push("Looking inside a few of them, you find a walk-in cold storage area filled with produce in each one.");
 		message.push("Each building also a room with bedding, and another with a fountain of water.");

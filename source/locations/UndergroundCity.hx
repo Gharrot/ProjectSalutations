@@ -10,9 +10,9 @@ class UndergroundCity extends Location
 		super();
 		
 		name = "Underground City";
-		backgroundImageFile = "assets/images/LocationImages/GhostTown.png";
-		backgroundImageFileNoFrame = "assets/images/LocationImages/GhostTownNoFrame.png";
-		backgroundImageFileMiniFramed = "assets/images/LocationImages/GhostTownEmptyDeerTile.png";
+		backgroundImageFile = "assets/images/LocationImages/UndergroundCity.png";
+		backgroundImageFileNoFrame = "assets/images/LocationImages/UndergroundCityNoFrame.png";
+		backgroundImageFileMiniFramed = "assets/images/LocationImages/UndergroundCityDeerTile.png";
 	}
 	
 	override public function explore(deer:Deer)
@@ -36,7 +36,7 @@ class UndergroundCity extends Location
 		message.push("(This area, and more exploration of the city will open up in a later update.)");
 		message.push("(You can still find the 3 medallions in this version though.)");
 		
-		if (GameVariables.instance.getMedallionCount >= 3)
+		if (GameVariables.instance.getMedallionCount() >= 3)
 		{
 			message.push("(Which you already did, congratulations!)");
 		}

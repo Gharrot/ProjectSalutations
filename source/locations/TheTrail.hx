@@ -122,23 +122,39 @@ class TheTrail extends Location
 	{
 		GameVariables.instance.changeLocation("Stone Stronghold Entrance");
 		resetDailyVariables();
-		returnAfterDayEnd();
+		returnToDen();
 	}
 	
 	public function damageEveryone(message:Array<String>, amount:Int)
 	{
 		var gameVariables:GameVariables = GameVariables.instance;
+		message.push("The trail continues onwards, draining the energy of your deer.");
+		message.push("(2 damage to all non-resting deer)");
 		
 		for (i in 0...gameVariables.controlledDeer.length)
 		{
 			if (gameVariables.controlledDeer[i].currentAction != "Resting")
 			{
 				gameVariables.controlledDeer[i].takeDamage(amount);
+				
+				if (gameVariables.controlledDeer[i].checkForStatusByName("Carrying Planks") && gameVariables.controlledDeer[i].checkForStatusByName("Carrying Ropes"))
+				{
+					gameVariables.controlledDeer[i].takeDamage(2);
+					message.push("(+2 damage to " + gameVariables.controlledDeer[i].getName() + " from carrying planks and ropes)");
+				}
+				else if (gameVariables.controlledDeer[i].checkForStatusByName("Carrying Planks"))
+				{
+					gameVariables.controlledDeer[i].takeDamage(1);
+					message.push("(+1 damage to " + gameVariables.controlledDeer[i].getName() + " from carrying planks)");
+				}
+				else if (gameVariables.controlledDeer[i].checkForStatusByName("Carrying Ropes"))
+				{
+					gameVariables.controlledDeer[i].takeDamage(1);
+					message.push("(+1 damage to " + gameVariables.controlledDeer[i].getName() + " from carrying ropes)");
+				}
 			}
 		}
 		
-		message.push("The trail continues onwards, draining the energy of your deer.");
-		message.push("(2 damage to all non-resting deer)");
 	}
 	
 	override public function explore(deer:Deer)
@@ -284,7 +300,7 @@ class TheTrail extends Location
 		var message:Array<String> = new Array<String>();
 		message.push("You come across a bundle of ropes washed up on the side of creek.");
 		message.push("Taking some will make the journey harder, but you might find some use for them.");
-		showChoice(message, ["Take some", "Leave"], [takePlanks, continueOnChoice], deer);
+		showChoice(message, ["Take some", "Leave"], [takeRopes, continueOnChoice], deer);
 	}
 	
 	public function takeRopes(choice:String, deer:Deer)

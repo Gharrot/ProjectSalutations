@@ -20,6 +20,7 @@ class DeerTile extends FlxButton{
     public var statNumbers:Array<FlxText>;
 	
 	public var healthStatusSprite:FlxSprite;
+	public var otherStatusSprites:Array<FlxSprite>;
 
 	public var bgSprite:FlxSprite;
 	public var deerSprite:FlxSprite;
@@ -77,6 +78,10 @@ class DeerTile extends FlxButton{
         FlxG.state.remove(bgSprite);
         FlxG.state.remove(healthStatusSprite);
         FlxG.state.remove(deerSprite);
+		
+		for(i in 0...otherStatusSprites.length){
+            FlxG.state.remove(otherStatusSprites[i]);
+        }
     }
 	
 	public function deerDisplayOnlyMode()
@@ -92,6 +97,10 @@ class DeerTile extends FlxButton{
         this.onOver.callback = null;
         this.onOut.callback = null;
 		
+        for(i in 0...otherStatusSprites.length){
+            otherStatusSprites[i].visible = false;
+        }
+		
 		loadGraphic("assets/images/DeerTileSpriteBorder.png", true, 190, 134);
 	}
 
@@ -106,6 +115,10 @@ class DeerTile extends FlxButton{
 		bgSprite.visible = false;
 		healthStatusSprite.visible = false;
 		this.visible = false;
+		
+        for(i in 0...otherStatusSprites.length){
+            otherStatusSprites[i].visible = false;
+        }
     }
 
     public function show(){
@@ -117,6 +130,10 @@ class DeerTile extends FlxButton{
 		bgSprite.visible = true;
 		healthStatusSprite.visible = true;
 		this.visible = true;
+		
+        for(i in 0...otherStatusSprites.length){
+            otherStatusSprites[i].visible = true;
+        }
     }
 
     private function onHoverOver(){
@@ -177,6 +194,11 @@ class DeerTile extends FlxButton{
 		healthStatusSprite.x = x + 15;
 		healthStatusSprite.y = y + 33;
 		
+		for(i in 0...otherStatusSprites.length){
+			otherStatusSprites[i].x = x + 33 + (i*18);
+			otherStatusSprites[i].y = y + 35;
+		}
+		
 		deerSprite.x = x + 79;
 		deerSprite.y = y + 74;
     }
@@ -219,6 +241,7 @@ class DeerTile extends FlxButton{
 		
 		bgSprite.loadGraphic(GameVariables.instance.currentLocation.backgroundImageFileNoFrame);
 		healthStatusSprite.loadGraphic(deer.getHealthSpriteString());
+		updateDeerStatusIcons();
 	}
 	
 	public function setupBgSprite(){
@@ -247,6 +270,8 @@ class DeerTile extends FlxButton{
 		
 		deerSprite.scale.set(2, 2);
 		FlxG.state.add(deerSprite);
+		
+		updateDeerStatusIcons();
 	}
 
     public function setupTexts() {
@@ -281,4 +306,25 @@ class DeerTile extends FlxButton{
         statusText.visible = false;
         FlxG.state.add(statusText);
     }
+	
+	function updateDeerStatusIcons()
+	{
+		if (otherStatusSprites != null)
+		{
+			for(i in 0...otherStatusSprites.length){
+				FlxG.state.remove(otherStatusSprites[i]);
+			}
+		}
+		
+		otherStatusSprites = deer.getStatusIcons();
+		
+        for(i in 0...otherStatusSprites.length){
+            FlxG.state.add(otherStatusSprites[i]);
+		}
+		
+		for(i in 0...otherStatusSprites.length){
+			otherStatusSprites[i].x = x + 33 + (i*18);
+			otherStatusSprites[i].y = y + 35;
+		}
+	}
 }

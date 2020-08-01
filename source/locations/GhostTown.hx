@@ -41,7 +41,7 @@ class GhostTown extends Location
 		if (GameVariables.instance.undergroundCityReached)
 		{
 			message.push("You head into the bar.");
-			message.push("Other than the trapdoor leading to the train station you don't find anything of interest.");
+			message.push("Other than the trapdoor leading to the stone room at the end of the trail, there isn't much else in here.");
 			showChoice(message, ["Follow the tunnel", "Head back"], [headToTheCity, continueOnChoice], deer);
 		}
 		else
@@ -54,7 +54,9 @@ class GhostTown extends Location
 	
 	public function headToTheCity(choice:String, deer:Deer)
 	{
-		
+		GameVariables.instance.changeLocation("Stone Stronghold Entrance");
+		resetDailyVariables();
+		returnAfterDayEnd();
 	}
 	
 	public function theTrail(choice:String, deer:Deer)

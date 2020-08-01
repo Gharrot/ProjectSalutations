@@ -1,4 +1,5 @@
 package;
+import flixel.FlxSprite;
 import statuses.DeerStatusEffect;
 import statuses.BabyStatusEffect;
 import haxe.display.Position.Location;
@@ -123,6 +124,22 @@ class Deer{
 		}
 		
 		return spriteString;
+	}
+	
+	public function getStatusIcons():Array<FlxSprite>{
+		var statusIcons:Array<FlxSprite> = new Array<FlxSprite>();
+		
+		if (checkForStatusByName("Carrying Planks"))
+		{
+			statusIcons.push(new FlxSprite(0, 0, "assets/images/DeerTileSprites/Planks.png"));
+		}
+		
+		if (checkForStatusByName("Carrying Ropes"))
+		{
+			statusIcons.push(new FlxSprite(0, 0, "assets/images/DeerTileSprites/Ropes.png"));
+		}
+		
+		return statusIcons;
 	}
 	
 	public function isAvailable():Bool{
@@ -473,5 +490,20 @@ class Deer{
 		}
 		
 		return false;
+	}
+	
+	public function removeStatusByName(name:String)
+	{
+		var i:Int = statusEffects.length - 1;
+		
+		while (i >= 0)
+		{
+			if (statusEffects[i].statusName == name)
+			{
+				statusEffects.remove(statusEffects[i]);
+			}
+			
+			i--;
+		}
 	}
 }

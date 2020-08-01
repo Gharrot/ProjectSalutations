@@ -16,6 +16,8 @@ class DeerRenamingBox extends FlxObject
 	
 	var nameBox:FlxInputText;
 	
+	var deerCharacterSprite:DeerTile;
+	
 	var deer:Deer;
 	var actionScreen:DeerActionScreen;
 
@@ -40,9 +42,14 @@ class DeerRenamingBox extends FlxObject
 		
 		nameBox = new FlxInputText(0, 0, 154, this.deer.name, 16);
 		nameBox.screenCenter();
+		nameBox.y += 40;
 		FlxG.state.add(nameBox);
 
         setupButtons();
+		
+        deerCharacterSprite = new DeerTile(deer);
+        deerCharacterSprite.moveDisplay(145, 180);
+		FlxG.state.add(deerCharacterSprite);
 	}
 	
 	override public function update(elapsed:Float):Void
@@ -52,6 +59,8 @@ class DeerRenamingBox extends FlxObject
 			nameBox.text = nameBox.text.substring(0, nameBox.text.length - 1);
 			nameBox.caretIndex = nameBox.text.length;
 		}
+		
+		deerCharacterSprite.nameText.text = nameBox.text;
 	}
 	
     public function close(){
@@ -62,6 +71,9 @@ class DeerRenamingBox extends FlxObject
         FlxG.state.remove(cancelButton);
 		
         FlxG.state.remove(nameBox);
+		
+        FlxG.state.remove(deerCharacterSprite);
+		deerCharacterSprite.destroyChildren();
 
         actionScreen.show();
         FlxG.state.remove(this);

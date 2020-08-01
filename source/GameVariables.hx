@@ -148,6 +148,10 @@ class GameVariables {
 		currentLocationName = targetLocation;
 		setBG();
 		
+		if (resetLocationVariables)
+		{
+			removeLocationLockedStatuses();
+		}
 		checkVariables();
 	}
 	
@@ -336,7 +340,7 @@ class GameVariables {
 	
 	public function getMedallionCount():Int
 	{
-		var medallionCount:Int;
+		var medallionCount:Int = 0;
 		
 		if (unfamiliarWoodsMedallionTaken)
 		{
@@ -354,6 +358,24 @@ class GameVariables {
 		}
 		
 		return medallionCount;
+	}
+	
+	public function removeLocationLockedStatuses()
+	{
+		for (i in 0...controlledDeer.length)
+		{
+			var currentDeer:Deer = controlledDeer[i];
+			
+			if (currentDeer.checkForStatusByName("Carrying Planks"))
+			{
+				currentDeer.removeStatusByName("Carrying Planks");
+			}
+			
+			if (currentDeer.checkForStatusByName("Carrying Ropes"))
+			{
+				currentDeer.removeStatusByName("Carrying Ropes");
+			}
+		}
 	}
 	
 	public function initializeVariables(){
@@ -432,8 +454,20 @@ class GameVariables {
 		{
 			return "assets/images/LocationImages/GhostTown.png";
 		}
+		else if (locationName == "The Trail")
+		{
+			return "assets/images/LocationImages/AbandonedFields.png";
+		}
+		else if (locationName == "Stone Stronghold Entrance")
+		{
+			return "assets/images/LocationImages/StoneStrongholdEntrance.png";
+		}
+		else if (locationName == "Underground City")
+		{
+			return "assets/images/LocationImages/UndergroundCity.png";
+		}
 		
-		return "dang";
+		return "assets/images/LocationImages/ForgottenWoods.png";
 	}
 	
 	public function setBG()

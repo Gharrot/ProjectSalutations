@@ -132,6 +132,7 @@ class DeerActionScreen extends FlxObject{
 		
 		deerCharacterSprite.show();
         deerCharacterSprite.visible = true;
+        deerCharacterSprite.deerDisplayOnlyMode();
         
         xButton.visible = true;
 		
