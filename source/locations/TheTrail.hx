@@ -110,6 +110,19 @@ class TheTrail extends Location
 			showChoice(message, ["Continue"], [finishingTheTrail], gameVariables.getPlayerDeer());
 		}
 		
+		
+		if (ropesPlaced && !planksPlaced)
+		{
+			ropesPlaced = false;
+			message.push("You hear the distinct sound of some ropes falling off a ravine.");
+		}
+		else if (planksPlaced && !ropesPlaced)
+		{
+			planksPlaced = false;
+			message.push("You hear the distinct sound of some planks falling off a ravine.");
+		}
+		
+		
 		if (GameVariables.instance.theTrailDayNumber < 5)
 		{
 			GameVariables.instance.theTrailDayNumber++;
@@ -546,10 +559,11 @@ class TheTrail extends Location
 	public function crossingTheRavine(choice:String, deer:Deer)
 	{
 		GameVariables.instance.theTrailDayMedallionTaken = true;
+		GameVariables.instance.maxPackSize++;
 		
 		var message:Array<String> = new Array<String>();
 		message.push("You put the ropes and planks together and make a suspension bridge over the ravine.");
-		message.push("After a comfortable walk across, you take the medallion off the pedestal then head back over and continue on the trail.");
+		message.push("After a comfortable walk across, you take the medallion off the pedestal. (+1 max pack size)");
 		showResult(message);
 	}
 	

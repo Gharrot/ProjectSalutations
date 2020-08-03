@@ -150,7 +150,7 @@ null
 @:keep @:bind @:noCompletion #if display private #end class __ASSET__assets_images_locationimages_mapwoods_png extends flash.display.BitmapData { public function new () { super (0, 0, true, 0); } }
 @:keep @:bind @:noCompletion #if display private #end class __ASSET__assets_images_locationimages_stonestrongholdentrance_ase extends null { }
 @:keep @:bind @:noCompletion #if display private #end class __ASSET__assets_images_locationimages_stonestrongholdentrance_png extends flash.display.BitmapData { public function new () { super (0, 0, true, 0); } }
-@:keep @:bind @:noCompletion #if display private #end class __ASSET__assets_images_locationimages_stonestrongholdentrancedeertile_png extends flash.display.BitmapData { public function new () { super (0, 0, true, 0); } }
+@:keep @:bind @:noCompletion #if display private #end class __ASSET__assets_images_locationimages_stonestrongholdentranceemptydeertile_png extends flash.display.BitmapData { public function new () { super (0, 0, true, 0); } }
 @:keep @:bind @:noCompletion #if display private #end class __ASSET__assets_images_locationimages_stonestrongholdentrancenoframe_png extends flash.display.BitmapData { public function new () { super (0, 0, true, 0); } }
 @:keep @:bind @:noCompletion #if display private #end class __ASSET__assets_images_locationimages_thetrailday2_ase extends null { }
 @:keep @:bind @:noCompletion #if display private #end class __ASSET__assets_images_locationimages_thetrailday2_png extends flash.display.BitmapData { public function new () { super (0, 0, true, 0); } }
@@ -184,6 +184,7 @@ null
 @:keep @:bind @:noCompletion #if display private #end class __ASSET__assets_images_mapimages_unreachablelocation_png extends flash.display.BitmapData { public function new () { super (0, 0, true, 0); } }
 @:keep @:bind @:noCompletion #if display private #end class __ASSET__assets_images_medallions_darkforestmedallion_png extends flash.display.BitmapData { public function new () { super (0, 0, true, 0); } }
 @:keep @:bind @:noCompletion #if display private #end class __ASSET__assets_images_medallions_forgottenwoodsmedallion_png extends flash.display.BitmapData { public function new () { super (0, 0, true, 0); } }
+@:keep @:bind @:noCompletion #if display private #end class __ASSET__assets_images_medallions_thetrailmedallion_png extends flash.display.BitmapData { public function new () { super (0, 0, true, 0); } }
 @:keep @:bind @:noCompletion #if display private #end class __ASSET__assets_images_minusbutton_png extends flash.display.BitmapData { public function new () { super (0, 0, true, 0); } }
 @:keep @:bind @:noCompletion #if display private #end class __ASSET__assets_images_octabutton_ase extends null { }
 @:keep @:bind @:noCompletion #if display private #end class __ASSET__assets_images_octabutton_png extends flash.display.BitmapData { public function new () { super (0, 0, true, 0); } }

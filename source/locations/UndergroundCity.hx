@@ -12,7 +12,7 @@ class UndergroundCity extends Location
 		name = "Underground City";
 		backgroundImageFile = "assets/images/LocationImages/UndergroundCity.png";
 		backgroundImageFileNoFrame = "assets/images/LocationImages/UndergroundCityNoFrame.png";
-		backgroundImageFileMiniFramed = "assets/images/LocationImages/UndergroundCityDeerTile.png";
+		backgroundImageFileMiniFramed = "assets/images/LocationImages/UndergroundCityEmptyDeerTile.png";
 	}
 	
 	override public function explore(deer:Deer)

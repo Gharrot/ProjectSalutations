@@ -458,8 +458,6 @@ class Deer{
 			}
 		}
 		
-		trace(newDeer.getStatTotal());
-		
 		newDeer.maxHealth = newDeer.res * 2;
 		if(newDeer.maxHealth == 0){
 			newDeer.maxHealth = 1;

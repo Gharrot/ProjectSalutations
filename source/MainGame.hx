@@ -444,6 +444,11 @@ class MainGame extends FlxState
 		{
 			medallions[1].loadGraphic("assets/images/Medallions/DarkForestMedallion.png");
 		}
+		
+		if (GameVariables.instance.theTrailDayMedallionTaken)
+		{
+			medallions[2].loadGraphic("assets/images/Medallions/TheTrailMedallion.png");
+		}
 	}
 
     function continueClicked(){
@@ -689,6 +694,16 @@ class MainGame extends FlxState
 			newButton.x -= 100;
 			mapButtons.push(newButton);
 			add(newButton);
+			
+			//Stone Stronghold Entrance
+			if (GameVariables.instance.undergroundCityReached)
+			{
+				var newButton:LocationButton = new LocationButton("Stone Stronghold Entrance", 0);
+				newButton.screenCenter();
+				newButton.x += 180;
+				mapButtons.push(newButton);
+				add(newButton);
+			}
 		}
 		else if (GameVariables.instance.currentLocationName == "The Trail")
 		{
@@ -732,7 +747,7 @@ class MainGame extends FlxState
 			{
 				var newButton:LocationButton = new LocationButton("Underground City", 0);
 				newButton.screenCenter();
-				newButton.y += 70;
+				newButton.y += 80;
 				mapButtons.push(newButton);
 				add(newButton);
 			}
@@ -744,7 +759,7 @@ class MainGame extends FlxState
 			currentLocationSprite.loadGraphic("assets/images/MapImages/CurrentLocationMarker.png", true);
 			currentLocationSprite.scale.set(3, 3);
 			currentLocationSprite.screenCenter();
-			currentLocationSprite.y += 70;
+			currentLocationSprite.y += 80;
 			mapSprites.push(currentLocationSprite);
 			add(currentLocationSprite);
 			
