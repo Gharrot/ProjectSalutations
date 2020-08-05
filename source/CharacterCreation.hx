@@ -74,7 +74,7 @@ class CharacterCreation extends FlxState
 		
 		randomizeButton = new FlxButton(250, 270, "Randomize", randomize);
 		randomizeButton.loadGraphic("assets/images/OctaButtonSkinny.png", true, 160, 74);
-		ButtonUtils.fixButtonText(randomizeButton, 14, 22, 1);
+		ButtonUtils.fixButtonText(randomizeButton, 14, 23, 1);
 		add(randomizeButton);
 		
 		updateDeer();
