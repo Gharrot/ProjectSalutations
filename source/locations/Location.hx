@@ -270,7 +270,14 @@ class Location{
     public function showChoice(text:Array<String>, optionNames:Array<String>, resultFunction:Array < (String, Deer)->Void > , deer:Deer){
 		spawnOptionButtons(text, optionNames);
 		for (i in 0...displayedOptions.length){
-			displayedOptions[i].onUp.callback = choiceChosen.bind(optionNames[i], resultFunction[i], deer);
+			if (i < resultFunction.length)
+			{
+				displayedOptions[i].onUp.callback = choiceChosen.bind(optionNames[i], resultFunction[i], deer);
+			}
+			else
+			{
+				displayedOptions[i].onUp.callback = choiceChosen.bind(optionNames[i], resultFunction[resultFunction.length-1], deer);
+			}
 		}
     }
 	

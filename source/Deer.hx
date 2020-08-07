@@ -241,9 +241,14 @@ class Deer{
 	}
 	
 	//Returns a hint about the deer's stats
-	public function getGlimmer():String{
+	public function getGlimmer(?resultNames:Array<String>):String{
 		var result:String = "(insert glimmer here)";
 		var statNames = ["Strength", "Resilience", "Dexterity", "Intellect", "Fortune"];
+		
+		if (resultNames == null)
+		{
+			resultNames = statNames;
+		}
 		
 		var randomizer:FlxRandom = new FlxRandom();
 		randomizer.shuffle(statNames);
@@ -258,7 +263,17 @@ class Deer{
 			}
 		} 
 		
-		result = maxSkillName;
+		if(maxSkillName == "Strength"){
+			result = resultNames[0];
+		}else if(maxSkillName == "Resilience"){
+			result = resultNames[1];
+		}else if(maxSkillName == "Dexterity"){
+			result = resultNames[2];
+		}else if(maxSkillName == "Intellect"){
+			result = resultNames[3];
+		}else if(maxSkillName == "Fortune"){
+			result = resultNames[4];
+		}
 		
 		return result;
 	}
