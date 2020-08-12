@@ -276,19 +276,19 @@ class DarkForest extends Location
 		{
 			message.push("The area around you happens to be full of these herbs, and you monch them all.");
 			message.push("(+3 Dexterity for 2 days)");
-			deer.addStatusEffect(new DeerStatusEffect("SpeedHerb", 3, 0, 0, 3, 0, 0));
+			deer.addStatusEffect(new DeerStatusEffect("Speediest Herbs", 3, 0, 0, 3, 0, 0));
         }
 		else if (monchingSkill >= 3)
 		{
 			message.push("You munch on everything nearby, finding a few other similar herbs.");
 			message.push("(+2 Dexterity for 2 days)");
-			deer.addStatusEffect(new DeerStatusEffect("SpeedHerb", 3, 0, 0, 2, 0, 0));
+			deer.addStatusEffect(new DeerStatusEffect("Speedier Herbs", 3, 0, 0, 2, 0, 0));
 		}
 		else
 		{
 			message.push("You munch on everything nearby, but don't find any more of that herb.");
 			message.push("(+1 Dexterity for 2 days)");
-			deer.addStatusEffect(new DeerStatusEffect("SpeedHerb", 3, 0, 0, 1, 0, 0));
+			deer.addStatusEffect(new DeerStatusEffect("Speedy Herbs", 3, 0, 0, 1, 0, 0));
 		}
 		
 		message.push("(+1 Food)");

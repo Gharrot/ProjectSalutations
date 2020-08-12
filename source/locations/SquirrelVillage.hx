@@ -1,11 +1,13 @@
 package locations;
 
+import statuses.DeerStatusEffect;
 import flixel.ui.FlxButton;
 import flixel.text.FlxText;
 import flixel.FlxG;
 import flixel.FlxSprite;
 import flixel.FlxObject;
 import flixel.util.FlxAxes;
+import flixel.math.FlxRandom;
 
 class SquirrelVillage extends Location 
 {
@@ -32,23 +34,27 @@ class SquirrelVillage extends Location
 	
 	public function exploreWithString(choice:String, deer:Deer)
 	{
+		var message:Array<String> = new Array<String>();
+		message.push("You step outside and walk to the center of town.");
+		message.push("Where will you head to?");
+		
 		var exploreOptionNames:Array<String> = new Array<String>();
 		var exploreOptionFunctions:Array<(String, Deer)->Void> = new Array<(String, Deer)->Void>();
-
-		//Cafe 
-		exploreOptionNames.push("Cafe");
-		exploreOptionFunctions.push(cafe);
 		
-		//Inn
 		if (!buyingPhase)
 		{
+			//Cafe 
+			exploreOptionNames.push("Cafe");
+			exploreOptionFunctions.push(cafe);
+		
+			//Inn
 			exploreOptionNames.push("Inn");
 			exploreOptionFunctions.push(inn); 
+			
+			//Visitor Center
+			exploreOptionNames.push("Visitor Center");
+			exploreOptionFunctions.push(visitorCenter); 
 		}
-		
-		//Visitor Center
-		exploreOptionNames.push("Visitor Center");
-		exploreOptionFunctions.push(visitorCenter); 
 		
 		//Museum
 		exploreOptionNames.push("Museum");
@@ -58,7 +64,7 @@ class SquirrelVillage extends Location
 		exploreOptionNames.push("Supplies Shop");
 		exploreOptionFunctions.push(suppliesShop);
 
-		showChoice(["Where will you head to?"], exploreOptionNames, exploreOptionFunctions, deer);
+		showChoice(message, exploreOptionNames, exploreOptionFunctions, deer);
 	}
 	
 	//Cafe Location
@@ -98,11 +104,11 @@ class SquirrelVillage extends Location
 		var exploreOptionNames:Array<String> = new Array<String>();
 		var exploreOptionFunctions:Array<(String, Deer)->Void> = new Array<(String, Deer)->Void>();
 
-		//Gossip 
+		//Gossip Squirrels
 		exploreOptionNames.push("Discuss Squirrels");
 		exploreOptionFunctions.push(gossipSquirrels);
 		
-		//Coffees
+		//Gossip Deer
 		exploreOptionNames.push("Discuss Deer");
 		exploreOptionFunctions.push(gossipDeer);
 
@@ -112,11 +118,8 @@ class SquirrelVillage extends Location
 	public function gossipSquirrels(choice:String, deer:Deer)
 	{
 		var message:Array<String> = new Array<String>();
-		//Add randomized tips here later
-		message.push("The squirrel says 'Hey, I've gotta good tip for ya'.");
-		message.push("'Or at least I would if the dev didn't forget to remove this placeholder'.");
-		message.push("'Please go remind that guy to give me some tips to say'.");
-		message.push("'I feel so worthless'.");
+		message.push("The squirrel next to you starts chittering frantically as you turn towards them.");
+		message.push("Nothing they say would interest anyone but a squirrel, and after a while you politely excuse yourself.");
 		showResult(message);
 	}
 	
@@ -148,13 +151,15 @@ class SquirrelVillage extends Location
 	public function coffee(choice:String, deer:Deer)
 	{
 		var message:Array<String> = new Array<String>();
-		message.push("There's a bunch of choices.");
+		message.push("You head over to the cafe counter and take a seat.");
+		message.push("The squirrel behind the counter lays out some choices for you.");
 		
 		var drinkNames:Array<String> = new Array<String>();
 
 		//Gossip 
 		drinkNames.push("Acorn Brew");
 		drinkNames.push("Sleepy Spruce Tea");
+		drinkNames.push("Chucklebean Blend");
 
 		showChoice(message, drinkNames, [coffeeDrinking], deer);
 	}
@@ -165,12 +170,30 @@ class SquirrelVillage extends Location
 		
 		if (choice == "Acorn Brew")
 		{
-			//+2 luck
+			//+2 luck for 4 days
+			message.push("The squirrel runs and grabs you a fresh cup of coffee.");
+			message.push("The flavour tastes just like munching on acorns.");
+			message.push("(+2 luck for 4 days).");
+			deer.addStatusEffect(new DeerStatusEffect("Lucky as an Acorn", 4, 0, 0, 0, 0, 3));
 		}
 		else if (choice == "Sleepy Spruce Tea")
 		{
-			//+3 health while resting for 2 days
+			//+2 health while resting for 4 days
+			message.push("The squirrel runs and grabs you a fresh cup of tea.");
+			message.push("The flavour tastes just like munching on spruce needles.");
+			message.push("(+2 health while resting for 4 days).");
+			deer.addStatusEffect(new DeerStatusEffect("Sleepy as a Spruce Tree", 4, 0, 0, 0, 0, 0));
 		}
+		else if (choice == "Chucklebean Blend")
+		{
+			//+2 dexterity for 4 days
+			message.push("The squirrel runs and grabs you a fresh cup of coffee.");
+			message.push("The flavour tastes just like munching on beans.");
+			message.push("(+2 dexterity for 4 days).");
+			deer.addStatusEffect(new DeerStatusEffect("Chuckled as a Bean", 4, 0, 0, 2, 0, 0));
+		}
+		
+		showResult(message);
 	}
 	
 	public function workingTheCafe(choice:String, deer:Deer)
@@ -178,11 +201,59 @@ class SquirrelVillage extends Location
 		var message:Array<String> = new Array<String>();
 		if (mountaineeringChallengeActive)
 		{
-			message.push("Serving.");
+			message.push("The barista squirrel ushers you behind the counter, gives you an apron, and puts you to work taking orders.");
+			var currentDeer:Deer = deer[i];
+			var cafeSkill:Int = currentDeer.dex + currentDeer.int + randomNums.int(0, 5);
+			
+			if (cafeSkill >= 17)
+			{
+				message.push(currentDeer.getName() + " speedily takes the orders of every squirrel and remembers them all without a mistake.");
+				message.push("The barista squirrel gives you 5 acorns for your outstanding work.");
+				acornsEarned += 5;
+			}
+			else if (cafeSkill >= 15)
+			{
+				message.push(currentDeer.getName() + " quickly takes the orders of every squirrel and remembers almost all of them without mistake.");
+				message.push("The barista squirrel gives you 4 acorns for your excellent work.");
+				acornsEarned += 4;
+			}
+			else if (cafeSkill >= 13)
+			{
+				message.push(currentDeer.getName() + " manages to get all the squirrels orders before they get mad, but makes a couple mistakes.");
+				message.push("The barista squirrel gives you 3 acorns for your decent performance.");
+				acornsEarned += 3;
+			}
+			else if (cafeSkill >= 11)
+			{
+				message.push(currentDeer.getName() + " scrambles to take every squirrel's order, recieving a couple complaints of the poor service.");
+				message.push("The barista squirrel gives you 2 acorns for finishing your work.");
+				acornsEarned += 2;
+			}
+			else if (cafeSkill >= 8)
+			{
+				message.push(currentDeer.getName() + " scrambles to take every squirrel's order, and some leave because of the poor service.");
+				message.push("The barista squirrel gives you a single acorn; you suspect they're just taking pity on you.");
+				acornsEarned += 1;
+			}
+			else
+			{
+				message.push(currentDeer.getName() + " struggles to take the squirrels orders quick enough, especially since they have to memorize them too.");
+				message.push("The barista squirrel awards you no acorns for your embarrassing performance.");
+			}
+			showResult(message);
 		}
 		else
 		{
-			
+			message.push("The barista squirrel chitters rapidly as you approach the counter.");
+			if (mountaineeringChallengeStartingTomorrow)
+			{
+				message.push("It seems you need to wait until tomorrow for your mountaineering challenge to officially start before working here.");
+			}
+			else
+			{
+				message.push("It seems you have to sign up for some mountaineering challenge to work here.");
+			}
+			showChoice(message, ["Gossip", "Specialty Brews", "Head outside"], [gossip, coffee, exploreWithString], deer);
 		}
 	}
 	
@@ -191,18 +262,19 @@ class SquirrelVillage extends Location
 	{
 		var message:Array<String> = new Array<String>();
 		message.push("You walk over to the hotel and head inside.");
-		message.push("It's a hotel.");
+		message.push("The hotel lobby is a small cramped room, with most areas of the floor covered in leaves.");
+		message.push("On a reception desk in front of you a squirrel is hurriedly scurrying back and forth, scribbling on small scraps of paper as they go.");
 		
 		var exploreOptionNames:Array<String> = new Array<String>();
 		var exploreOptionFunctions:Array<(String, Deer)->Void> = new Array<(String, Deer)->Void>();
 		
-		//Coffees
+		//Book a room
 		exploreOptionNames.push("Book a room");
-		exploreOptionFunctions.push(coffee);
+		exploreOptionFunctions.push(roomBooking);
 		
 		//Clean rooms
 		exploreOptionNames.push("Clean rooms");
-		exploreOptionFunctions.push(workingTheCafe);
+		exploreOptionFunctions.push(roomCleaning);
 		
 		//Back
 		exploreOptionNames.push("Head outside");
@@ -214,30 +286,93 @@ class SquirrelVillage extends Location
 	public function roomBooking(choice:String, deer:Deer)
 	{
 		var message:Array<String> = new Array<String>();
+		message.push("The squirrel sees you approaching and quickly scribbles something down on a notepad.");
+		message.push("It seems your room is now booked, but you'll need to choose what type of bedding you want the room to have.");
+		message.push("The squirrel lays out a few options for you to choose from.");
 		
-		if (!mountaineeringChallengeActive)
-		{
-			message.push("Ya gotta go to the info center");
-			showChoice(message, ["Clean rooms", "Head outside"], [roomCleaning, exploreWithString], deer);
-		}
-		else
-		{
-			//Room booking
-		}
+		var beddingNames:Array<String> = new Array<String>();
+
+		//Twig Bedding (+1 Resilience) 
+		beddingNames.push("Twig Bedding");
+		
+		//Leafy Bedding (+1 Dexterity) 
+		beddingNames.push("Leafy Bedding");
+		
+		//Cotton Bedding (+1 Intellect) 
+		beddingNames.push("Cotton Bedding");
+		
+		showChoice(message, beddingNames, [roomConfirmation], deer);
+	}
+	
+	public function roomConfirmation(choice:String, deer:Deer)
+	{
+		var message:Array<String> = new Array<String>();
+		
+		GameVariables.instance.beddingChoice = choice;
+		message.push("The squirrel scribbles your choice down on another scrap of paper, then shoos you outside.");
+		message.push("Your herd will come back to sleep there tonight.");
+		showResult(message);
 	}
 	
 	public function roomCleaning(choice:String, deer:Deer)
 	{
 		var message:Array<String> = new Array<String>();
 		
-		if (!mountaineeringChallengeActive)
+		if (mountaineeringChallengeActive)
 		{
-			message.push("Ya gotta go to the info center");
-			showChoice(message, ["Book a room", "Head outside"], [roomBooking, exploreWithString], deer);
+			message.push("The squirrel ushers you behind the counter, hands you a broom, and puts you to work cleaning rooms.");
+			var currentDeer:Deer = deer[i];
+			var cleaningSkill:Int = currentDeer.res + currentDeer.lck + randomNums.int(0, 4);
+			
+			if (cleaningSkill >= 16)
+			{
+				message.push(currentDeer.getName() + " manages to clean every room in the inn, leaving them completely spotless.");
+				message.push("The squirrel manager gives you 5 acorns for your outstanding work.");
+				acornsEarned += 5;
+			}
+			else if (cleaningSkill >= 14)
+			{
+				message.push(currentDeer.getName() + " falls over after cleaning every room in the inn, only missing a couple spots.");
+				message.push("The squirrel manager gives you 4 acorns for your excellent work.");
+				acornsEarned += 4;
+			}
+			else if (cleaningSkill >= 12)
+			{
+				message.push(currentDeer.getName() + " falls over after cleaning every almost every room in the inn, leaving them very clean.");
+				message.push("The squirrel manager gives you 3 acorns for your decent performance.");
+				acornsEarned += 3;
+			}
+			else if (cleaningSkill >= 10)
+			{
+				message.push(currentDeer.getName() + " gets tired after cleaning a few rooms, but leaves them very clean.");
+				message.push("The squirrel manager gives you 2 acorns for your work.");
+				acornsEarned += 2;
+			}
+			else if (cleaningSkill >= 7)
+			{
+				message.push(currentDeer.getName() + " gets tired after cleaning a few rooms and slumps down in a corner.");
+				message.push("The squirrel manager gives you a single acorn; you suspect they're just taking pity on you.");
+				acornsEarned += 1;
+			}
+			else
+			{
+				message.push(currentDeer.getName() + " gets tired before finishing a single room and passes out on the floor.");
+				message.push("The squirrel manager awards you no acorns for your embarrassing performance.");
+			}
+			showResult(message);
 		}
 		else
 		{
-			//Room cleaning
+			message.push("The squirrel shakes their pencil at you and chitters as you approach the desk.");
+			if (mountaineeringChallengeStartingTomorrow)
+			{
+				message.push("It seems you need to wait until tomorrow for your mountaineering challenge to officially start before working here.");
+			}
+			else
+			{
+				message.push("It seems you have to sign up for some mountaineering challenge to work here.");
+			}
+			showChoice(message, ["Book a room", "Head outside"], [roomBooking, exploreWithString], deer);
 		}
 	}
 	
@@ -245,14 +380,14 @@ class SquirrelVillage extends Location
 	public function visitorCenter(choice:String, deer:Deer)
 	{
 		var message:Array<String> = new Array<String>();
-		message.push("You walk over to the vistor center and head inside.");
-		message.push("It's a visitor center.");
+		message.push("You walk over to the vistor center and head inside. The center is a large 1-roomed wooden building with walls lined with maps.");
+		message.push("A squirrel at the other end of the room beckons you over from the small counter they're standing on.");
 		
 		var exploreOptionNames:Array<String> = new Array<String>();
 		var exploreOptionFunctions:Array<(String, Deer)->Void> = new Array<(String, Deer)->Void>();
 		
 		//Booth
-		exploreOptionNames.push("Visit the booth");
+		exploreOptionNames.push("Visit the squirrel");
 		exploreOptionFunctions.push(booth);
 		
 		//Study the maps
@@ -269,7 +404,7 @@ class SquirrelVillage extends Location
 	public function booth(choice:String, deer:Deer)
 	{
 		var message:Array<String> = new Array<String>();
-		message.push("You walk over to the booth.");
+		message.push("You walk over to the desk.");
 		
 		if (mountaineeringChallengeActive || mountaineeringChallengeStartingTomorrow)
 		{
@@ -287,17 +422,26 @@ class SquirrelVillage extends Location
 		
 		if (mountaineeringChallengeStartingTomorrow)
 		{
-			message.push("It starts tomorah.");
+			message.push("You walk over and the squirrel starts frantically chirping at you.");
+			message.push("Your challenge starts tomorrow. You should help out around town to earn acorns today, then spend them on supplies tomorrow morning.");
+			message.push("After that you'll head out to climb the mountain.");
 			showChoice(message, ["Study the maps", "Head outside"], [mountaineeringChallengeStart, mapStudying, exploreWithString], deer);
 		}
 		else if (mountaineeringChallengeActive)
 		{
-			message.push("Info while started.");
+			message.push("You walk over and the squirrel starts motioning for you to head outside, then also points at the maps.");
+			message.push("Your challenge is currently underway. You should help out around town to earn acorns today, then spend them on supplies tomorrow morning.");
+			message.push("After that you'll head out to climb the mountain.");
+			message.push("You can also spend time today studying the route you'll be following.");
 			showChoice(message, ["Study the maps", "Head outside"], [mountaineeringChallengeStart, mapStudying, exploreWithString], deer);
 		}
 		else
 		{
-			message.push("Normal info.");
+			message.push("You walk over and the squirrel starts frantically chirping at you.");
+			message.push("It seems the village runs a program for anyone wanting to climb the nearby mountain.");
+			message.push("If you sign the clipboard next to them then you'll start the mountaineering challenge tomorrow.");
+			message.push("During the challenge tomorrow you should help out squirrels to earn acorns.");
+			message.push("Then the next morning you can those acorns on supplies, then head out on an expedition to climb the nearby mountain.");
 			showChoice(message, ["Start the challenge", "Study the maps", "Head outside"], [mountaineeringChallengeStart, mapStudying, exploreWithString], deer);
 		}
 	}
@@ -307,7 +451,8 @@ class SquirrelVillage extends Location
 		mountaineeringChallengeStartingTomorrow = true;
 		
 		var message:Array<String> = new Array<String>();
-		message.push("Everything will start tomorrow.");
+		message.push("You step over to the clipboard hanging on the wall and sign your name.");
+		message.push("Your mountaineering challenge begins tomorrow.");
 		showResult(message);
 	}
 	
@@ -317,13 +462,16 @@ class SquirrelVillage extends Location
 		
 		if (mountaineeringChallengeStartingTomorrow)
 		{
-			message.push("Hey don't bother, the route we follow changes daily.");
-			showChoice(message, ["Visit the booth", "Head outside"], [booth, exploreWithString], deer);
+			message.push("The squirrel sees you studying the maps and rushes over to stop you.");
+			message.push("It seems the safest route to the top changes often, and you shouldn't be studying the mountain until you're about to climb it.");
+			message.push("You should come by tomorrow when your challenge has started.");
+			showChoice(message, ["Visit the squirrel", "Head outside"], [booth, exploreWithString], deer);
 		}
 		else if (!mountaineeringChallengeActive)
 		{
-			message.push("Hey don't bother, the route we follow changes daily.");
-			showChoice(message, ["Visit the booth", "Head outside"], [booth, exploreWithString], deer);
+			message.push("The squirrel sees you studying the maps and rushes over to stop you.");
+			message.push("It seems the safest route to the top changes often, and you shouldn't be studying the mountain until you're about to climb it.");
+			showChoice(message, ["Visit the squirrel", "Head outside"], [booth, exploreWithString], deer);
 		}
 		else
 		{
@@ -336,19 +484,19 @@ class SquirrelVillage extends Location
 	public function museum(choice:String, deer:Deer)
 	{
 		var message:Array<String> = new Array<String>();
-		message.push("You walk over to the vistor center and head inside.");
-		message.push("It's a visitor center.");
+		message.push("You walk over to the museum and head inside.");
+		message.push("The museum is a small room packed with climbing supplies and framed drawings of squirrels. Over on your right is a counter for a giftshop.");
 		
 		var exploreOptionNames:Array<String> = new Array<String>();
 		var exploreOptionFunctions:Array<(String, Deer)->Void> = new Array<(String, Deer)->Void>();
 		
-		//Booth
-		exploreOptionNames.push("Visit the booth");
-		exploreOptionFunctions.push(booth);
+		//Museum exhibits
+		exploreOptionNames.push("Look at the exhibits");
+		exploreOptionFunctions.push(museumExhibits);
 		
-		//Study the maps
-		exploreOptionNames.push("Study the maps");
-		exploreOptionFunctions.push(exploreWithString); 
+		//Gift Shop
+		exploreOptionNames.push("Visit the gift shop");
+		exploreOptionFunctions.push(giftShop); 
 		
 		//Back
 		exploreOptionNames.push("Head outside");
@@ -357,14 +505,33 @@ class SquirrelVillage extends Location
 		showChoice(message, exploreOptionNames, exploreOptionFunctions, deer);
 	}
 	
-	public function museumEnter(choice:String, deer:Deer)
+	public function museumExhibits(choice:String, deer:Deer)
 	{
+		var message:Array<String> = new Array<String>();
 		
+		if (!GameVariables.instance.leaderShipSkillsEarned)
+		{
+			GameVariables.instance.leaderShipSkillsEarned = true;
+			message.push("Looking through the exhibits, what stands out to you most is a series of drawings depicting the first expedition to climb the mountain.");
+			message.push("A single squirrel seems to lead a few others up the mountain, delegating each one a task for the day.");
+			message.push("You leave the museum with some ideas on how to more quickly organize your herd.");
+			message.push("(This setting can be turned off in the options)");
+			showResult(message);
+		}
+		else
+		{
+			message.push("Looking through the exhibits, what stands out to you most is a series of drawings depicting the first expedition to climb the mountain.");
+			message.push("A single squirrel seems to lead a few others up the mountain, delegating each one a task for the day.");
+			showChoice(message, ["Visit the gift shop", "Head outside"], [giftShop, exploreWithString], deer);
+		}
 	}
 	
 	public function giftShop(choice:String, deer:Deer)
 	{
-		
+		var message:Array<String> = new Array<String>();
+		message.push("Most of the items and stuff only a squirrel would want, except for one item. A miniature flag with a picture of a deer on it.");
+		message.push("The flag is listed as costing 5 acorns.");
+		showChoice(message, ["Look at the exhibits", "Head outside"], [museumExhibits, exploreWithString], deer);
 	}
 	
 	//Supplies Shop Location
@@ -381,7 +548,7 @@ class SquirrelVillage extends Location
 			message.push("The squirrel motions for you to step up to the counter.");
 			
 			//Counter
-			exploreOptionNames.push("Step up to the Counter");
+			exploreOptionNames.push("Step up to the counter");
 			exploreOptionFunctions.push(suppliesExplanation);
 		}
 		else
@@ -414,12 +581,34 @@ class SquirrelVillage extends Location
 	
 	public function suppliesExplanation(choice:String, deer:Deer)
 	{
+		var message:Array<String> = new Array<String>();
 		
+		if (mountaineeringChallengeActive)
+		{
+			message.push("You walk over to the store counter.");
+			message.push("You should work to earn acorns today, then come by the next morning to buy supplies.");
+			showChoice(message, ["Chop wood", "Head outside"], [woodChopping, exploreWithString], deer);
+		}
+		else if(mountaineeringChallengeStartingTomorrow)
+		{
+			message.push("You walk over to the store counter.");
+			message.push("You should work to earn acorns tomorrow, then come by the next morning to buy supplies.");
+			showChoice(message, ["Chop wood", "Head outside"], [woodChopping, exploreWithString], deer);
+		}
+		else
+		{
+			message.push("You walk over to the store counter.");
+			message.push("You should start the mountaineering challenge, then come here the morning you leave to buy some supplies.");
+			showChoice(message, ["Chop wood", "Head outside"], [woodChopping, exploreWithString], deer);
+		}
 	}
 	
 	public function foodAisle(choice:String, deer:Deer)
 	{
-		
+		var message:Array<String> = new Array<String>();
+		message.push("The food packs have 3 food each and you'll open them automatically if you run out on the mountain.");
+		message.push("A sign next to them lists them as costing 2 acorns per pack.");
+		showChoice(message, ["Chop wood", "Head outside"], [woodChopping, exploreWithString], deer);
 	}
 	
 	public function explosives(choice:String, deer:Deer)

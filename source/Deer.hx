@@ -183,7 +183,20 @@ class Deer{
 		baby = true;
 	}
 	
-	public function addStatusEffect(statusEffect:DeerStatusEffect){
+	public function addStatusEffect(statusEffect:DeerStatusEffect, stackable:Bool = false){
+		if (!stackable)
+		{
+			var originalLength:Int = statusEffects.length;
+			for (i in 1...(originalLength + 1)) {
+				var currentStatus:DeerStatusEffect = statusEffects[originalLength - i];
+				
+				if (currentStatus.statusName == statusEffect.statusName)
+				{
+					statusEffects.remove(currentStatus);
+				}
+			}
+		}
+		
 		statusEffects.push(statusEffect);
 		updateStats();
 	}

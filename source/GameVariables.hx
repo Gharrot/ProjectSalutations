@@ -68,6 +68,14 @@ class GameVariables {
 	public var undergroundCityReached:Bool;
 	public var undergroundCityOpened:Bool;
 	
+	//Squirrel Village
+	public var beddingChoice:String;
+	public var leaderShipSkillsEarned:Bool;
+	public var mountaineeringChallegeDay:Bool;
+	
+	//Mount Vire
+	public var foodPacks:Int;
+	
 	public var saveNum:Int;
 
     public static var instance(default, null):GameVariables = new GameVariables();
@@ -137,12 +145,17 @@ class GameVariables {
 		else if (targetLocation == "Stone Stronghold Entrance")
 		{
 			currentLocation = new StoneStrongholdEntrance();
-			maxFood = theTrailMaxFood;
+			maxFood = 10;
 		}
 		else if (targetLocation == "Underground City")
 		{
 			currentLocation = new UndergroundCity();
-			maxFood = theTrailMaxFood;
+			maxFood = 10;
+		}
+		else if (targetLocation == "Squirrel Village")
+		{
+			currentLocation = new SquirrelVillage();
+			maxFood = 10;
 		}
 		
 		currentLocationName = targetLocation;
