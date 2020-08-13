@@ -27,6 +27,22 @@ class SquirrelVillage extends Location
 		backgroundImageFileMiniFramed = "assets/images/LocationImages/StoneStrongholdEntranceEmptyDeerTile.png";
 	}
 	
+	private function getAcornStatus():String
+	{
+		var result:String = "(You now have " + acornsEarned;
+		
+		if (acornsEarned == 1)
+		{
+			result += " acorn.)";
+		}
+		else
+		{
+			result += " acorns.)";
+		}
+		
+		return result;
+	}
+	
 	override public function explore(deer:Deer)
 	{
 		exploreWithString("You have no chance to survive make your time", deer);
@@ -127,12 +143,12 @@ class SquirrelVillage extends Location
 	{
 		var randomNums:FlxRandom = new FlxRandom();
 		
-		var newDeerFriend:Deer = Deer.buildADeer(randomNums.int(14, 15));
+		var newDeerFriend:Deer = Deer.buildADeer(randomNums.int(14, 15), -1, 0, [[33, 55, 70, 82, 100], [22, 55, 70, 82, 100], [29, 58, 70, 80, 100]], false);
 		foundDeer = newDeerFriend;
 		
 		var message:String = "You ask the squirrels if they've met any other deer around here. They say that a ";
 		message += newDeerFriend.gender;
-		message += " deer named " + " came by often, and that they were very ";
+		message += " deer named " + newDeerFriend.getName() + " came by often, and that they were very ";
 		message += newDeerFriend.getGlimmer(["strong", "resilient", "quick", "wise", "good at cards"]);
 		message += ".";
 		showChoice([message], ["Ask to meet them", "Head back"], [recruitGossipDeer, continueOnChoice], deer);
@@ -198,48 +214,63 @@ class SquirrelVillage extends Location
 	
 	public function workingTheCafe(choice:String, deer:Deer)
 	{
+		var randomNums:FlxRandom = new FlxRandom();
 		var message:Array<String> = new Array<String>();
 		if (mountaineeringChallengeActive)
 		{
 			message.push("The barista squirrel ushers you behind the counter, gives you an apron, and puts you to work taking orders.");
-			var currentDeer:Deer = deer[i];
-			var cafeSkill:Int = currentDeer.dex + currentDeer.int + randomNums.int(0, 5);
+			var cafeSkill:Int = deer.dex + deer.int + randomNums.int(0, 5);
 			
 			if (cafeSkill >= 17)
 			{
-				message.push(currentDeer.getName() + " speedily takes the orders of every squirrel and remembers them all without a mistake.");
+				message.push(deer.getName() + " speedily takes the orders of every squirrel and remembers them all without a mistake.");
 				message.push("The barista squirrel gives you 5 acorns for your outstanding work.");
 				acornsEarned += 5;
 			}
 			else if (cafeSkill >= 15)
 			{
-				message.push(currentDeer.getName() + " quickly takes the orders of every squirrel and remembers almost all of them without mistake.");
+				message.push(deer.getName() + " quickly takes the orders of every squirrel and remembers almost all of them without mistake.");
 				message.push("The barista squirrel gives you 4 acorns for your excellent work.");
 				acornsEarned += 4;
 			}
 			else if (cafeSkill >= 13)
 			{
-				message.push(currentDeer.getName() + " manages to get all the squirrels orders before they get mad, but makes a couple mistakes.");
+				message.push(deer.getName() + " manages to get all the squirrels orders before they get mad, but makes a couple mistakes.");
 				message.push("The barista squirrel gives you 3 acorns for your decent performance.");
 				acornsEarned += 3;
 			}
 			else if (cafeSkill >= 11)
 			{
-				message.push(currentDeer.getName() + " scrambles to take every squirrel's order, recieving a couple complaints of the poor service.");
+				message.push(deer.getName() + " scrambles to take every squirrel's order, recieving a couple complaints of the poor service.");
 				message.push("The barista squirrel gives you 2 acorns for finishing your work.");
 				acornsEarned += 2;
 			}
 			else if (cafeSkill >= 8)
 			{
-				message.push(currentDeer.getName() + " scrambles to take every squirrel's order, and some leave because of the poor service.");
+				message.push(deer.getName() + " scrambles to take every squirrel's order, and some leave because of the poor service.");
 				message.push("The barista squirrel gives you a single acorn; you suspect they're just taking pity on you.");
 				acornsEarned += 1;
 			}
 			else
 			{
-				message.push(currentDeer.getName() + " struggles to take the squirrels orders quick enough, especially since they have to memorize them too.");
+				message.push(deer.getName() + " struggles to take the squirrels orders quick enough, especially since they have to memorize them too.");
 				message.push("The barista squirrel awards you no acorns for your embarrassing performance.");
 			}
+			
+			var bonusAcorns = randomNums.int(0, deer.lck);
+			
+			if (bonusAcorns == 1)
+			{
+				message.push("You check your tip jar afterwards and find 1 acorn inside.");
+			}
+			else
+			{
+				message.push("You check your tip jar afterwards and find " + bonusAcorns + " acorns inside.");
+			}
+			
+			acornsEarned += bonusAcorns;
+			
+			message.push(getAcornStatus());
 			showResult(message);
 		}
 		else
@@ -316,49 +347,50 @@ class SquirrelVillage extends Location
 	
 	public function roomCleaning(choice:String, deer:Deer)
 	{
+		var randomNums:FlxRandom = new FlxRandom();
 		var message:Array<String> = new Array<String>();
 		
 		if (mountaineeringChallengeActive)
 		{
 			message.push("The squirrel ushers you behind the counter, hands you a broom, and puts you to work cleaning rooms.");
-			var currentDeer:Deer = deer[i];
-			var cleaningSkill:Int = currentDeer.res + currentDeer.lck + randomNums.int(0, 4);
+			var cleaningSkill:Int = deer.res + deer.lck + randomNums.int(0, 4);
 			
 			if (cleaningSkill >= 16)
 			{
-				message.push(currentDeer.getName() + " manages to clean every room in the inn, leaving them completely spotless.");
-				message.push("The squirrel manager gives you 5 acorns for your outstanding work.");
-				acornsEarned += 5;
+				message.push(deer.getName() + " manages to clean every room in the inn, leaving them completely spotless.");
+				message.push("The squirrel manager gives you 8 acorns for your outstanding work.");
+				acornsEarned += 8;
 			}
 			else if (cleaningSkill >= 14)
 			{
-				message.push(currentDeer.getName() + " falls over after cleaning every room in the inn, only missing a couple spots.");
-				message.push("The squirrel manager gives you 4 acorns for your excellent work.");
-				acornsEarned += 4;
+				message.push(deer.getName() + " falls over after cleaning every room in the inn, only missing a couple spots.");
+				message.push("The squirrel manager gives you 6 acorns for your excellent work.");
+				acornsEarned += 6;
 			}
 			else if (cleaningSkill >= 12)
 			{
-				message.push(currentDeer.getName() + " falls over after cleaning every almost every room in the inn, leaving them very clean.");
-				message.push("The squirrel manager gives you 3 acorns for your decent performance.");
-				acornsEarned += 3;
+				message.push(deer.getName() + " falls over after cleaning every almost every room in the inn, leaving them very clean.");
+				message.push("The squirrel manager gives you 4 acorns for your decent performance.");
+				acornsEarned += 4;
 			}
 			else if (cleaningSkill >= 10)
 			{
-				message.push(currentDeer.getName() + " gets tired after cleaning a few rooms, but leaves them very clean.");
+				message.push(deer.getName() + " gets tired after cleaning a few rooms, but leaves them very clean.");
 				message.push("The squirrel manager gives you 2 acorns for your work.");
 				acornsEarned += 2;
 			}
 			else if (cleaningSkill >= 7)
 			{
-				message.push(currentDeer.getName() + " gets tired after cleaning a few rooms and slumps down in a corner.");
+				message.push(deer.getName() + " gets tired after cleaning a few rooms and slumps down in a corner.");
 				message.push("The squirrel manager gives you a single acorn; you suspect they're just taking pity on you.");
 				acornsEarned += 1;
 			}
 			else
 			{
-				message.push(currentDeer.getName() + " gets tired before finishing a single room and passes out on the floor.");
+				message.push(deer.getName() + " gets tired before finishing a single room and passes out on the floor.");
 				message.push("The squirrel manager awards you no acorns for your embarrassing performance.");
 			}
+			message.push(getAcornStatus());
 			showResult(message);
 		}
 		else
@@ -529,8 +561,7 @@ class SquirrelVillage extends Location
 	public function giftShop(choice:String, deer:Deer)
 	{
 		var message:Array<String> = new Array<String>();
-		message.push("Most of the items and stuff only a squirrel would want, except for one item. A miniature flag with a picture of a deer on it.");
-		message.push("The flag is listed as costing 5 acorns.");
+		message.push("Add some stuff to buy here later.");
 		showChoice(message, ["Look at the exhibits", "Head outside"], [museumExhibits, exploreWithString], deer);
 	}
 	
@@ -548,7 +579,7 @@ class SquirrelVillage extends Location
 			message.push("The squirrel motions for you to step up to the counter.");
 			
 			//Counter
-			exploreOptionNames.push("Step up to the counter");
+			exploreOptionNames.push("Walk up to the counter");
 			exploreOptionFunctions.push(suppliesExplanation);
 		}
 		else
@@ -598,7 +629,7 @@ class SquirrelVillage extends Location
 		else
 		{
 			message.push("You walk over to the store counter.");
-			message.push("You should start the mountaineering challenge, then come here the morning you leave to buy some supplies.");
+			message.push("You could start a mountaineering challenge, then come here the morning you leave to buy some supplies.");
 			showChoice(message, ["Chop wood", "Head outside"], [woodChopping, exploreWithString], deer);
 		}
 	}
@@ -623,23 +654,115 @@ class SquirrelVillage extends Location
 	
 	public function woodChopping(choice:String, deer:Deer)
 	{
+		var randomNums:FlxRandom = new FlxRandom();
+		var message:Array<String> = new Array<String>();
 		
+		if (mountaineeringChallengeActive)
+		{
+			message.push("The squirrel leads you out behind the shop, hands you an axe, and puts you to work chopping wood.");
+			var choppingSkill:Int = deer.res + deer.lck + randomNums.int(0, 4);
+			
+			var currentAcornsEarned:Int = Math.floor(choppingSkill / 2);
+			message.push(deer.getName() + " manages to chop " + choppingSkill + " sets of logs.");
+			
+			if (currentAcornsEarned >= 8)
+			{
+				message.push("The squirrel gives you " + currentAcornsEarned + " acorns for your outstanding work.");
+				acornsEarned += currentAcornsEarned;
+			}
+			else if (currentAcornsEarned >= 6)
+			{
+				message.push("The squirrel gives you " + currentAcornsEarned + " acorns for your excellent work.");
+				acornsEarned += currentAcornsEarned;
+			}
+			else if (currentAcornsEarned >= 4)
+			{
+				message.push("The squirrel gives you " + currentAcornsEarned + " acorns for your good work.");
+				acornsEarned += currentAcornsEarned;
+			}
+			else if (currentAcornsEarned >= 2)
+			{
+				message.push("The squirrel gives you " + currentAcornsEarned + " acorns for your work.");
+				acornsEarned += currentAcornsEarned;
+			}
+			else
+			{
+				message.push("The squirrel gives you a single acorn for your work; you suspect they're just taking pity on you.");
+				acornsEarned += 1;
+			}
+			message.push(getAcornStatus());
+			showResult(message);
+		}
+		else
+		{
+			message.push("You motion toward the axe leaning against the back door, but the squirrel silently shakes their head and points to a sign above them.");
+			if (mountaineeringChallengeStartingTomorrow)
+			{
+				message.push("It seems you need to wait until tomorrow for your mountaineering challenge to officially start before working here.");
+			}
+			else
+			{
+				message.push("It seems you have to sign up for some mountaineering challenge to work here.");
+			}
+			showChoice(message, ["Walk up to the counter", "Head outside"], [suppliesExplanation, exploreWithString], deer);
+		}
 	}
 	
 	override public function forage(deer:Deer) 
 	{
 		var randomNums:FlxRandom = new FlxRandom();
+		var message:Array<String> = new Array<String>();
+		var forageResult = (deer.int * 2) + (deer.lck) + randomNums.int(0, 10);
+
+		if (forageResult <= 6)
+		{
+			//Found nothing
+			message.push("You are unable to find any food today.");
+		}
+		else if (forageResult <= 14)
+		{
+			GameVariables.instance.modifyFood(1);
+			message.push("You find a small patch of herbs growing on the mountainside (+1 food).");
+		}
+		else if (forageResult <= 19)
+		{
+			GameVariables.instance.modifyFood(2);
+			message.push("You find a blueberry bush just off a mountain trail (+2 food).");
+		}
+		else if (forageResult <= 23)
+		{
+			GameVariables.instance.modifyFood(3);
+			message.push("You find a small crabapples tree just off a mountain trail (+3 food).");
+		}
+		else
+		{
+			GameVariables.instance.modifyFood(4);
+			message.push("You find a tree filled with chestnuts in a small mountain grove (+4 food).");
+		}
 		
-		GameVariables.instance.modifyFood(3);
-		showResult(["Some nearby squirrels see you searching for food and offer you some acorns to eat (+3 food)."]);
+		if (!mountaineeringChallengeActive)
+		{
+			GameVariables.instance.modifyFood(2);
+			message.push("Some nearby squirrels see you searching for food and offer you some chestnuts (+2 food).");
+		}
+		else
+		{
+			message.push("Some nearby squirrels see you searching for food.");
+			message.push("They feel bad that they've taken most of it and offer you a couple acorns.");
+			acornsEarned += 2;
+			message.push(getAcornStatus());
+		}
+		
+		showResult(message);
 	}
 	
 	override public function defend(deer:Array<Deer>)
 	{
+		var randomNums:FlxRandom = new FlxRandom();
 		var message:Array<String> = new Array<String>();
 		if (mountaineeringChallengeStartingTomorrow)
 		{
-			message.push("It seems there's nothing that will attack your den here. It's likely thanks to the squirrel guards patrolling the area.");
+			message.push("It seems there's nothing that will attack your den here for now. It's likely thanks to the squirrel guards patrolling the area.");
 			message.push("You run into some patrolling squirrels and they warn you that you'll have to defend your own stuff during the mountaineering challenge tomorrow.");
 			showResult(message);
 		}
@@ -647,9 +770,9 @@ class SquirrelVillage extends Location
 		{
 			if (deer.length > 0)
 			{
-				message.push("It seems there's nothing that will attack your den here. It's likely thanks to the squirrel guards patrolling the area.");
+				message.push("It seems there's nothing that will attack your den here for now. It's likely thanks to the squirrel guards patrolling the area.");
 				message.push("You run into some patrolling squirrels and they warn you that you'll have to defend your own stuff during the mountaineering challenge.");
-				message.push("They motion for you to head to the visitors center to learn more about it.");
+				message.push("They motion for you to head to the visitors center to learn about it.");
 				showResult(message);
 			}
 			else
@@ -659,29 +782,169 @@ class SquirrelVillage extends Location
 		}
 		else
 		{
-			setOut();
+			message.push("Night draws and a group of ninja squirrels approaches your food stash.");
+			
+			for (i in 0...deer.length)
+			{
+				var squirrelAttackReduction:Int = 0;
+				var squirrelScaringSkill:Int = deer[i].dex * 2 + deer[i].lck + randomNums.int(0, 5);
+				var currentDeer:Deer = deer[i];
+				
+				if (squirrelScaringSkill >= 19)
+				{
+					message.push(currentDeer.getName() + " hones in on the squirrels' movements, deflecting all of their attempts to approach.");
+					squirrelAttackReduction += 5;
+				}
+				else if (squirrelScaringSkill >= 17)
+				{
+					message.push(currentDeer.getName() + " hones in on the squirrels' movements, deflecting almost all of their attempts to approach.");
+					squirrelAttackReduction += 4;
+				}
+				else if (squirrelScaringSkill >= 15)
+				{
+					message.push(currentDeer.getName() + " desperately blocks the squirrels' approaches, deflecting most of their attempts to approach.");
+					squirrelAttackReduction += 3;
+				}
+				else if (squirrelScaringSkill >= 13)
+				{
+					message.push(currentDeer.getName() + " desperately blocks the squirrels' approaches, deflecting some of their attempts to approach.");
+					squirrelAttackReduction += 2;
+				}
+				else if (squirrelScaringSkill >= 10)
+				{
+					message.push(currentDeer.getName() + " is too slow to keep up with the squirrels' movements, deflecting almost none of their attempts to approach.");
+					squirrelAttackReduction += 1;
+				}
+				else
+				{
+					message.push(currentDeer.getName() + " is too slow to keep up with the squirrels' movements, deflecting none of their attempts to approach.");
+				}
+			}
+			
+			if (squirrelAttackReduction >= 5)
+			{
+				message.push("When all is said and done you lose none of your food to the ninja squirrels.");
+				message.push("The squirrels leave you a pile of 5 acorns, impressed by your skills.");
+				acornsEarned += 5;
+				message.push(getAcornStatus());
+			}
+			else if (squirrelAttackReduction >= 3)
+			{
+				message.push("You stopped most of the ninja squirrels' attempts at stealing your food, but still lose some scraps.");
+				message.push("(-2 food)");
+				GameVariables.instance.modifyFood(-2);
+				message.push("The squirrels leave you a pile of 3 acorns, impressed by your skills.");
+				acornsEarned += 3;
+				message.push(getAcornStatus());
+			}
+			else if (squirrelAttackReduction >= 1)
+			{
+				message.push("You stopped some of the ninja squirrels' attempts at stealing your food, but not all of them.");
+				message.push("(-3 food)");
+				GameVariables.instance.modifyFood(-3);
+				message.push("The squirrels leave you a couple acorns for your admirable attempt at a defense.");
+				acornsEarned += 2;
+				message.push(getAcornStatus());
+			}
+			else
+			{
+				if (deer.length == 0)
+				{
+					message.push("With your den undefended, the squirrels take some food and leave unhindered.");
+					message.push("(-4 food)");
+				}
+				else
+				{
+					message.push("Your deer were completely ineffective at preventing the ninja squirrels' attempts to steal your food.");
+					message.push("(-4 food)");
+					message.push("The squirrels leave you a couple acorns for your admirable attempt to defend your stash.");
+					acornsEarned += 2;
+					message.push(getAcornStatus());
+				}
+				GameVariables.instance.modifyFood(-4);
+			}
+		
+			showResult(message);
 		}
 	}
 	
-	override public function hunt(deer:Array<Deer>) {
+	override public function hunt(deer:Array<Deer>) 
+	{
+		var randomNums:FlxRandom = new FlxRandom();
 		var message:Array<String> = new Array<String>();
 		
 		if (mountaineeringChallengeStartingTomorrow)
 		{
 			message.push("Your hunting pack wanders around the area, but it seems like the squirrels have scared off anything nearby.");
-			message.push("You run into some squirrels heading back to the village after a hunt, they tell you to come back and help them tomorrow once your mountaineering challenge has started.");
+			message.push("You run into some squirrels heading back to the village after a hunt, they tell you to come back and try hunting tomorrow once your mountaineering challenge has started.");
 			showResult(message);
 		}
 		else if (!mountaineeringChallengeActive)
 		{
 			message.push("Your hunting pack wanders around the area, but it seems like the squirrels have scared off anything nearby.");
-			message.push("You run into some squirrels heading back to the village after a hunt, they let you know you could help them while you're doing the mountaineering challenge.");
-			message.push("They motion for you to head to the visitors center to learn more about it.");
+			message.push("You run into some squirrels heading back to the village after a hunt, they let you know you should try to go hunting when you take the mountaineering challenge.");
+			message.push("They motion for you to head to the visitors center to learn about it.");
 			showResult(message);
 		}
 		else
 		{
+			message.push("Your hunting pack comes across a single mountain goat, taunting you from halfway up a cliffside.");
+			randomNums.shuffle(deer);
 			
+			var acornReward:Int = 0;
+			
+			for (i in 0...deer.length)
+			{
+				var currentDeer:Deer = deer[i];
+				var climbingSkill:Int = currentDeer.dex * 2 + currentDeer.lck + randomNums.int(0, 4);
+				
+				if (climbingSkill >= 10)
+				{
+					message.push(currentDeer.getName() + " manages to scramble up the cliffside to where the goat is.");
+					
+					var smackingSkill:Int = currentDeer.str * 2 + randomNums.int(0, 4);
+					
+					if (smackingSkill >= 14)
+					{
+						message.push(currentDeer.getName() + " bashes into the goat's horns, sending them stumbling backwards.");
+						acornReward += 10;
+					}
+					else if (smackingSkill >= 12)
+					{
+						message.push(currentDeer.getName() + " bashes into the goat's horns, making them take a step back.");
+						acornReward += 8;
+					} 
+					else if (smackingSkill >= 10)
+					{
+						message.push(currentDeer.getName() + " bashes into the goat's horns, making them take a step back.");
+						acornReward += 6;
+					} 
+					else
+					{
+						message.push(currentDeer.getName() + " tries to bash into the goat's horns, but moreso just head-taps them.");
+						acornReward += 3;
+					} 
+				}
+				else
+				{
+					message.push(currentDeer.getName() + " is too slow to keep up with the squirrels' movements, deflecting none of their attempts to approach.");
+				}
+			}
+			
+			if (acornReward > 0)
+			{
+				message.push("The goat follows your deer as you stumble back down the cliffside. They seem to have enjoyed your attempts at fighting a mountain goat on a mountain.");
+				message.push("The goat quickly hops back up the cliff, then comes back down with a mouthful of " + acornReward + " acorns to offer as a gift.");
+				
+				acornsEarned += acornReward;
+				message.push(getAcornStatus());
+			}
+			else
+			{
+				message.push("The goat laughingly bleats at you as your hunting pack fails to get up the cliffside.");
+			}
+			
+			showResult(result);
 		}
 	}
 }

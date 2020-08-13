@@ -371,10 +371,14 @@ class Deer{
 		return name;
 	}
 	
-	static public function buildADeer(totalStatPoints:Int, ?maxStatValue:Int = -1, ?minStatValue:Int = 0, ?distributions:Array<Array<Int>>):Deer{
+	static public function buildADeer(totalStatPoints:Int, ?maxStatValue:Int = -1, ?minStatValue:Int = 0, ?distributions:Array<Array<Int>>, ?shuffleDistributions:Bool = true):Deer{
 		var randomizer:FlxRandom = new FlxRandom();
 		var statNames = ["Strength", "Resilience", "Dexterity", "Intellect", "Fortune"];
-		randomizer.shuffle(statNames);
+		
+		if (shuffleDistributions)
+		{
+			randomizer.shuffle(statNames);
+		}
 		
 		if(distributions == null){
 			distributions = [[26, 49, 69, 88, 100]];

@@ -626,7 +626,7 @@ class TheTrail extends Location
 				}
 				else
 				{
-					message.push("A horde of rabbits   approaches your den.");
+					message.push("A horde of rabbits approaches your den.");
 				}
 				
 				for (i in 0...deer.length)
