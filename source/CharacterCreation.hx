@@ -33,6 +33,9 @@ class CharacterCreation extends FlxState
 	var startButton:FlxButton;
 	
 	var randomizeButton:FlxButton;
+	
+	var openMap:Bool = false;
+	var starterDeer:Bool = false;
 
 	override public function create():Void
 	{
@@ -66,7 +69,7 @@ class CharacterCreation extends FlxState
 
 		setupStats();
 
-		startButton = new FlxButton(370, 520, "Begin", startGame);
+		startButton = new FlxButton(370, 540, "Begin", startGame);
 		startButton.loadGraphic("assets/images/OctaButton.png", true, 160, 74);
 		ButtonUtils.fixButtonText(startButton, 22, 18, 3);
 		startButton.screenCenter(FlxAxes.X);
@@ -78,6 +81,77 @@ class CharacterCreation extends FlxState
 		add(randomizeButton);
 		
 		updateDeer();
+		
+		setupModifierButtons();
+	}
+	
+	public function setupModifierButtons()
+	{
+		var modifierTitle:FlxText = new FlxText(50, 200, 0, "Game modifiers", 24);
+		modifierTitle.color = 0xFF000000;
+		modifierTitle.screenCenter();
+		modifierTitle.y += 60;
+		add(modifierTitle);
+		
+		var modifierSubTitle:FlxText = new FlxText(50, 220, 0, "(Not suggested for 1st playthrough)", 16);
+		modifierSubTitle.color = 0xFF000000;
+		modifierSubTitle.screenCenter();
+		modifierSubTitle.y += 85;
+		add(modifierSubTitle);
+		
+		var openMapModifierText:FlxText = new FlxText(50, 430, 0, "Unlocked Map", 16);
+		openMapModifierText.color = 0xFF000000;
+		add(openMapModifierText);
+
+        var openMapButton:FlxButton = new FlxButton(25, 430, "");
+        openMapButton.loadGraphic("assets/images/Checkbox.png", true, 128, 128);
+        add(openMapButton);
+		openMapButton.onUp.callback = modifierButtonClicked.bind(openMapButton, "Open Map");
+		openMapButton.scale.set(0.17, 0.17);
+		openMapButton.updateHitbox();
+		
+		var starterDeerModifierText:FlxText = new FlxText(50, 465, 0, "Starter Deer", 16);
+		starterDeerModifierText.color = 0xFF000000;
+		add(starterDeerModifierText);
+
+        var starterDeerModifierButton:FlxButton = new FlxButton(25, 465, "");
+        starterDeerModifierButton.loadGraphic("assets/images/Checkbox.png", true, 128, 128);
+        add(starterDeerModifierButton);
+		starterDeerModifierButton.onUp.callback = modifierButtonClicked.bind(starterDeerModifierButton, "Starter Deer");
+		starterDeerModifierButton.scale.set(0.17, 0.17);
+		starterDeerModifierButton.updateHitbox();
+	}
+	
+	public function modifierButtonClicked(button:FlxButton, name:String)
+	{
+		if (name == "Open Map")
+		{
+			if (openMap)
+			{
+				openMap = false;
+				button.loadGraphic("assets/images/Checkbox.png", true, 128, 128);
+			}
+			else
+			{
+				openMap = true;
+				button.loadGraphic("assets/images/CheckedCheckbox.png", false, 128, 128);
+			}
+		}
+		else if (name == "Starter Deer")
+		{
+			if (starterDeer)
+			{
+				starterDeer = false;
+				button.loadGraphic("assets/images/Checkbox.png", true, 128, 128);
+			}
+			else
+			{
+				starterDeer = true;
+				button.loadGraphic("assets/images/CheckedCheckbox.png", false, 128, 128);
+			}
+		}
+		
+		button.updateHitbox();
 	}
 
 	override public function update(elapsed:Float):Void
@@ -106,6 +180,20 @@ class CharacterCreation extends FlxState
 										Std.parseInt(statTexts[1].text), Std.parseInt(statTexts[2].text),
 										Std.parseInt(statTexts[3].text), Std.parseInt(statTexts[4].text), 
 										true));
+		
+		if(openMap)
+		{
+			GameVariables.instance.unfamiliarWoodsPathToDarkWoodsFound = true;
+			GameVariables.instance.undergroundCityReached = true;
+		}	
+		
+		if (starterDeer)
+		{
+			GameVariables.instance.addFoundDeer(Deer.buildADeer(13));
+			GameVariables.instance.addFoundDeer(Deer.buildADeer(13));
+			GameVariables.instance.addFoundDeer(Deer.buildADeer(13));
+		}
+		
 		FlxG.switchState(new MainGame());
 	}
 	
@@ -215,6 +303,7 @@ class CharacterCreation extends FlxState
 		femaleButton.scale.set(0.17,0.17);
 		femaleButton.updateHitbox();
 	}
+	
 
 	private function maleClicked(?updateDeerDisplay:Bool = true){
 		gender = "Male";
@@ -241,5 +330,5 @@ class CharacterCreation extends FlxState
 			updateDeer();
 		}
 	}
-
+	
 }

@@ -27,9 +27,18 @@ class SquirrelVillage extends Location
 		backgroundImageFileMiniFramed = "assets/images/LocationImages/StoneStrongholdEntranceEmptyDeerTile.png";
 	}
 	
-	private function getAcornStatus():String
+	private function getAcornStatus(?addNow:Bool = true):String
 	{
-		var result:String = "(You now have " + acornsEarned;
+		var result:String;
+		
+		if (addNow)
+		{
+			result = "(You now have " + acornsEarned;
+		}
+		else
+		{
+			result = "(You have " + acornsEarned;
+		}
 		
 		if (acornsEarned == 1)
 		{
@@ -38,6 +47,31 @@ class SquirrelVillage extends Location
 		else
 		{
 			result += " acorns.)";
+		}
+		
+		return result;
+	}
+	
+	private function getFoodPackStatus(?addNow:Bool = true):String
+	{
+		var result:String;
+		
+		if (addNow)
+		{
+			result = "(You now have " + GameVariables.instance.mountVireFoodPacks;
+		}
+		else
+		{
+			result = "(You have " + GameVariables.instance.mountVireFoodPacks;
+		}
+		
+		if (acornsEarned == 1)
+		{
+			result += " food pack.)";
+		}
+		else
+		{
+			result += " food packs.)";
 		}
 		
 		return result;
@@ -581,6 +615,10 @@ class SquirrelVillage extends Location
 			//Counter
 			exploreOptionNames.push("Walk up to the counter");
 			exploreOptionFunctions.push(suppliesExplanation);
+		
+			//Chop wood
+			exploreOptionNames.push("Chop wood");
+			exploreOptionFunctions.push(exploreWithString); 
 		}
 		else
 		{
@@ -588,20 +626,16 @@ class SquirrelVillage extends Location
 			
 			//Food Packs
 			exploreOptionNames.push("Food aisle");
-			exploreOptionFunctions.push(exploreWithString); 
+			exploreOptionFunctions.push(foodAisle); 
 			
 			//Explosives
 			exploreOptionNames.push("Explosives section");
-			exploreOptionFunctions.push(exploreWithString); 
+			exploreOptionFunctions.push(explosives); 
 			
 			//Firewood
-			exploreOptionNames.push("Firewood stacks");
-			exploreOptionFunctions.push(exploreWithString); 
+			exploreOptionNames.push("Firewood Piles");
+			exploreOptionFunctions.push(firewood); 
 		}
-		
-		//Chop wood
-		exploreOptionNames.push("Chop wood");
-		exploreOptionFunctions.push(exploreWithString); 
 		
 		//Back
 		exploreOptionNames.push("Head outside");
@@ -637,9 +671,29 @@ class SquirrelVillage extends Location
 	public function foodAisle(choice:String, deer:Deer)
 	{
 		var message:Array<String> = new Array<String>();
-		message.push("The food packs have 3 food each and you'll open them automatically if you run out on the mountain.");
-		message.push("A sign next to them lists them as costing 2 acorns per pack.");
-		showChoice(message, ["Chop wood", "Head outside"], [woodChopping, exploreWithString], deer);
+		message.push("The food packs contain 3 food each and you'll open them automatically if you run out on the mountain.");
+		message.push("The food packs cost 4 acorns each.");
+		showChoice(message, ["Buy one", "Explosives section", "Firewood Piles", "Head outside"], [buyingFoodPack, explosives, firewood, exploreWithString], deer);
+	}
+	
+	public function buyingFoodPack(choice:String, deer:Deer)
+	{
+		var message:Array<String> = new Array<String>();
+		if (acornsEarned >= 4)
+		{
+			GameVariables.instance.mountVireFoodPacks++;
+			acornsEarned -= 4;
+			
+			message.push("You buy a pack of food (+1 food pack) (-4 acorns).");
+			message.push(getAcornStatus());
+			showChoice(message, ["Buy another", "Explosives section", "Firewood Piles", "Head outside"], [buyingFoodPack, explosives, firewood, exploreWithString], deer);
+		}
+		else
+		{
+			message.push("You don't have enough acorns to spend 4 on a food pack.");
+			message.push(getAcornStatus(false));
+			showChoice(message, ["Explosives section", "Firewood Piles", "Head outside"], [explosives, firewood, exploreWithString], deer);
+		}
 	}
 	
 	public function explosives(choice:String, deer:Deer)
@@ -783,10 +837,10 @@ class SquirrelVillage extends Location
 		else
 		{
 			message.push("Night draws and a group of ninja squirrels approaches your food stash.");
+			var squirrelAttackReduction:Int = 0;
 			
 			for (i in 0...deer.length)
 			{
-				var squirrelAttackReduction:Int = 0;
 				var squirrelScaringSkill:Int = deer[i].dex * 2 + deer[i].lck + randomNums.int(0, 5);
 				var currentDeer:Deer = deer[i];
 				
@@ -944,7 +998,7 @@ class SquirrelVillage extends Location
 				message.push("The goat laughingly bleats at you as your hunting pack fails to get up the cliffside.");
 			}
 			
-			showResult(result);
+			showResult(message);
 		}
 	}
 }

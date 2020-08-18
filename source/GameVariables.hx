@@ -74,7 +74,7 @@ class GameVariables {
 	public var mountaineeringChallegeDay:Bool;
 	
 	//Mount Vire
-	public var foodPacks:Int;
+	public var mountVireFoodPacks:Int;
 	
 	public var saveNum:Int;
 
