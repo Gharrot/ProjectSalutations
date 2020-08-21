@@ -75,6 +75,9 @@ class GameVariables {
 	
 	//Mount Vire
 	public var mountVireFoodPacks:Int;
+	public var mountVireExplosives:Int;
+	public var mountVireLocation:String;
+	public var mountVireMountainPathBlockage:String;
 	
 	public var saveNum:Int;
 

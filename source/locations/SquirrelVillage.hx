@@ -27,7 +27,7 @@ class SquirrelVillage extends Location
 		backgroundImageFileMiniFramed = "assets/images/LocationImages/StoneStrongholdEntranceEmptyDeerTile.png";
 	}
 	
-	private function getAcornStatus(?addNow:Bool = true):String
+	static public function getAcornStatus(?addNow:Bool = true):String
 	{
 		var result:String;
 		
@@ -52,7 +52,7 @@ class SquirrelVillage extends Location
 		return result;
 	}
 	
-	private function getFoodPackStatus(?addNow:Bool = true):String
+	static public function getFoodPackStatus(?addNow:Bool = true):String
 	{
 		var result:String;
 		
@@ -72,6 +72,31 @@ class SquirrelVillage extends Location
 		else
 		{
 			result += " food packs.)";
+		}
+		
+		return result;
+	}
+	
+	static public function getExplosivesStatus(?addNow:Bool = true):String
+	{
+		var result:String;
+		
+		if (addNow)
+		{
+			result = "(You now have " + GameVariables.instance.mountVireExplosives;
+		}
+		else
+		{
+			result = "(You have " + GameVariables.instance.mountVireExplosives;
+		}
+		
+		if (acornsEarned == 1)
+		{
+			result += " sets of explosives.)";
+		}
+		else
+		{
+			result += " sets of explosives.)";
 		}
 		
 		return result;
@@ -206,7 +231,6 @@ class SquirrelVillage extends Location
 		
 		var drinkNames:Array<String> = new Array<String>();
 
-		//Gossip 
 		drinkNames.push("Acorn Brew");
 		drinkNames.push("Sleepy Spruce Tea");
 		drinkNames.push("Chucklebean Blend");
@@ -672,7 +696,9 @@ class SquirrelVillage extends Location
 	{
 		var message:Array<String> = new Array<String>();
 		message.push("The food packs contain 3 food each and you'll open them automatically if you run out on the mountain.");
-		message.push("The food packs cost 4 acorns each.");
+		message.push("They cost 4 acorns each.");
+		message.push(getFoodPackStatus(false));
+		message.push(getAcornStatus(false));
 		showChoice(message, ["Buy one", "Explosives section", "Firewood Piles", "Head outside"], [buyingFoodPack, explosives, firewood, exploreWithString], deer);
 	}
 	
@@ -686,6 +712,7 @@ class SquirrelVillage extends Location
 			
 			message.push("You buy a pack of food (+1 food pack) (-4 acorns).");
 			message.push(getAcornStatus());
+			message.push(getFoodPackStatus());
 			showChoice(message, ["Buy another", "Explosives section", "Firewood Piles", "Head outside"], [buyingFoodPack, explosives, firewood, exploreWithString], deer);
 		}
 		else
@@ -698,7 +725,33 @@ class SquirrelVillage extends Location
 	
 	public function explosives(choice:String, deer:Deer)
 	{
-		
+		var message:Array<String> = new Array<String>();
+		message.push("The explosive sets can be used to help clear obstacles on the mountain.");
+		message.push("They cost 5 acorns each.");
+		message.push(getExplosivesStatus(false));
+		message.push(getAcornStatus(false));
+		showChoice(message, ["Buy one", "Food aisle", "Firewood Piles", "Head outside"], [buyingExplosives, foodAisle, firewood, exploreWithString], deer);
+	}
+	
+	public function buyingExplosives(choice:String, deer:Deer)
+	{
+		var message:Array<String> = new Array<String>();
+		if (acornsEarned >= 5)
+		{
+			GameVariables.instance.mountVireExplosives++;
+			acornsEarned -= 5;
+			
+			message.push("You buy a set of explosives (+1 explosives set) (-5 acorns).");
+			message.push(getAcornStatus());
+			message.push(getExplosivesStatus());
+			showChoice(message, ["Buy another", "Food aisle", "Firewood Piles", "Head outside"], [buyingExplosives, foodAisle, firewood, exploreWithString], deer);
+		}
+		else
+		{
+			message.push("You don't have enough acorns to spend 5 on a food pack.");
+			message.push(getAcornStatus(false));
+			showChoice(message, ["Food aisle", "Firewood Piles", "Head outside"], [foodAisle, firewood, exploreWithString], deer);
+		}
 	}
 	
 	public function firewood(choice:String, deer:Deer)
@@ -768,7 +821,7 @@ class SquirrelVillage extends Location
 		var message:Array<String> = new Array<String>();
 		var forageResult = (deer.int * 2) + (deer.lck) + randomNums.int(0, 10);
 
-		if (forageResult <= 6)
+		if (forageResult <= 9)
 		{
 			//Found nothing
 			message.push("You are unable to find any food today.");

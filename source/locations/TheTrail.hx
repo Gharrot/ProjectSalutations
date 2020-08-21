@@ -104,7 +104,7 @@ class TheTrail extends Location
 		}
 		else if (GameVariables.instance.theTrailDayNumber == 5)
 		{
-			message.push("After a short hike through some rocky terrain, you round a corner and your compulsion to travel washes away.");
+			message.push("After a short hike through some rocky terrain, you round a corner and your compulsion to travel fades away.");
 			message.push("Before you seems to be a stone door carved into the side of a cliff.");
 			message.push("The trail continues a bit further downhill to the entrance of some sort of settlement. A dozen or so log buildings sit on the plateau below you.");
 			showChoice(message, ["Continue"], [finishingTheTrail], gameVariables.getPlayerDeer());
