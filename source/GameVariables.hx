@@ -74,10 +74,13 @@ class GameVariables {
 	public var mountaineeringChallegeDay:Bool;
 	
 	//Mount Vire
+	public var mountVireAcorns:Int;
 	public var mountVireFoodPacks:Int;
 	public var mountVireExplosives:Int;
+	public var mountVirePineLogs:Int;
+	public var mountVireMapleLogs:Int;
 	public var mountVireLocation:String;
-	public var mountVireMountainPathBlockage:String;
+	public var mountVireMountainPathBlockage:Int;
 	
 	public var saveNum:Int;
 
@@ -450,6 +453,20 @@ class GameVariables {
 		//Underground City
 		undergroundCityReached = false;
 		undergroundCityOpened = false;
+	
+		//Squirrel Village
+		beddingChoice = "None";
+		leaderShipSkillsEarned = false;
+		mountaineeringChallegeDay = false;
+		
+		//Mount Vire
+		mountVireAcorns = 0;
+		mountVireFoodPacks = 0;
+		mountVireExplosives = 0;
+		mountVirePineLogs = 0;
+		mountVireMapleLogs = 0;
+		mountVireLocation = "Base camp";
+		mountVireMountainPathBlockage = 5;
 	}
 	
 	public static function getLocationSpriteByName(locationName:String):String

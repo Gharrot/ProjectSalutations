@@ -419,11 +419,22 @@ class Location{
 		}
 	}
 	
-	public function continueOnChoice(choice:String, deer:Deer){
+	public function continueOnChoice(choice:String, deer:Deer)
+	{
 		continueOn();
 	}
 	
-	public function continueOn(){
+	public function continueOn(?setOutAgain:Bool = true){
+		clearChoicesAndEventDisplay();
+		
+		if (setOutAgain)
+		{
+			setOut();
+		}
+	}
+	
+	public function clearChoicesAndEventDisplay()
+	{
 		if (displayedOptions != null)
 		{
 			for(i in 0...displayedOptions.length){
@@ -432,7 +443,6 @@ class Location{
 		}
 		
 		FlxG.state.remove(displayedTextList);
-		setOut();
 	}
 	
 	public function spawnButton(buttonText:String):FlxButton{

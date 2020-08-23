@@ -12,6 +12,8 @@ import flixel.math.FlxRandom;
 class MountVire extends Location
 {
 	var movingUpwards:String = "No";
+	var coldPhaseCompleted:Bool = false;
+	var currentColdness:Int = 0;
 	
 	public function new(){
 		super();
@@ -22,10 +24,27 @@ class MountVire extends Location
 		backgroundImageFileMiniFramed = "assets/images/LocationImages/GhostTownEmptyDeerTile.png";
 	}
 	
+	override public function startDay()
+	{
+		coldPhaseCompleted = false;
+	}
+	
 	override public function returnAfterDayEnd()
+	{
+		dayEnd("dummy", GameVariables.instance.getPlayerDeer());
+	}
+	
+	public function dayEnd(choice:String, deer:Deer)
 	{
 		var gameVariables:GameVariables = GameVariables.instance;
 		var message:Array<String> = new Array<String>();
+		
+		if (!coldPhaseCompleted)
+		{
+			coldPhaseCompleted = true;
+			coldAndFire();
+			return;
+		}
 		
 		if (gameVariables.mountVireLocation == "Base camp")
 		{
@@ -33,6 +52,121 @@ class MountVire extends Location
 			{
 				mountainMovement("Goat plateau");
 			}
+		}
+	}
+	
+	public function coldAndFire()
+	{
+		var gameVariables:GameVariables = GameVariables.instance;
+		var message:Array<String> = new Array<String>();
+		
+		if (gameVariables.mountVireLocation == "Base camp")
+		{
+			currentColdness = 1;
+		}
+		else if (gameVariables.mountVireLocation == "Goat plateau")
+		{
+			currentColdness = 2;
+		}
+		
+		var exploreOptionNames:Array<String> = new Array<String>();
+		var exploreOptionFunctions:Array < (String, Deer)->Void > = new Array < (String, Deer)->Void > ();
+		
+		if (gameVariables.mountVirePineLogs > 0)
+		{
+			exploreOptionNames.push("Burn some pine logs");
+			exploreOptionFunctions.push(burnLogs);
+		}
+		else if (gameVariables.mountVireMapleLogs > 0)
+		{
+			exploreOptionNames.push("Burn some maple logs");
+			exploreOptionFunctions.push(burnLogs);
+		}
+		
+		exploreOptionNames.push("Sleep without a fire");
+		exploreOptionFunctions.push(returnAfterDayEnd);
+		
+		if (exploreOptionNames.length > 1)
+		{
+			if (coldness == 1)
+			{
+				message.push("It's a bit chilly tonight, will you light a fire?");
+			}
+			else if (coldness == 2)
+			{
+				message.push("It's pretty cold tonight, will you light a fire?");
+			}
+			
+			showChoice(message, ["Continue"], [burnLogs], gameVariables.getPlayerDeer());
+		}
+		else
+		{
+			coldDamage();
+		}
+	}
+	
+	public function burnLogs(choice:String, deer:Deer)
+	{
+		var message:Array<String> = new Array<String>();
+		
+		if (choice == "Burn some pine logs")
+		{
+			currentColdness -= 1;
+			GameVariables.instance.mountVirePineLogs--;
+			
+			if (currentColdness > 0)
+			{
+				message.push("You light a pine fire and hundle around it, but the night is still cold.");
+			}
+			else
+			{
+				message.push("You light a pine fire and hundle around it.");
+			}
+		}
+		else if (choice == "Burn some maple logs")
+		{
+			currentColdness -= 3;
+			GameVariables.instance.mountVireMapleLogs--;
+			
+			if (currentColdness > 0)
+			{
+				message.push("You light a maple fire and hundle around it, but the night still chills your bones.");
+			}
+			else
+			{
+				message.push("You light a maple fire and hundle around it.");
+			}
+		}
+		
+		coldDamage(message);
+	}
+	
+	public function coldDamage(?currentMessage:Array<String>)
+	{
+		var gameVariables:GameVariables = GameVariables.instance;
+		var message:Array<String> = new Array<String>();
+		
+		if (currentMessage != null)
+		{
+			message = currentMessage;
+		}
+		
+		if (currentColdness > 0)
+		{
+			message.push("The cold night weakens your herd.");
+			message.push("(" + currentColdness + " damage to all deer)");
+			
+			for (i in 0...gameVariables.controlledDeer.length)
+			{
+				gameVariables.controlledDeer[i].takeDamage(amount);
+			}
+			
+			showChoice(message ["Continue"], [dayEnd], gameVariables.getPlayerDeer());
+		}
+		else
+		{
+			message.push("Your warm fire staves off all of the cold.");
+			showChoice(message, ["Continue"], [dayEnd], gameVariables.getPlayerDeer());
 		}
 	}
 	
@@ -46,7 +180,7 @@ class MountVire extends Location
 			
 			message.push("Your herd treks up the mountain for a while and comes to a large plateau filled with goats.");
 			message.push("The goats stare at you for a moment then bound off and up the nearby cliffsides.");
-			showChoice(message, ["Continue"], [enterGoatPlateau], gameVariables.getPlayerDeer());
+			showChoice(message, ["Continue"], [returnToDenChoice], gameVariables.getPlayerDeer());
 		}
 	}
 	

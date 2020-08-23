@@ -12,7 +12,6 @@ import flixel.math.FlxRandom;
 class SquirrelVillage extends Location 
 {
 	var foundDeer:Deer;
-	var acornsEarned:Int = 0;
 	
 	var mountaineeringChallengeStartingTomorrow:Bool = false;
 	var mountaineeringChallengeActive:Bool = false;
@@ -27,20 +26,53 @@ class SquirrelVillage extends Location
 		backgroundImageFileMiniFramed = "assets/images/LocationImages/StoneStrongholdEntranceEmptyDeerTile.png";
 	}
 	
+	override public function continueOn(?setOutAgain:Bool = true)
+	{
+		if (buyingPhase)
+		{
+			super.continueOn(false); 
+		}
+		else
+		{
+			super.continueOn(true); 
+		}
+	}
+	
+	override public function returnAfterDayEnd()
+	{
+		if (mountaineeringChallengeStartingTomorrow)
+		{
+			mountaineeringChallengeStartingTomorrow = false;
+			mountaineeringChallengeActive = true;
+			GameVariables.instance.mountaineeringChallegeDay = true;
+			returnToDen();
+		}
+		else if (mountaineeringChallengeActive)
+		{
+			mountaineeringChallengeActive = false;
+			buyingPhase = true;
+			explore(GameVariables.instance.getPlayerDeer());
+		}
+		else
+		{
+			returnToDen();
+		}
+	}
+	
 	static public function getAcornStatus(?addNow:Bool = true):String
 	{
 		var result:String;
 		
 		if (addNow)
 		{
-			result = "(You now have " + acornsEarned;
+			result = "(You now have " + GameVariables.instance.mountVireAcorns;
 		}
 		else
 		{
-			result = "(You have " + acornsEarned;
+			result = "(You have " + GameVariables.instance.mountVireAcorns;
 		}
 		
-		if (acornsEarned == 1)
+		if (GameVariables.instance.mountVireAcorns == 1)
 		{
 			result += " acorn.)";
 		}
@@ -65,7 +97,7 @@ class SquirrelVillage extends Location
 			result = "(You have " + GameVariables.instance.mountVireFoodPacks;
 		}
 		
-		if (acornsEarned == 1)
+		if (GameVariables.instance.mountVireFoodPacks == 1)
 		{
 			result += " food pack.)";
 		}
@@ -90,13 +122,47 @@ class SquirrelVillage extends Location
 			result = "(You have " + GameVariables.instance.mountVireExplosives;
 		}
 		
-		if (acornsEarned == 1)
+		if (GameVariables.instance.mountVireExplosives == 1)
 		{
-			result += " sets of explosives.)";
+			result += " set of explosives.)";
 		}
 		else
 		{
 			result += " sets of explosives.)";
+		}
+		
+		return result;
+	}
+	
+	static public function getLogsStatus(?addNow:Bool = true):String
+	{
+		var result:String;
+		
+		if (addNow)
+		{
+			result = "(You now have " + GameVariables.instance.mountVirePineLogs;
+		}
+		else
+		{
+			result = "(You have " + GameVariables.instance.mountVirePineLogs;
+		}
+		
+		if (GameVariables.instance.mountVirePineLogs == 1)
+		{
+			result += " bundle of pine logs and ";
+		}
+		else
+		{
+			result += " bundles of pine logs and ";
+		}
+		
+		if (GameVariables.instance.mountVireMapleLogs == 1)
+		{
+			result += " bundle of maple logs.)";
+		}
+		else
+		{
+			result += " bundles of maple logs.)";
 		}
 		
 		return result;
@@ -283,31 +349,31 @@ class SquirrelVillage extends Location
 			{
 				message.push(deer.getName() + " speedily takes the orders of every squirrel and remembers them all without a mistake.");
 				message.push("The barista squirrel gives you 5 acorns for your outstanding work.");
-				acornsEarned += 5;
+				GameVariables.instance.mountVireAcorns += 5;
 			}
 			else if (cafeSkill >= 15)
 			{
 				message.push(deer.getName() + " quickly takes the orders of every squirrel and remembers almost all of them without mistake.");
 				message.push("The barista squirrel gives you 4 acorns for your excellent work.");
-				acornsEarned += 4;
+				GameVariables.instance.mountVireAcorns += 4;
 			}
 			else if (cafeSkill >= 13)
 			{
 				message.push(deer.getName() + " manages to get all the squirrels orders before they get mad, but makes a couple mistakes.");
 				message.push("The barista squirrel gives you 3 acorns for your decent performance.");
-				acornsEarned += 3;
+				GameVariables.instance.mountVireAcorns += 3;
 			}
 			else if (cafeSkill >= 11)
 			{
 				message.push(deer.getName() + " scrambles to take every squirrel's order, recieving a couple complaints of the poor service.");
 				message.push("The barista squirrel gives you 2 acorns for finishing your work.");
-				acornsEarned += 2;
+				GameVariables.instance.mountVireAcorns += 2;
 			}
 			else if (cafeSkill >= 8)
 			{
 				message.push(deer.getName() + " scrambles to take every squirrel's order, and some leave because of the poor service.");
 				message.push("The barista squirrel gives you a single acorn; you suspect they're just taking pity on you.");
-				acornsEarned += 1;
+				GameVariables.instance.mountVireAcorns += 1;
 			}
 			else
 			{
@@ -326,7 +392,7 @@ class SquirrelVillage extends Location
 				message.push("You check your tip jar afterwards and find " + bonusAcorns + " acorns inside.");
 			}
 			
-			acornsEarned += bonusAcorns;
+			GameVariables.instance.mountVireAcorns += bonusAcorns;
 			
 			message.push(getAcornStatus());
 			showResult(message);
@@ -417,31 +483,31 @@ class SquirrelVillage extends Location
 			{
 				message.push(deer.getName() + " manages to clean every room in the inn, leaving them completely spotless.");
 				message.push("The squirrel manager gives you 8 acorns for your outstanding work.");
-				acornsEarned += 8;
+				GameVariables.instance.mountVireAcorns += 8;
 			}
 			else if (cleaningSkill >= 14)
 			{
 				message.push(deer.getName() + " falls over after cleaning every room in the inn, only missing a couple spots.");
 				message.push("The squirrel manager gives you 6 acorns for your excellent work.");
-				acornsEarned += 6;
+				GameVariables.instance.mountVireAcorns += 6;
 			}
 			else if (cleaningSkill >= 12)
 			{
 				message.push(deer.getName() + " falls over after cleaning every almost every room in the inn, leaving them very clean.");
 				message.push("The squirrel manager gives you 4 acorns for your decent performance.");
-				acornsEarned += 4;
+				GameVariables.instance.mountVireAcorns += 4;
 			}
 			else if (cleaningSkill >= 10)
 			{
 				message.push(deer.getName() + " gets tired after cleaning a few rooms, but leaves them very clean.");
 				message.push("The squirrel manager gives you 2 acorns for your work.");
-				acornsEarned += 2;
+				GameVariables.instance.mountVireAcorns += 2;
 			}
 			else if (cleaningSkill >= 7)
 			{
 				message.push(deer.getName() + " gets tired after cleaning a few rooms and slumps down in a corner.");
 				message.push("The squirrel manager gives you a single acorn; you suspect they're just taking pity on you.");
-				acornsEarned += 1;
+				GameVariables.instance.mountVireAcorns += 1;
 			}
 			else
 			{
@@ -705,12 +771,12 @@ class SquirrelVillage extends Location
 	public function buyingFoodPack(choice:String, deer:Deer)
 	{
 		var message:Array<String> = new Array<String>();
-		if (acornsEarned >= 4)
+		if (GameVariables.instance.mountVireAcorns >= 4)
 		{
 			GameVariables.instance.mountVireFoodPacks++;
-			acornsEarned -= 4;
+			GameVariables.instance.mountVireAcorns -= 4;
 			
-			message.push("You buy a pack of food (+1 food pack) (-4 acorns).");
+			message.push("You buy a pack of food (-4 acorns).");
 			message.push(getAcornStatus());
 			message.push(getFoodPackStatus());
 			showChoice(message, ["Buy another", "Explosives section", "Firewood Piles", "Head outside"], [buyingFoodPack, explosives, firewood, exploreWithString], deer);
@@ -736,19 +802,19 @@ class SquirrelVillage extends Location
 	public function buyingExplosives(choice:String, deer:Deer)
 	{
 		var message:Array<String> = new Array<String>();
-		if (acornsEarned >= 5)
+		if (GameVariables.instance.mountVireAcorns >= 5)
 		{
 			GameVariables.instance.mountVireExplosives++;
-			acornsEarned -= 5;
+			GameVariables.instance.mountVireAcorns -= 5;
 			
-			message.push("You buy a set of explosives (+1 explosives set) (-5 acorns).");
+			message.push("You buy a set of explosives (-5 acorns).");
 			message.push(getAcornStatus());
 			message.push(getExplosivesStatus());
 			showChoice(message, ["Buy another", "Food aisle", "Firewood Piles", "Head outside"], [buyingExplosives, foodAisle, firewood, exploreWithString], deer);
 		}
 		else
 		{
-			message.push("You don't have enough acorns to spend 5 on a food pack.");
+			message.push("You don't have enough acorns to spend 5 on an explosives set.");
 			message.push(getAcornStatus(false));
 			showChoice(message, ["Food aisle", "Firewood Piles", "Head outside"], [foodAisle, firewood, exploreWithString], deer);
 		}
@@ -756,7 +822,58 @@ class SquirrelVillage extends Location
 	
 	public function firewood(choice:String, deer:Deer)
 	{
-		
+		//Pine = low heat, maple = high heat
+		var message:Array<String> = new Array<String>();
+		message.push("Each bundle of logs has enough firewood to stave off a night of cold on the mountain.");
+		message.push("The maple logs will provide better protection against the cold, but the pine logs are cheaper.");
+		message.push("The pine log bundles costs 2 acorns each, and the maple bundles cost 4.");
+		message.push(getLogsStatus(false));
+		message.push(getAcornStatus(false));
+		showChoice(message, ["Buy pine logs", "But maple logs", "Food aisle", "Explosives section", "Head outside"], [buyingFirewoodPine, buyingFirewoodMaple, foodAisle, explosives, exploreWithString], deer);
+	}
+	
+	public function buyingFirewoodPine(choice:String, deer:Deer)
+	{
+		//Pine = low heat
+		var message:Array<String> = new Array<String>();
+		if (GameVariables.instance.mountVireAcorns >= 2)
+		{
+			GameVariables.instance.mountVirePineLogs++;
+			GameVariables.instance.mountVireAcorns -= 2;
+			
+			message.push("You buy a bundle of pine logs (-2 acorns).");
+			message.push(getAcornStatus());
+			message.push(getLogsStatus());
+			showChoice(message, ["Buy more pine logs", "Buy maple logs", "Food aisle", "Explosives section", "Head outside"], [buyingFirewoodPine, buyingFirewoodMaple, foodAisle, explosives, exploreWithString], deer);
+		}
+		else
+		{
+			message.push("You don't have enough acorns to spend 2 on a bundle of pine logs.");
+			message.push(getAcornStatus(false));
+			showChoice(message, ["Food aisle", "Explosives section", "Head outside"], [foodAisle, explosives, exploreWithString], deer);
+		}
+	}
+	
+	public function buyingFirewoodMaple(choice:String, deer:Deer)
+	{
+		//Maple = high heat
+		var message:Array<String> = new Array<String>();
+		if (GameVariables.instance.mountVireAcorns >= 4)
+		{
+			GameVariables.instance.mountVireMapleLogs++;
+			GameVariables.instance.mountVireAcorns -= 4;
+			
+			message.push("You buy a bundle of maple logs (-4 acorns).");
+			message.push(getAcornStatus());
+			message.push(getLogsStatus());
+			showChoice(message, ["Buy more maple logs", "Buy pine logs", "Food aisle", "Explosives section", "Head outside"], [buyingFirewoodMaple, buyingFirewoodPine, foodAisle, explosives, exploreWithString], deer);
+		}
+		else
+		{
+			message.push("You don't have enough acorns to spend 4 on a bundle of maple logs.");
+			message.push(getAcornStatus(false));
+			showChoice(message, ["Buy pine logs", "Food aisle", "Explosives section", "Head outside"], [buyingFirewoodPine, foodAisle, explosives, exploreWithString], deer);
+		}
 	}
 	
 	public function woodChopping(choice:String, deer:Deer)
@@ -775,27 +892,27 @@ class SquirrelVillage extends Location
 			if (currentAcornsEarned >= 8)
 			{
 				message.push("The squirrel gives you " + currentAcornsEarned + " acorns for your outstanding work.");
-				acornsEarned += currentAcornsEarned;
+				GameVariables.instance.mountVireAcorns += currentAcornsEarned;
 			}
 			else if (currentAcornsEarned >= 6)
 			{
 				message.push("The squirrel gives you " + currentAcornsEarned + " acorns for your excellent work.");
-				acornsEarned += currentAcornsEarned;
+				GameVariables.instance.mountVireAcorns += currentAcornsEarned;
 			}
 			else if (currentAcornsEarned >= 4)
 			{
 				message.push("The squirrel gives you " + currentAcornsEarned + " acorns for your good work.");
-				acornsEarned += currentAcornsEarned;
+				GameVariables.instance.mountVireAcorns += currentAcornsEarned;
 			}
 			else if (currentAcornsEarned >= 2)
 			{
 				message.push("The squirrel gives you " + currentAcornsEarned + " acorns for your work.");
-				acornsEarned += currentAcornsEarned;
+				GameVariables.instance.mountVireAcorns += currentAcornsEarned;
 			}
 			else
 			{
 				message.push("The squirrel gives you a single acorn for your work; you suspect they're just taking pity on you.");
-				acornsEarned += 1;
+				GameVariables.instance.mountVireAcorns += 1;
 			}
 			message.push(getAcornStatus());
 			showResult(message);
@@ -856,7 +973,7 @@ class SquirrelVillage extends Location
 		{
 			message.push("Some nearby squirrels see you searching for food.");
 			message.push("They feel bad that they've taken most of it and offer you a couple acorns.");
-			acornsEarned += 2;
+			GameVariables.instance.mountVireAcorns += 2;
 			message.push(getAcornStatus());
 		}
 		
@@ -869,9 +986,17 @@ class SquirrelVillage extends Location
 		var message:Array<String> = new Array<String>();
 		if (mountaineeringChallengeStartingTomorrow)
 		{
-			message.push("It seems there's nothing that will attack your den here for now. It's likely thanks to the squirrel guards patrolling the area.");
-			message.push("You run into some patrolling squirrels and they warn you that you'll have to defend your own stuff during the mountaineering challenge tomorrow.");
-			showResult(message);
+			if (deer.length > 0)
+			{
+				message.push("It seems there's nothing that will attack your den here for now. It's likely thanks to the squirrel guards patrolling the area.");
+				message.push("You run into some patrolling squirrels and they warn you that you'll have to defend your own stuff during the mountaineering challenge tomorrow.");
+				showResult(message);
+			}
+			else
+			{
+				message.push("Some squirrels come by and warn you that you'll have to defend your own stuff during the mountaineering challenge tomorrow.");
+				showResult(message);
+			}
 		}
 		else if (!mountaineeringChallengeActive)
 		{
@@ -932,7 +1057,7 @@ class SquirrelVillage extends Location
 			{
 				message.push("When all is said and done you lose none of your food to the ninja squirrels.");
 				message.push("The squirrels leave you a pile of 5 acorns, impressed by your skills.");
-				acornsEarned += 5;
+				GameVariables.instance.mountVireAcorns += 5;
 				message.push(getAcornStatus());
 			}
 			else if (squirrelAttackReduction >= 3)
@@ -941,7 +1066,7 @@ class SquirrelVillage extends Location
 				message.push("(-2 food)");
 				GameVariables.instance.modifyFood(-2);
 				message.push("The squirrels leave you a pile of 3 acorns, impressed by your skills.");
-				acornsEarned += 3;
+				GameVariables.instance.mountVireAcorns += 3;
 				message.push(getAcornStatus());
 			}
 			else if (squirrelAttackReduction >= 1)
@@ -950,7 +1075,7 @@ class SquirrelVillage extends Location
 				message.push("(-3 food)");
 				GameVariables.instance.modifyFood(-3);
 				message.push("The squirrels leave you a couple acorns for your admirable attempt at a defense.");
-				acornsEarned += 2;
+				GameVariables.instance.mountVireAcorns += 2;
 				message.push(getAcornStatus());
 			}
 			else
@@ -965,7 +1090,7 @@ class SquirrelVillage extends Location
 					message.push("Your deer were completely ineffective at preventing the ninja squirrels' attempts to steal your food.");
 					message.push("(-4 food)");
 					message.push("The squirrels leave you a couple acorns for your admirable attempt to defend your stash.");
-					acornsEarned += 2;
+					GameVariables.instance.mountVireAcorns += 2;
 					message.push(getAcornStatus());
 				}
 				GameVariables.instance.modifyFood(-4);
@@ -1043,7 +1168,7 @@ class SquirrelVillage extends Location
 				message.push("The goat follows your deer as you stumble back down the cliffside. They seem to have enjoyed your attempts at fighting a mountain goat on a mountain.");
 				message.push("The goat quickly hops back up the cliff, then comes back down with a mouthful of " + acornReward + " acorns to offer as a gift.");
 				
-				acornsEarned += acornReward;
+				GameVariables.instance.mountVireAcorns += acornReward;
 				message.push(getAcornStatus());
 			}
 			else

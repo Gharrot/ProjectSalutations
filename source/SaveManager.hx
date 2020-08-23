@@ -60,6 +60,21 @@ class SaveManager
 		
 		//Underground City
 		gameVariables.undergroundCityReached = save.data.undergroundCityReached;
+		gameVariables.undergroundCityOpened = save.data.undergroundCityOpened;
+		
+		//Squirrel Village
+		gameVariables.beddingChoice = save.data.beddingChoice;
+		gameVariables.leaderShipSkillsEarned = save.data.leaderShipSkillsEarned;
+		gameVariables.mountaineeringChallegeDay = save.data.mountaineeringChallegeDay;
+		
+		//Mount Vire
+		gameVariables.mountVireAcorns = save.data.mountVireAcorns;
+		gameVariables.mountVireFoodPacks = save.data.mountVireFoodPacks;
+		gameVariables.mountVireExplosives = save.data.mountVireExplosives;
+		gameVariables.mountVirePineLogs = save.data.mountVirePineLogs;
+		gameVariables.mountVireMapleLogs = save.data.mountVireMapleLogs;
+		gameVariables.mountVireLocation = save.data.mountVireLocation;
+		gameVariables.mountVireMountainPathBlockage = save.data.mountVireMountainPathBlockage;
 		
 		//move to the correct location
 		gameVariables.currentLocationName = save.data.currentLocationName;
@@ -121,6 +136,21 @@ class SaveManager
 		
 		//Underground City
 		save.data.undergroundCityReached = gameVariables.undergroundCityReached;
+		save.data.undergroundCityOpened = gameVariables.undergroundCityOpened;
+		
+		//Squirrel Village
+		save.data.beddingChoice = gameVariables.beddingChoice;
+		save.data.leaderShipSkillsEarned = gameVariables.leaderShipSkillsEarned;
+		save.data.mountaineeringChallegeDay = gameVariables.mountaineeringChallegeDay;
+		
+		//Mount Vire
+		save.data.mountVireAcorns = gameVariables.mountVireAcorns;
+		save.data.mountVireFoodPacks = gameVariables.mountVireFoodPacks;
+		save.data.mountVireExplosives = gameVariables.mountVireExplosives;
+		save.data.mountVirePineLogs = gameVariables.mountVirePineLogs;
+		save.data.mountVireMapleLogs = gameVariables.mountVireMapleLogs;
+		save.data.mountVireLocation = gameVariables.mountVireLocation;
+		save.data.mountVireMountainPathBlockage = gameVariables.mountVireMountainPathBlockage;
 		
 		save.flush();
 	}

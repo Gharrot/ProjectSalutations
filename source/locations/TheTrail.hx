@@ -167,7 +167,6 @@ class TheTrail extends Location
 				}
 			}
 		}
-		
 	}
 	
 	override public function explore(deer:Deer)
