@@ -69,9 +69,9 @@ class GameVariables {
 	public var undergroundCityOpened:Bool;
 	
 	//Squirrel Village
-	public var beddingChoice:String;
+	public var squirrelVillageBeddingChoice:String;
 	public var leaderShipSkillsEarned:Bool;
-	public var mountaineeringChallegeDay:Bool;
+	public var squirrelVillageMountaineeringChallegeDay:Bool;
 	
 	//Mount Vire
 	public var mountVireAcorns:Int;
@@ -162,6 +162,22 @@ class GameVariables {
 		{
 			currentLocation = new SquirrelVillage();
 			maxFood = 10;
+			
+			if (resetLocationVariables)
+			{
+				stone
+			}
+		}
+		else if (targetLocation == "Mount Vire")
+		{
+			currentLocation = new MountVire();
+			maxFood = 10;
+			
+			if (resetLocationVariables)
+			{
+				mountVireLocation = "Base camp";
+				mountVireMountainPathBlockage = 5;
+			}
 		}
 		
 		currentLocationName = targetLocation;
@@ -455,9 +471,9 @@ class GameVariables {
 		undergroundCityOpened = false;
 	
 		//Squirrel Village
-		beddingChoice = "None";
+		squirrelVillageBeddingChoice = "None";
 		leaderShipSkillsEarned = false;
-		mountaineeringChallegeDay = false;
+		squirrelVillageMountaineeringChallegeDay = false;
 		
 		//Mount Vire
 		mountVireAcorns = 0;

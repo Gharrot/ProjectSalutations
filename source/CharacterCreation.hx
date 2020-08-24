@@ -107,7 +107,7 @@ class CharacterCreation extends FlxState
         openMapButton.loadGraphic("assets/images/Checkbox.png", true, 128, 128);
         add(openMapButton);
 		openMapButton.onUp.callback = modifierButtonClicked.bind(openMapButton, "Open Map");
-		openMapButton.scale.set(0.17, 0.17);
+		openMapButton.scale.set(0.18, 0.18);
 		openMapButton.updateHitbox();
 		
 		var starterDeerModifierText:FlxText = new FlxText(50, 465, 0, "Starter Deer", 16);
@@ -118,7 +118,7 @@ class CharacterCreation extends FlxState
         starterDeerModifierButton.loadGraphic("assets/images/Checkbox.png", true, 128, 128);
         add(starterDeerModifierButton);
 		starterDeerModifierButton.onUp.callback = modifierButtonClicked.bind(starterDeerModifierButton, "Starter Deer");
-		starterDeerModifierButton.scale.set(0.17, 0.17);
+		starterDeerModifierButton.scale.set(0.18, 0.18);
 		starterDeerModifierButton.updateHitbox();
 	}
 	
@@ -227,7 +227,7 @@ class CharacterCreation extends FlxState
 			plusButtons[i] = new FlxButton(428, 90+(i*30));
 			plusButtons[i].onDown.callback = plusClicked.bind(i);
 			plusButtons[i].loadGraphic("assets/images/PlusButton.png", true, 32, 32);
-			plusButtons[i].scale.set(0.7,0.7);
+			plusButtons[i].scale.set(0.72,0.72);
 			plusButtons[i].updateHitbox();
 			add(plusButtons[i]);
 		}
@@ -237,7 +237,7 @@ class CharacterCreation extends FlxState
 			minusButtons[i] = new FlxButton(368, 90+(i*30));
 			minusButtons[i].onDown.callback = minusClicked.bind(i);
 			minusButtons[i].loadGraphic("assets/images/MinusButton.png", true, 32, 32);
-			minusButtons[i].scale.set(0.7,0.7);
+			minusButtons[i].scale.set(0.72,0.72);
 			minusButtons[i].updateHitbox();
 			add(minusButtons[i]);
 		}
@@ -293,14 +293,14 @@ class CharacterCreation extends FlxState
         maleButton.loadGraphic("assets/images/Checkbox.png", true, 128, 128);
         add(maleButton);
 		maleButton.onUp.callback = maleClicked.bind();
-		maleButton.scale.set(0.17, 0.17);
+		maleButton.scale.set(0.18, 0.18);
 		maleButton.updateHitbox();
 
 		femaleButton = new FlxButton(25, 310, "");
         femaleButton.loadGraphic("assets/images/Checkbox.png", true, 128, 128);
         add(femaleButton);
 		femaleButton.onUp.callback = femaleClicked.bind();
-		femaleButton.scale.set(0.17,0.17);
+		femaleButton.scale.set(0.18,0.18);
 		femaleButton.updateHitbox();
 	}
 	

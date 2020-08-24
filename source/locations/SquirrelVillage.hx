@@ -13,6 +13,8 @@ class SquirrelVillage extends Location
 {
 	var foundDeer:Deer;
 	
+	var sleepPhaseCompleted:Bool = false;
+	
 	var mountaineeringChallengeStartingTomorrow:Bool = false;
 	var mountaineeringChallengeActive:Bool = false;
 	var buyingPhase = false;
@@ -24,6 +26,11 @@ class SquirrelVillage extends Location
 		backgroundImageFile = "assets/images/LocationImages/StoneStrongholdEntrance.png";
 		backgroundImageFileNoFrame = "assets/images/LocationImages/StoneStrongholdEntranceNoFrame.png";
 		backgroundImageFileMiniFramed = "assets/images/LocationImages/StoneStrongholdEntranceEmptyDeerTile.png";
+	}
+	
+	override public function startDay()
+	{
+		sleepPhaseCompleted = false;
 	}
 	
 	override public function continueOn(?setOutAgain:Bool = true)
@@ -40,11 +47,22 @@ class SquirrelVillage extends Location
 	
 	override public function returnAfterDayEnd()
 	{
+		dayEnd("dummy", GameVariables.instance.getPlayerDeer());
+	}
+	
+	public function dayEnd(choice:String, deer:Deer)
+	{
+		if (!sleepPhaseCompleted && GameVariables.instance.squirrelVillageBeddingChoice != "None")
+		{
+			sleepPhaseCompleted = true;
+			innSleeping();
+		}
+		
 		if (mountaineeringChallengeStartingTomorrow)
 		{
 			mountaineeringChallengeStartingTomorrow = false;
 			mountaineeringChallengeActive = true;
-			GameVariables.instance.mountaineeringChallegeDay = true;
+			GameVariables.instance.squirrelVillageMountaineeringChallegeDay = true;
 			returnToDen();
 		}
 		else if (mountaineeringChallengeActive)
@@ -52,6 +70,7 @@ class SquirrelVillage extends Location
 			mountaineeringChallengeActive = false;
 			buyingPhase = true;
 			explore(GameVariables.instance.getPlayerDeer());
+			actionText.text = "Buying Supplies";
 		}
 		else
 		{
@@ -59,113 +78,42 @@ class SquirrelVillage extends Location
 		}
 	}
 	
-	static public function getAcornStatus(?addNow:Bool = true):String
+	public function innSleeping()
 	{
-		var result:String;
+		var sleepyDeer:Deer = GameVariables.instance.getControlledDeer();
 		
-		if (addNow)
-		{
-			result = "(You now have " + GameVariables.instance.mountVireAcorns;
-		}
-		else
-		{
-			result = "(You have " + GameVariables.instance.mountVireAcorns;
-		}
+		var message:Array<String> = new Array<String>();
+		message.push("As the day ends your herd heads to the inn to rest for a while.");
 		
-		if (GameVariables.instance.mountVireAcorns == 1)
+		if (GameVariables.instance.squirrelVillageBeddingChoice == "Twig Bedding")
 		{
-			result += " acorn.)";
+			message.push("The pokey twig bedding toughens up your deer.");
+			message.push("(+1 resilience for all deer tomorrow.");
+			
+			for (i in 0...sleepyDeer.length) {
+				thisRoundsDefenders[i].addStatusEffect(new DeerStatusEffect("Pokey Bedding", 1, 0, 1, 0, 0, 0));
+			}
 		}
-		else
+		else if (GameVariables.instance.squirrelVillageBeddingChoice == "Leafy Bedding")
 		{
-			result += " acorns.)";
+			message.push("The delicious leafy bedding gives your deer a boost of energy.");
+			message.push("(+1 dexterity for all deer tomorrow.");
+			
+			for (i in 0...sleepyDeer.length) {
+				thisRoundsDefenders[i].addStatusEffect(new DeerStatusEffect("Delicious Bedding", 1, 0, 0, 1, 0, 0));
+			}
 		}
-		
-		return result;
-	}
-	
-	static public function getFoodPackStatus(?addNow:Bool = true):String
-	{
-		var result:String;
-		
-		if (addNow)
+		else if (GameVariables.instance.squirrelVillageBeddingChoice == "Cotton Bedding")
 		{
-			result = "(You now have " + GameVariables.instance.mountVireFoodPacks;
-		}
-		else
-		{
-			result = "(You have " + GameVariables.instance.mountVireFoodPacks;
+			message.push("The soft cotton bedding relaxes your deer.");
+			message.push("(+1 intellect for all deer tomorrow.");
+			
+			for (i in 0...sleepyDeer.length) {
+				thisRoundsDefenders[i].addStatusEffect(new DeerStatusEffect("Comfy Bedding", 1, 0, 0, 0, 1, 0));
+			}
 		}
 		
-		if (GameVariables.instance.mountVireFoodPacks == 1)
-		{
-			result += " food pack.)";
-		}
-		else
-		{
-			result += " food packs.)";
-		}
-		
-		return result;
-	}
-	
-	static public function getExplosivesStatus(?addNow:Bool = true):String
-	{
-		var result:String;
-		
-		if (addNow)
-		{
-			result = "(You now have " + GameVariables.instance.mountVireExplosives;
-		}
-		else
-		{
-			result = "(You have " + GameVariables.instance.mountVireExplosives;
-		}
-		
-		if (GameVariables.instance.mountVireExplosives == 1)
-		{
-			result += " set of explosives.)";
-		}
-		else
-		{
-			result += " sets of explosives.)";
-		}
-		
-		return result;
-	}
-	
-	static public function getLogsStatus(?addNow:Bool = true):String
-	{
-		var result:String;
-		
-		if (addNow)
-		{
-			result = "(You now have " + GameVariables.instance.mountVirePineLogs;
-		}
-		else
-		{
-			result = "(You have " + GameVariables.instance.mountVirePineLogs;
-		}
-		
-		if (GameVariables.instance.mountVirePineLogs == 1)
-		{
-			result += " bundle of pine logs and ";
-		}
-		else
-		{
-			result += " bundles of pine logs and ";
-		}
-		
-		if (GameVariables.instance.mountVireMapleLogs == 1)
-		{
-			result += " bundle of maple logs.)";
-		}
-		else
-		{
-			result += " bundles of maple logs.)";
-		}
-		
-		return result;
+		showChoice(message, ["Continue"], [dayEnd], GameVariables.instance.getPlayerDeer());
 	}
 	
 	override public function explore(deer:Deer)
@@ -190,22 +138,42 @@ class SquirrelVillage extends Location
 		
 			//Inn
 			exploreOptionNames.push("Inn");
-			exploreOptionFunctions.push(inn); 
+			exploreOptionFunctions.push(inn);
 			
-			//Visitor Center
-			exploreOptionNames.push("Visitor Center");
-			exploreOptionFunctions.push(visitorCenter); 
+			//Museum
+			exploreOptionNames.push("Museum");
+			exploreOptionFunctions.push(museum); 
 		}
-		
-		//Museum
-		exploreOptionNames.push("Museum");
-		exploreOptionFunctions.push(museum); 
+			
+		//Visitor Center
+		exploreOptionNames.push("Visitor Center");
+		exploreOptionFunctions.push(visitorCenter);
 		
 		//Supplies Shop
 		exploreOptionNames.push("Supplies Shop");
 		exploreOptionFunctions.push(suppliesShop);
+		
+		if (buyingPhase)
+		{
+			exploreOptionNames.push("Begin the mountain trek");
+			exploreOptionFunctions.push(headToMountain);
+		}
 
 		showChoice(message, exploreOptionNames, exploreOptionFunctions, deer);
+	}
+	
+	public function headToMountain(choice:String, deer:Deer)
+	{
+		var message:Array<String> = new Array<String>();
+		message.push("You gather your herd and set off on your quest to climb the mountain.");
+		showChoice(message, ["Onwards"], [actualHeadToMountain], deer);
+	}
+	
+	public function actualHeadToMountain(choice:String, deer:Deer)
+	{
+		GameVariables.instance.changeLocation("Mount Vire");
+		resetDailyVariables();
+		returnAfterDayEnd();
 	}
 	
 	//Cafe Location
@@ -463,9 +431,9 @@ class SquirrelVillage extends Location
 	{
 		var message:Array<String> = new Array<String>();
 		
-		GameVariables.instance.beddingChoice = choice;
+		GameVariables.instance.squirrelVillageBeddingChoice = choice;
 		message.push("The squirrel scribbles your choice down on another scrap of paper, then shoos you outside.");
-		message.push("Your herd will come back to sleep there tonight.");
+		message.push("Your herd will come back to sleep here while in the squirrel village.");
 		showResult(message);
 	}
 	
@@ -542,9 +510,12 @@ class SquirrelVillage extends Location
 		var exploreOptionNames:Array<String> = new Array<String>();
 		var exploreOptionFunctions:Array<(String, Deer)->Void> = new Array<(String, Deer)->Void>();
 		
-		//Booth
-		exploreOptionNames.push("Visit the squirrel");
-		exploreOptionFunctions.push(booth);
+		if (!buyingPhase)
+		{
+			//Booth
+			exploreOptionNames.push("Visit the squirrel");
+			exploreOptionFunctions.push(booth);
+		}
 		
 		//Study the maps
 		exploreOptionNames.push("Study the maps");
@@ -578,7 +549,7 @@ class SquirrelVillage extends Location
 		
 		if (mountaineeringChallengeStartingTomorrow)
 		{
-			message.push("You walk over and the squirrel starts frantically chirping at you.");
+			message.push("You tilt your head at the squirrel and it starts frantically chirping at you.");
 			message.push("Your challenge starts tomorrow. You should help out around town to earn acorns today, then spend them on supplies tomorrow morning.");
 			message.push("After that you'll head out to climb the mountain.");
 			showChoice(message, ["Study the maps", "Head outside"], [mountaineeringChallengeStart, mapStudying, exploreWithString], deer);
@@ -593,7 +564,7 @@ class SquirrelVillage extends Location
 		}
 		else
 		{
-			message.push("You walk over and the squirrel starts frantically chirping at you.");
+			message.push("You tilt your head at the squirrel and it starts frantically chirping at you.");
 			message.push("It seems the village runs a program for anyone wanting to climb the nearby mountain.");
 			message.push("If you sign the clipboard next to them then you'll start the mountaineering challenge tomorrow.");
 			message.push("During the challenge tomorrow you should help out squirrels to earn acorns.");
@@ -615,25 +586,17 @@ class SquirrelVillage extends Location
 	public function mapStudying(choice:String, deer:Deer)
 	{
 		var message:Array<String> = new Array<String>();
+		message.push("Map studying to be added here later on.");
 		
-		if (mountaineeringChallengeStartingTomorrow)
+		if (!buyingPhase)
 		{
-			message.push("The squirrel sees you studying the maps and rushes over to stop you.");
-			message.push("It seems the safest route to the top changes often, and you shouldn't be studying the mountain until you're about to climb it.");
-			message.push("You should come by tomorrow when your challenge has started.");
-			showChoice(message, ["Visit the squirrel", "Head outside"], [booth, exploreWithString], deer);
-		}
-		else if (!mountaineeringChallengeActive)
-		{
-			message.push("The squirrel sees you studying the maps and rushes over to stop you.");
-			message.push("It seems the safest route to the top changes often, and you shouldn't be studying the mountain until you're about to climb it.");
 			showChoice(message, ["Visit the squirrel", "Head outside"], [booth, exploreWithString], deer);
 		}
 		else
 		{
-			message.push("Study the maps.");
-			showResult(message);
+			showChoice(message, ["Head outside"], [exploreWithString], deer);
 		}
+		showResult(message);
 	}
 	
 	//Museum Location
@@ -649,10 +612,6 @@ class SquirrelVillage extends Location
 		//Museum exhibits
 		exploreOptionNames.push("Look at the exhibits");
 		exploreOptionFunctions.push(museumExhibits);
-		
-		//Gift Shop
-		exploreOptionNames.push("Visit the gift shop");
-		exploreOptionFunctions.push(giftShop); 
 		
 		//Back
 		exploreOptionNames.push("Head outside");
@@ -678,15 +637,8 @@ class SquirrelVillage extends Location
 		{
 			message.push("Looking through the exhibits, what stands out to you most is a series of drawings depicting the first expedition to climb the mountain.");
 			message.push("A single squirrel seems to lead a few others up the mountain, delegating each one a task for the day.");
-			showChoice(message, ["Visit the gift shop", "Head outside"], [giftShop, exploreWithString], deer);
+			showChoice(message, ["Head outside"], [exploreWithString], deer);
 		}
-	}
-	
-	public function giftShop(choice:String, deer:Deer)
-	{
-		var message:Array<String> = new Array<String>();
-		message.push("Add some stuff to buy here later.");
-		showChoice(message, ["Look at the exhibits", "Head outside"], [museumExhibits, exploreWithString], deer);
 	}
 	
 	//Supplies Shop Location
@@ -708,7 +660,7 @@ class SquirrelVillage extends Location
 		
 			//Chop wood
 			exploreOptionNames.push("Chop wood");
-			exploreOptionFunctions.push(exploreWithString); 
+			exploreOptionFunctions.push(woodChopping); 
 		}
 		else
 		{
@@ -762,7 +714,7 @@ class SquirrelVillage extends Location
 	{
 		var message:Array<String> = new Array<String>();
 		message.push("The food packs contain 3 food each and you'll open them automatically if you run out on the mountain.");
-		message.push("They cost 4 acorns each.");
+		message.push("They cost 2 acorns each.");
 		message.push(getFoodPackStatus(false));
 		message.push(getAcornStatus(false));
 		showChoice(message, ["Buy one", "Explosives section", "Firewood Piles", "Head outside"], [buyingFoodPack, explosives, firewood, exploreWithString], deer);
@@ -771,19 +723,19 @@ class SquirrelVillage extends Location
 	public function buyingFoodPack(choice:String, deer:Deer)
 	{
 		var message:Array<String> = new Array<String>();
-		if (GameVariables.instance.mountVireAcorns >= 4)
+		if (GameVariables.instance.mountVireAcorns >= 2)
 		{
 			GameVariables.instance.mountVireFoodPacks++;
-			GameVariables.instance.mountVireAcorns -= 4;
+			GameVariables.instance.mountVireAcorns -= 2;
 			
-			message.push("You buy a pack of food (-4 acorns).");
+			message.push("You buy a pack of food (-2 acorns).");
 			message.push(getAcornStatus());
 			message.push(getFoodPackStatus());
 			showChoice(message, ["Buy another", "Explosives section", "Firewood Piles", "Head outside"], [buyingFoodPack, explosives, firewood, exploreWithString], deer);
 		}
 		else
 		{
-			message.push("You don't have enough acorns to spend 4 on a food pack.");
+			message.push("You don't have enough acorns to spend 2 on a food pack.");
 			message.push(getAcornStatus(false));
 			showChoice(message, ["Explosives section", "Firewood Piles", "Head outside"], [explosives, firewood, exploreWithString], deer);
 		}
@@ -793,7 +745,7 @@ class SquirrelVillage extends Location
 	{
 		var message:Array<String> = new Array<String>();
 		message.push("The explosive sets can be used to help clear obstacles on the mountain.");
-		message.push("They cost 5 acorns each.");
+		message.push("They cost 3 acorns each.");
 		message.push(getExplosivesStatus(false));
 		message.push(getAcornStatus(false));
 		showChoice(message, ["Buy one", "Food aisle", "Firewood Piles", "Head outside"], [buyingExplosives, foodAisle, firewood, exploreWithString], deer);
@@ -802,19 +754,19 @@ class SquirrelVillage extends Location
 	public function buyingExplosives(choice:String, deer:Deer)
 	{
 		var message:Array<String> = new Array<String>();
-		if (GameVariables.instance.mountVireAcorns >= 5)
+		if (GameVariables.instance.mountVireAcorns >= 3)
 		{
 			GameVariables.instance.mountVireExplosives++;
-			GameVariables.instance.mountVireAcorns -= 5;
+			GameVariables.instance.mountVireAcorns -= 3;
 			
-			message.push("You buy a set of explosives (-5 acorns).");
+			message.push("You buy a set of explosives (-3 acorns).");
 			message.push(getAcornStatus());
 			message.push(getExplosivesStatus());
 			showChoice(message, ["Buy another", "Food aisle", "Firewood Piles", "Head outside"], [buyingExplosives, foodAisle, firewood, exploreWithString], deer);
 		}
 		else
 		{
-			message.push("You don't have enough acorns to spend 5 on an explosives set.");
+			message.push("You don't have enough acorns to spend 3 on an explosives set.");
 			message.push(getAcornStatus(false));
 			showChoice(message, ["Food aisle", "Firewood Piles", "Head outside"], [foodAisle, firewood, exploreWithString], deer);
 		}
@@ -826,7 +778,7 @@ class SquirrelVillage extends Location
 		var message:Array<String> = new Array<String>();
 		message.push("Each bundle of logs has enough firewood to stave off a night of cold on the mountain.");
 		message.push("The maple logs will provide better protection against the cold, but the pine logs are cheaper.");
-		message.push("The pine log bundles costs 2 acorns each, and the maple bundles cost 4.");
+		message.push("The pine log bundles costs 1 acorns each, and the maple bundles cost 3.");
 		message.push(getLogsStatus(false));
 		message.push(getAcornStatus(false));
 		showChoice(message, ["Buy pine logs", "But maple logs", "Food aisle", "Explosives section", "Head outside"], [buyingFirewoodPine, buyingFirewoodMaple, foodAisle, explosives, exploreWithString], deer);
@@ -836,19 +788,19 @@ class SquirrelVillage extends Location
 	{
 		//Pine = low heat
 		var message:Array<String> = new Array<String>();
-		if (GameVariables.instance.mountVireAcorns >= 2)
+		if (GameVariables.instance.mountVireAcorns >= 1)
 		{
 			GameVariables.instance.mountVirePineLogs++;
-			GameVariables.instance.mountVireAcorns -= 2;
+			GameVariables.instance.mountVireAcorns -= 1;
 			
-			message.push("You buy a bundle of pine logs (-2 acorns).");
+			message.push("You buy a bundle of pine logs (-1 acorns).");
 			message.push(getAcornStatus());
 			message.push(getLogsStatus());
 			showChoice(message, ["Buy more pine logs", "Buy maple logs", "Food aisle", "Explosives section", "Head outside"], [buyingFirewoodPine, buyingFirewoodMaple, foodAisle, explosives, exploreWithString], deer);
 		}
 		else
 		{
-			message.push("You don't have enough acorns to spend 2 on a bundle of pine logs.");
+			message.push("You don't have enough acorns to spend 1 on a bundle of pine logs.");
 			message.push(getAcornStatus(false));
 			showChoice(message, ["Food aisle", "Explosives section", "Head outside"], [foodAisle, explosives, exploreWithString], deer);
 		}
@@ -858,19 +810,19 @@ class SquirrelVillage extends Location
 	{
 		//Maple = high heat
 		var message:Array<String> = new Array<String>();
-		if (GameVariables.instance.mountVireAcorns >= 4)
+		if (GameVariables.instance.mountVireAcorns >= 3)
 		{
 			GameVariables.instance.mountVireMapleLogs++;
-			GameVariables.instance.mountVireAcorns -= 4;
+			GameVariables.instance.mountVireAcorns -= 3;
 			
-			message.push("You buy a bundle of maple logs (-4 acorns).");
+			message.push("You buy a bundle of maple logs (-3 acorns).");
 			message.push(getAcornStatus());
 			message.push(getLogsStatus());
 			showChoice(message, ["Buy more maple logs", "Buy pine logs", "Food aisle", "Explosives section", "Head outside"], [buyingFirewoodMaple, buyingFirewoodPine, foodAisle, explosives, exploreWithString], deer);
 		}
 		else
 		{
-			message.push("You don't have enough acorns to spend 4 on a bundle of maple logs.");
+			message.push("You don't have enough acorns to spend 3 on a bundle of maple logs.");
 			message.push(getAcornStatus(false));
 			showChoice(message, ["Buy pine logs", "Food aisle", "Explosives section", "Head outside"], [buyingFirewoodPine, foodAisle, explosives, exploreWithString], deer);
 		}
@@ -884,7 +836,7 @@ class SquirrelVillage extends Location
 		if (mountaineeringChallengeActive)
 		{
 			message.push("The squirrel leads you out behind the shop, hands you an axe, and puts you to work chopping wood.");
-			var choppingSkill:Int = deer.res + deer.lck + randomNums.int(0, 4);
+			var choppingSkill:Int = deer.str + deer.res + randomNums.int(0, 4);
 			
 			var currentAcornsEarned:Int = Math.floor(choppingSkill / 2);
 			message.push(deer.getName() + " manages to chop " + choppingSkill + " sets of logs.");
@@ -1178,5 +1130,116 @@ class SquirrelVillage extends Location
 			
 			showResult(message);
 		}
+	}
+	
+	
+	
+	static public function getAcornStatus(?addNow:Bool = true):String
+	{
+		var result:String;
+		
+		if (addNow)
+		{
+			result = "(You now have " + GameVariables.instance.mountVireAcorns;
+		}
+		else
+		{
+			result = "(You have " + GameVariables.instance.mountVireAcorns;
+		}
+		
+		if (GameVariables.instance.mountVireAcorns == 1)
+		{
+			result += " acorn.)";
+		}
+		else
+		{
+			result += " acorns.)";
+		}
+		
+		return result;
+	}
+	
+	static public function getFoodPackStatus(?addNow:Bool = true):String
+	{
+		var result:String;
+		
+		if (addNow)
+		{
+			result = "(You now have " + GameVariables.instance.mountVireFoodPacks;
+		}
+		else
+		{
+			result = "(You have " + GameVariables.instance.mountVireFoodPacks;
+		}
+		
+		if (GameVariables.instance.mountVireFoodPacks == 1)
+		{
+			result += " food pack.)";
+		}
+		else
+		{
+			result += " food packs.)";
+		}
+		
+		return result;
+	}
+	
+	static public function getExplosivesStatus(?addNow:Bool = true):String
+	{
+		var result:String;
+		
+		if (addNow)
+		{
+			result = "(You now have " + GameVariables.instance.mountVireExplosives;
+		}
+		else
+		{
+			result = "(You have " + GameVariables.instance.mountVireExplosives;
+		}
+		
+		if (GameVariables.instance.mountVireExplosives == 1)
+		{
+			result += " set of explosives.)";
+		}
+		else
+		{
+			result += " sets of explosives.)";
+		}
+		
+		return result;
+	}
+	
+	static public function getLogsStatus(?addNow:Bool = true):String
+	{
+		var result:String;
+		
+		if (addNow)
+		{
+			result = "(You now have " + GameVariables.instance.mountVirePineLogs;
+		}
+		else
+		{
+			result = "(You have " + GameVariables.instance.mountVirePineLogs;
+		}
+		
+		if (GameVariables.instance.mountVirePineLogs == 1)
+		{
+			result += " bundle of pine logs and ";
+		}
+		else
+		{
+			result += " bundles of pine logs and ";
+		}
+		
+		if (GameVariables.instance.mountVireMapleLogs == 1)
+		{
+			result += " bundle of maple logs.)";
+		}
+		else
+		{
+			result += " bundles of maple logs.)";
+		}
+		
+		return result;
 	}
 }

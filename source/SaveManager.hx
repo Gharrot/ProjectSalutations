@@ -63,9 +63,9 @@ class SaveManager
 		gameVariables.undergroundCityOpened = save.data.undergroundCityOpened;
 		
 		//Squirrel Village
-		gameVariables.beddingChoice = save.data.beddingChoice;
+		gameVariables.squirrelVillageBeddingChoice = save.data.beddingChoice;
 		gameVariables.leaderShipSkillsEarned = save.data.leaderShipSkillsEarned;
-		gameVariables.mountaineeringChallegeDay = save.data.mountaineeringChallegeDay;
+		gameVariables.squirrelVillageMountaineeringChallegeDay = save.data.mountaineeringChallegeDay;
 		
 		//Mount Vire
 		gameVariables.mountVireAcorns = save.data.mountVireAcorns;
@@ -139,9 +139,9 @@ class SaveManager
 		save.data.undergroundCityOpened = gameVariables.undergroundCityOpened;
 		
 		//Squirrel Village
-		save.data.beddingChoice = gameVariables.beddingChoice;
+		save.data.beddingChoice = gameVariables.squirrelVillageBeddingChoice;
 		save.data.leaderShipSkillsEarned = gameVariables.leaderShipSkillsEarned;
-		save.data.mountaineeringChallegeDay = gameVariables.mountaineeringChallegeDay;
+		save.data.mountaineeringChallegeDay = gameVariables.squirrelVillageMountaineeringChallegeDay;
 		
 		//Mount Vire
 		save.data.mountVireAcorns = gameVariables.mountVireAcorns;

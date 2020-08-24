@@ -30,7 +30,7 @@ class NameGenerator
 		names.push("Rote");
 		names.push("Leaf");
 		names.push("Fleam");
-		names.push("Gilper");
+		names.push("Grass");
 		names.push("Flacks");
 		names.push("Sticks");
 		names.push("Glim");
@@ -42,5 +42,6 @@ class NameGenerator
 		names.push("Stones");
 		names.push("Ruge");
 		names.push("Ferf");
+		names.push("Lump");
 	}
 }
