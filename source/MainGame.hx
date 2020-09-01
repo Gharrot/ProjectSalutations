@@ -818,6 +818,24 @@ class MainGame extends FlxState
 				add(newButton);
 			}
 		}
+		else if (GameVariables.instance.currentLocationName == "Mount Vire")
+		{
+			//Mount Vire (current location)
+			var currentLocationSprite:FlxSprite = new FlxSprite(0, 0);
+			currentLocationSprite.loadGraphic("assets/images/MapImages/CurrentLocationMarker.png", true);
+			currentLocationSprite.scale.set(3, 3);
+			currentLocationSprite.screenCenter();
+			newButton.y -= 40;
+			mapSprites.push(currentLocationSprite);
+			add(currentLocationSprite);
+			
+			//Squirrel Village
+			var newButton:LocationButton = new LocationButton("Squirrel Village", 0);
+			newButton.screenCenter();
+			newButton.x -= 110;
+			mapButtons.push(newButton);
+			add(newButton);
+		}
 	}
 	
 	function hideMap(){

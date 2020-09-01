@@ -204,7 +204,7 @@ class PlayState extends FlxState
 					insert(this.length, deerSprites[i]);
 				}
 				
-				if (showDeleteButton != null){
+				if (showDeleteButton != null && saveDeleteButtons.length > 0){
 					remove(showDeleteButton);
 					insert(this.length, showDeleteButton);
 				}

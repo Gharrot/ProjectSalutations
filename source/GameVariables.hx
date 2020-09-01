@@ -22,6 +22,8 @@ class GameVariables {
     public var currentFood:Int;
     public var maxFood:Int;
 	
+	public var inventory:Inventory;
+	
 	public var rabbitFur:Int;
 	public var rabbitFurBeddingMade:Bool;
 	
@@ -81,6 +83,7 @@ class GameVariables {
 	public var mountVireMapleLogs:Int;
 	public var mountVireLocation:String;
 	public var mountVireMountainPathBlockage:Int;
+	public var mountVireStoneAcorns:Int;
 	
 	public var saveNum:Int;
 
@@ -165,7 +168,18 @@ class GameVariables {
 			
 			if (resetLocationVariables)
 			{
-				stone
+				cast(currentLocation, SquirrelVillage).mountaineeringChallengeStartingTomorrow = false;
+				cast(currentLocation, SquirrelVillage).mountaineeringChallengeActive = false;
+				cast(currentLocation, SquirrelVillage).buyingPhase = false;
+				
+				squirrelVillageMountaineeringChallegeDay = false;
+			}
+			else
+			{
+				if (squirrelVillageMountaineeringChallegeDay)
+				{
+					cast(currentLocation, SquirrelVillage).mountaineeringChallengeActive = true;
+				}
 			}
 		}
 		else if (targetLocation == "Mount Vire")

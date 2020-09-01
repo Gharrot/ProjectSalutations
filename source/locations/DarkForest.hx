@@ -181,8 +181,6 @@ class DarkForest extends Location
 			message.push("A low stone pedestal stands in front of the fire, where you took a medallion from.");
 		}
 		
-		message.push("(You've reached the end of this version of the game, congratulations!)");
-		
 		showResult(message);
 	}
 	

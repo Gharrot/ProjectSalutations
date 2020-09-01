@@ -1,5 +1,6 @@
 package locations;
 
+import haxe.Int64Helper;
 import statuses.DeerStatusEffect;
 import flixel.ui.FlxButton;
 import flixel.text.FlxText;
@@ -19,9 +20,9 @@ class MountVire extends Location
 		super();
 		
 		name = "Mount Vire";
-		backgroundImageFile = "assets/images/LocationImages/GhostTown.png";
-		backgroundImageFileNoFrame = "assets/images/LocationImages/GhostTownNoFrame.png";
-		backgroundImageFileMiniFramed = "assets/images/LocationImages/GhostTownEmptyDeerTile.png";
+		backgroundImageFile = "assets/images/LocationImages/TheTrailDay5.png";
+		backgroundImageFileNoFrame = "assets/images/LocationImages/TheTrailDay5NoFrame.png";
+		backgroundImageFileMiniFramed = "assets/images/LocationImages/TheTrailDay5EmptyDeerTile.png";
 	}
 	
 	override public function startDay()
@@ -53,6 +54,7 @@ class MountVire extends Location
 				mountainMovement("Goat plateau");
 			}
 		}
+		returnToDen();
 	}
 	
 	public function coldAndFire()
@@ -84,20 +86,20 @@ class MountVire extends Location
 		}
 		
 		exploreOptionNames.push("Sleep without a fire");
-		exploreOptionFunctions.push(returnAfterDayEnd);
+		exploreOptionFunctions.push(burnLogs);
 		
 		if (exploreOptionNames.length > 1)
 		{
-			if (coldness == 1)
+			if (currentColdness == 1)
 			{
 				message.push("It's a bit chilly tonight, will you light a fire?");
 			}
-			else if (coldness == 2)
+			else if (currentColdness == 2)
 			{
 				message.push("It's pretty cold tonight, will you light a fire?");
 			}
 			
-			showChoice(message, ["Continue"], [burnLogs], gameVariables.getPlayerDeer());
+			showChoice(message, exploreOptionNames, exploreOptionFunctions, gameVariables.getPlayerDeer());
 		}
 		else
 		{
@@ -158,10 +160,10 @@ class MountVire extends Location
 			
 			for (i in 0...gameVariables.controlledDeer.length)
 			{
-				gameVariables.controlledDeer[i].takeDamage(amount);
+				gameVariables.controlledDeer[i].takeDamage(currentColdness);
 			}
 			
-			showChoice(message ["Continue"], [dayEnd], gameVariables.getPlayerDeer());
+			showChoice(message, ["Continue"], [dayEnd], gameVariables.getPlayerDeer());
 		}
 		else
 		{
@@ -203,19 +205,316 @@ class MountVire extends Location
 		}
 		else if (gameVariables.mountVireLocation == "Goat plateau")
 		{
-			//Coffee tent
-			exploreOptionNames.push("Coffee tent");
+			//The upward trail
+			exploreOptionNames.push("The upward trail");
 			exploreOptionFunctions.push(coffeeTent);
 			
-			//Mountain trail
-			exploreOptionNames.push("Mountain trail");
+			//The cave
+			exploreOptionNames.push("The cave");
 			exploreOptionFunctions.push(mountainTrail);
+			
+			//The smaller rocks
+			exploreOptionNames.push("Small rocks");
+			exploreOptionFunctions.push(smallRocks);
 		}
 
 		showChoice(["Where will you head to?"], exploreOptionNames, exploreOptionFunctions, deer);
 	}
 	
-	public function coffeeTent(deer:Deer, choice:String)
+	public function theCaveEntrance(choice:String, deer:Deer)
+	{
+		var message:Array<String> = new Array<String>();
+		if (choice == "Step back")
+		{
+			message.push("You take a step back from the blanket squirrel.");
+			message.push("A few squirrels are still wandering about.");
+		}
+		else if (choice == "Head back")
+		{
+			message.push("You head back to the entrance of the cave.");
+			message.push("A few squirrels are still wandering about, and one is sitting on a blanket surrounded by trinkets.");
+		}
+		else
+		{
+			message.push("You walk into a large cavern leading into the mountain.");
+			message.push("A few squirrels are wandering about the cave, one is sitting on a blanket surrounded by trinkets.");
+		}
+		message.push("Torches lining the walls light the way deeper into the mountain.");
+		
+		var exploreOptionNames:Array<String> = new Array<String>();
+		var exploreOptionFunctions:Array<(String, Deer)->Void> = new Array<(String, Deer)->Void>();
+
+		//Head deeper
+		exploreOptionNames.push("Head deeper");
+		exploreOptionFunctions.push(mountainTunnelFirstRoom);
+		
+		//Squirrel guide 
+		exploreOptionNames.push("Visit the blanket squirrel");
+		exploreOptionFunctions.push(blanketSquirrel);
+		
+		//Back
+		exploreOptionNames.push("Head back");
+		exploreOptionFunctions.push(exploreWithString); 
+
+		showChoice(message, exploreOptionNames, exploreOptionFunctions, deer);
+	}
+	
+	public function mountainTunnelFirstRoom(choice:String, deer:Deer)
+	{
+		var message:Array<String> = new Array<String>();
+		message.push("You walk further into the cave as it twists into the mountain.");
+		message.push("The tunnel leads into a small chamber, lit by a small flame.");
+		message.push("In front of the flame sits a tiny stone pedestal; you feel like you should put something on it.");
+		message.push("Some nearby squirrels are watching you anxiously.");
+		
+		var exploreOptionNames:Array<String> = new Array<String>();
+		var exploreOptionFunctions:Array<(String, Deer)->Void> = new Array<(String, Deer)->Void>();
+		
+		//Back
+		exploreOptionNames.push("Head back");
+		exploreOptionFunctions.push(theCaveEntrance); 
+		
+		//Trinkets
+		addTrinketOptions(exploreOptionNames);
+		if (exploreOptionNames.length > 1)
+		{
+			exploreOptionFunctions.push(useTrinketFirstRoom); 
+		}
+
+		showChoice(message, exploreOptionNames, exploreOptionFunctions, deer);
+	}
+	
+	public function useTrinketFirstRoom(choice:String, deer:Deer)
+	{
+		var message:Array<String> = new Array<String>();
+		if (choice == "Wolf")
+		{
+			message.push("You place the wolf totem on the pedestal. After waiting a few moments the room begins to shake.");
+			message.push("The room slowly rotates, revealing a new path forward.");
+			showChoice(message, ["Continue onwards"], [mountainTunnelSecondRoom], deer);
+		}
+		else
+		{
+			message.push("You place the " + choice.toLowerCase(), " on the pedestal. After waiting a few moments nothing seems to be happening.");
+			message.push("The squirrels watching you disappointly usher you back out of the cave.");
+			message.push("You'll have to try again some other time.");
+			showResult(message);
+		}
+	}
+	
+	public function mountainTunnelSecondRoom(choice:String, deer:Deer)
+	{
+		var message:Array<String> = new Array<String>();
+		message.push("You follow the tunnel as it continues into the mountain.");
+		message.push("After a while you hop over a small gap and step into another small chamber, with another pedestal in its center. A plank leans against its side.");
+		message.push("Some squirrels seem to have followed you and watch intently.");
+		
+		var exploreOptionNames:Array<String> = new Array<String>();
+		var exploreOptionFunctions:Array<(String, Deer)->Void> = new Array<(String, Deer)->Void>();
+		
+		//Back
+		exploreOptionNames.push("Head back");
+		exploreOptionFunctions.push(theCaveEntrance); 
+		
+		//Trinkets
+		addTrinketOptions(exploreOptionNames);
+		if (exploreOptionNames.length > 1)
+		{
+			exploreOptionFunctions.push(useTrinketSecondRoom); 
+		}
+
+		showChoice(message, exploreOptionNames, exploreOptionFunctions, deer);
+	}
+	
+	public function useTrinketSecondRoom(choice:String, deer:Deer)
+	{
+		var message:Array<String> = new Array<String>();
+		if (choice == "String")
+		{
+			message.push("You place the piece of string on the pedestal. After waiting a few moments the room begins to shake.");
+			message.push("The room slowly rotates, revealing a new path forward.");
+			showChoice(message, ["Continue onwards"], [mountainTunnelThirdRoom], deer);
+		}
+		else
+		{
+			message.push("You place the " + choice.toLowerCase(), " on the pedestal. After waiting a few moments nothing seems to be happening.");
+			message.push("The squirrels watching you disappointly usher you back trough the tunnel and out of the cave.");
+			message.push("You'll have to try again some other time.");
+			showResult(message);
+		}
+	}
+	
+	public function mountainTunnelThirdRoom(choice:String, deer:Deer)
+	{
+		var message:Array<String> = new Array<String>();
+		message.push("You follow the tunnel as it continues into the mountain.");
+		message.push("After a while come to a dead end. When you walk up to it however the wall slides into the ground, revealing another chamber with another pedestal.");
+		message.push("The squirrels following you watch excitedly.");
+		
+		var exploreOptionNames:Array<String> = new Array<String>();
+		var exploreOptionFunctions:Array<(String, Deer)->Void> = new Array<(String, Deer)->Void>();
+		
+		//Back
+		exploreOptionNames.push("Head back");
+		exploreOptionFunctions.push(theCaveEntrance); 
+		
+		//Trinkets
+		addTrinketOptions(exploreOptionNames);
+		if (exploreOptionNames.length > 1)
+		{
+			exploreOptionFunctions.push(useTrinketThirdRoom); 
+		}
+
+		showChoice(message, exploreOptionNames, exploreOptionFunctions, deer);
+	}
+	
+	public function useTrinketThirdRoom(choice:String, deer:Deer)
+	{
+		var message:Array<String> = new Array<String>();
+		if (choice == "Star")
+		{
+			message.push("You place the star-shaped gem on the pedestal. After waiting a few moments the room begins to shake.");
+			message.push("The room slowly rotates, revealing an opening back outside.");
+			showChoice(message, ["Step outside"], [mountainTunnelExit], deer);
+		}
+		else
+		{
+			message.push("You place the " + choice.toLowerCase(), " on the pedestal. After waiting a few moments nothing seems to be happening.");
+			message.push("The squirrels watching you disappointly usher you back trough the tunnel and out of the cave.");
+			message.push("You'll have to try again some other time.");
+			showResult(message);
+		}
+	}
+	
+	public function mountainTunnelExit(choice:String, deer:Deer)
+	{
+		var message:Array<String> = new Array<String>();
+		message.push("You step outside onto the cold mountainside.");
+		message.push("The tunnel seems to have led to a secret path up the mountain.");
+		
+		if (movingUpwards == "No")
+		{
+			message.push("Will you follow the path? You'll go back to lead your herd here at the end of the day.");
+			showChoice(message, ["Follow the path", "Head back"], [continueUpTheSecretPath, continueOnChoice], deer);
+		}
+		else if (movingUpwards == "Secret")
+		{
+			message.push("You're already planning to follow the secret path tomorrow. Will you change your mind?");
+			showChoice(message, ["Don't follow the path", "Follow the path"], [cancelTheSecretPath, continueOnChoice], deer);
+		}
+		else if (movingUpwards == "Yes")
+		{
+			message.push("You're already planning to follow the other non-secret path tomorrow. Will you change your mind?");
+			showChoice(message, ["Follow this path instead", "Follow the normal path", "Don't follow any path"], [continueOnChoice, continueOnChoice, cancelTheSecretPath], deer);
+		}
+	}
+	
+	public function continueUpTheSecretPath(choice:String, deer:Deer)
+	{
+		movingUpwards = "Secret path";
+		continueOn();
+	}
+	
+	public function cancelTheSecretPath(choice:String, deer:Deer)
+	{
+		movingUpwards = "No";
+		continueOn();
+	}
+	
+	private function addTrinketOptions(optionNames:Array<String>, ?getUnownedTrinkets:Bool = false)
+	{
+		var statNames = ["Paperclip", "String", "Cube", "Goat", "Ball", "Squirrel", "Wolf", "Bottlecap", "Stone acorn", "Cow", "Star"];
+		
+		for (i in 0...statNames.length)
+		{
+			if (getUnownedTrinkets)
+			{
+				if (!GameVariables.instance.inventory.checkForItemByName(statNames[i]))
+				{
+					optionNames.push(statNames[i]);
+				}
+			}
+			else
+			{
+				if (GameVariables.instance.inventory.checkForItemByName(statNames[i]))
+				{
+					optionNames.push(statNames[i]);
+				}
+			}
+		}
+	}
+	
+	public function blanketSquirrel(choice:String, deer:Deer)
+	{
+		var message:Array<String> = new Array<String>();
+		message.push("You walk up to the squirrel and they gesture at the trinkets surrounding them.");
+		message.push("It seems like the squirrel is selling them in exchange for stone acorns.");
+		message.push("Each trinket costs 1 stone acorn.");
+		
+		var exploreOptionNames:Array<String> = new Array<String>();
+		var exploreOptionFunctions:Array<(String, Deer)->Void> = new Array<(String, Deer)->Void>();
+		
+		//Back
+		exploreOptionNames.push("Step back");
+		exploreOptionFunctions.push(theCaveEntrance); 
+		
+		//Trinkets
+		addTrinketOptions(exploreOptionNames, true);
+		exploreOptionFunctions.push(buyTrinket); 
+
+		showChoice(message, exploreOptionNames, exploreOptionFunctions, deer);
+	}
+	
+	public function buyTrinket(choice:String, deer:Deer)
+	{
+		var message:Array<String> = new Array<String>();
+		
+		if (GameVariables.instance.mountVireStoneAcorns > 0)
+		{
+			if (choice == "Stone acorn")
+			{
+				message.push("You give the squirrel a stone acorn and they hand another one back to you.");
+				message.push(getStoneAcornStatus());
+			}
+			else
+			{
+				GameVariables.instance.mountVireStoneAcorns--;
+				message.push("You give the squirrel a stone acorn and they hand you the " + choice.toLowerCase() + ".");
+				message.push(getStoneAcornStatus());
+			}
+		}
+		else
+		{
+			message.push("You don't have any stone acorns to trade for the trinket.");
+		}
+		
+		var exploreOptionNames:Array<String> = new Array<String>();
+		var exploreOptionFunctions:Array<(String, Deer)->Void> = new Array<(String, Deer)->Void>();
+		
+		//Back
+		exploreOptionNames.push("Step back");
+		exploreOptionFunctions.push(theCaveEntrance); 
+		
+		//Trinkets
+		addTrinketOptions(exploreOptionNames, true);
+		exploreOptionFunctions.push(buyTrinket); 
+
+		showChoice(message, exploreOptionNames, exploreOptionFunctions, deer);
+	}
+	
+	public function smallRocks(choice:String, deer:Deer)
+	{
+		var message:Array<String> = new Array<String>();
+		message.push("Walking around the plateau you find an area with small rocks scattered around.");
+		message.push("You push the rocks around for a while, building up some strength.");
+		message.push("(+2 Strength for 3 days).");
+		
+		deer.addStatusEffect(new DeerStatusEffect("Stone Pusher", 4, 2, 0, 0, 0, 0));
+		
+		showResult(message);
+	}
+	
+	public function coffeeTent(choice:String, deer:Deer)
 	{
 		var message:Array<String> = new Array<String>();
 		message.push("You walk into one of the camps larger tents and find a dozen or so squirrels sitting around a fire sipping on warm drinks.");
@@ -262,7 +561,7 @@ class MountVire extends Location
 		showResult(message);
 	}
 	
-	public function mountainTrail(deer:Deer, choice:String)
+	public function mountainTrail(choice:String, deer:Deer)
 	{
 		var gameVariables:GameVariables = GameVariables.instance;
 		var message:Array<String> = new Array<String>();
@@ -318,7 +617,7 @@ class MountVire extends Location
 		}
 	}
 	
-	public function setoffExplosionMoutainPath(deer:Deer, choice:String)
+	public function setoffExplosionMoutainPath(choice:String, deer:Deer)
 	{
 		var gameVariables:GameVariables = GameVariables.instance;
 		var message:Array<String> = new Array<String>();
@@ -351,8 +650,9 @@ class MountVire extends Location
 		}
 	}
 	
-	public function moveRocksMoutainPath(deer:Deer, choice:String)
+	public function moveRocksMoutainPath(choice:String, deer:Deer)
 	{
+		var randomNums:FlxRandom = new FlxRandom();
 		var gameVariables:GameVariables = GameVariables.instance;
 		var message:Array<String> = new Array<String>();
 		var rockMovingSkill:Int = deer.str*2 + deer.res + randomNums.int(0, 5);
@@ -407,13 +707,13 @@ class MountVire extends Location
 		}
 	}
 	
-	public function continueUpTheMountainPath(deer:Deer, choice:String)
+	public function continueUpTheMountainPath(choice:String, deer:Deer)
 	{
 		movingUpwards = "Yes";
 		continueOn();
 	}
 	
-	public function cancelMountainTrekPath(deer:Deer, choice:String)
+	public function cancelMountainPathTrek(choice:String, deer:Deer)
 	{
 		var message:Array<String> = new Array<String>();
 		
@@ -471,10 +771,10 @@ class MountVire extends Location
 			}
 			else
 			{
+				if(GameVariables.instance.mountVireStoneAcorns
 				setOut();
 			}
 		}
-		
 	}
 	
 	override public function hunt(deer:Array<Deer>) {
@@ -489,5 +789,104 @@ class MountVire extends Location
 				setOut();
 			}
 		}
+		else if (GameVariables.instance.mountVireLocation == "Goat plateau")
+		{
+			if (deer.length > 0)
+			{
+				message.push("Your hunting pack comes across a single mountain goat, bleating at you from the top of a small cliff.");
+				randomNums.shuffle(deer);
+				
+				var rewardValue:Int = 0;
+				
+				for (i in 0...deer.length)
+				{
+					var currentDeer:Deer = deer[i];
+					var climbingSkill:Int = currentDeer.dex * 2 + currentDeer.lck + randomNums.int(0, 4);
+					
+					if (climbingSkill >= 12)
+					{
+						message.push(currentDeer.getName() + " manages to scramble up the cliffside.");
+						
+						var smackingSkill:Int = currentDeer.str * 2 + randomNums.int(0, 4);
+						
+						if (smackingSkill >= 16)
+						{
+							message.push(currentDeer.getName() + " bashes into the goat's horns, sending them stumbling backwards.");
+							rewardValue += 5;
+						}
+						else if (smackingSkill >= 14)
+						{
+							message.push(currentDeer.getName() + " bashes into the goat's horns, making them take a few steps back.");
+							rewardValue += 4;
+						} 
+						else if (smackingSkill >= 12)
+						{
+							message.push(currentDeer.getName() + " bashes into the goat's horns, making them take a step back.");
+							rewardValue += 3;
+						} 
+						else
+						{
+							message.push(currentDeer.getName() + " tries to bash into the goat's horns, but moreso just head-taps them.");
+							rewardValue += 1;
+						} 
+					}
+					else
+					{
+						message.push(currentDeer.getName() + " fails to climb the cliffside and stumbles back down.");
+					}
+				}
+				
+				if (rewardValue > 0)
+				{
+					message.push("The goat seems to have enjoyed playing around with you.");
+					if (rewardValue == 1)
+					{
+						message.push("The goat quickly hops off, then comes back with a stone acorn in its mouth to offer to you as a gift.");
+					}
+					else
+					{
+						message.push("The goat quickly hops off, then comes back with a mouthful of " + rewardValue + " stone acorns to offer as a gift.");
+					}
+					
+					GameVariables.instance.mountVireStoneAcorns += rewardValue;
+					message.push(getAcornStatus());
+				}
+				else
+				{
+					message.push("Your pack lies down at the bottom of the cliffside, unable to make it up to the goat.");
+				}
+				
+				showResult(message);
+			}
+			else
+			{
+				setOut();
+			}
+		}
+	}
+	
+	static public function getStoneAcornStatus(?addNow:Bool = true):String
+	{
+		var result:String;
+		
+		if (addNow)
+		{
+			result = "(You now have " + GameVariables.instance.mountVireStoneAcorns;
+		}
+		else
+		{
+			result = "(You have " + GameVariables.instance.mountVireStoneAcorns;
+		}
+		
+		if (GameVariables.instance.mountVireStoneAcorns == 1)
+		{
+			result += " stone acorn.)";
+		}
+		else
+		{
+			result += " stone acorns.)";
+		}
+		
+		return result;
 	}
 }

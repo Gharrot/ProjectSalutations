@@ -958,7 +958,7 @@ class ForgottenWoods extends Location
 	{
 		var messages:Array<String> = new Array<String>();
 		messages.push("Heading inside you follow the cave as it curves rightwards, soon coming to a dead-end.");
-		messages.push("You stand in front of a smooth stone wall, featureless except for an arc of 5 clear stones embedded within it.");
+		messages.push("You stand in front of a smooth stone wall, featureless except for a clear gem in the shape of a 5-pointed star embedded within its center.");
 		
 		deerInCave.push(deer);
 		
@@ -976,26 +976,26 @@ class ForgottenWoods extends Location
 		
 		if (stonesGlowing == 1)
 		{
-			messages.push("One of the stones is glowing.");
+			messages.push("One of the star's points is glowing.");
 		}
 		else if (stonesGlowing == 2)
 		{
-			messages.push("Two of the stones are glowing.");
+			messages.push("Two of the star's points are glowing.");
 		}
 		else if (stonesGlowing == 3)
 		{
-			messages.push("Three of the stones are glowing.");
+			messages.push("Three of the star's points are glowing.");
 		}
 		else if (stonesGlowing == 4)
 		{
-			messages.push("Four of the stones are glowing.");
+			messages.push("Four of the star's points are glowing.");
 		}
 		else if (stonesGlowing == 5)
 		{
 			if(deerInCave.length > 1){
-				messages.push("As you walk forward and stand next to the other deer waiting around, all five of the glowing stones begin to pulse slowly.");
+				messages.push("As you walk forward and stand next to the other deer the full star starts to glow and slowly pulse.");
 			}else{
-				messages.push("As you walk closer to to the wall, all five of the glowing stones begin to pulse slowly.");
+				messages.push("As you walk closer to the wall the full star starts to glow and slowly pulse.");
 			}
 			messages.push("You hear a grinding sound as the stone wall lowers into the ground.");
 		}
