@@ -202,7 +202,9 @@ null
 @:keep @:bind @:noCompletion #if display private #end class __ASSET__assets_images_statusbuttonselected_png extends flash.display.BitmapData { public function new () { super (0, 0, true, 0); } }
 @:keep @:bind @:noCompletion #if display private #end class __ASSET__assets_images_transparentbg_png extends flash.display.BitmapData { public function new () { super (0, 0, true, 0); } }
 @:keep @:bind @:noCompletion #if display private #end class __ASSET__assets_images_xbutton_png extends flash.display.BitmapData { public function new () { super (0, 0, true, 0); } }
-@:keep @:bind @:noCompletion #if display private #end class __ASSET__assets_music_music_goes_here_txt extends null { }
+@:keep @:bind @:noCompletion #if display private #end class __ASSET__assets_music_nomoon_mp3 extends null { }
+@:keep @:bind @:noCompletion #if display private #end class __ASSET__assets_music_nomoon_ogg extends null { }
+@:keep @:bind @:noCompletion #if display private #end class __ASSET__assets_music_soloacousticblues_ogg extends null { }
 @:keep @:bind @:noCompletion #if display private #end class __ASSET__assets_sounds_sounds_go_here_txt extends null { }
 @:keep @:bind @:noCompletion #if display private #end class __ASSET__flixel_sounds_beep_ogg extends null { }
 @:keep @:bind @:noCompletion #if display private #end class __ASSET__flixel_sounds_flixel_ogg extends null { }

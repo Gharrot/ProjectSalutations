@@ -1,6 +1,7 @@
 package;
 
 import locations.*;
+import sound.SoundManager;
 import flixel.util.FlxArrayUtil;
 import flixel.util.FlxSave;
 import haxe.Serializer;
@@ -196,6 +197,7 @@ class GameVariables {
 		
 		currentLocationName = targetLocation;
 		setBG();
+		currentLocation.playMusic();
 		
 		if (resetLocationVariables)
 		{

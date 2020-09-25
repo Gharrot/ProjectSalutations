@@ -37,12 +37,6 @@ class PlayState extends FlxState
 	
 	var showDeleteButton:FlxButton;
 	
-	var rising:Bool;
-	var cameraScrollSpeed:Float = 10;
-	var cameraScrollMaxSpeed:Float = 340;
-	var cameraScrollAcceleration:Float = 180;
-	var cameraMaxY:Float = 140;
-	
 	var saveToStart:Int = 0;
 
 	override public function create()
@@ -131,83 +125,60 @@ class PlayState extends FlxState
 		
 		timeUntilNextSprite = 1;
 		deerSprites = new Array<RunningDeerSprite>();
-		
-		rising = false;
 	}
 
 	override public function update(elapsed:Float)
 	{
 		super.update(elapsed);
-		
-		if (rising)
-		{
-			if(cameraScrollSpeed < cameraScrollMaxSpeed){
-				cameraScrollSpeed += cameraScrollAcceleration*elapsed;
-				if(cameraScrollSpeed > cameraScrollMaxSpeed){
-					cameraScrollSpeed = cameraScrollMaxSpeed;
+		timeUntilNextSprite -= FlxG.elapsed;
+		if(timeUntilNextSprite <= 0){
+			var randomNums:FlxRandom = new FlxRandom();
+			//4,7
+			timeUntilNextSprite = randomNums.float(4, 7);
+			
+			var newRunningDeer:RunningDeerSprite = new RunningDeerSprite(-64, 490);
+			deerSprites[deerSprites.length] = newRunningDeer;
+			
+			newRunningDeer.scale.set(4, 4);
+			newRunningDeer.y += randomNums.int(0, 60);
+			
+			if(playingCredits){
+				if(creditsIndex >= credits.length){
+					creditsIndex = 0;
 				}
+				
+				newRunningDeer.giveNameText(credits[creditsIndex]);
+				creditsIndex++;
+			}
+			add(newRunningDeer);
+			
+			//remove offscreen deer
+			var i:Int = deerSprites.length - 1;
+			while(i >= 0){
+				if(deerSprites[i].x >= 680){
+					remove(deerSprites[i]);
+					deerSprites.remove(deerSprites[i]);
+				}
+				
+				i--;
 			}
 			
-			camera.scroll.y -= cameraScrollSpeed * elapsed;
-			
-			if(camera.scroll.y <= -640){
-				camera.scroll.y = -640;
-				rising = false;
-				switchToCharacterCreation();
+			//remove and re-add deer in right order
+			haxe.ds.ArraySort.sort(deerSprites, function (a:FlxSprite, b:FlxSprite) return cast(a.y - b.y, Int));
+			for(i in 0...deerSprites.length){
+				remove(deerSprites[i]);
 			}
-		}
-		else
-		{
-			timeUntilNextSprite -= FlxG.elapsed;
-			if(timeUntilNextSprite <= 0){
-				var randomNums:FlxRandom = new FlxRandom();
-				//4,7
-				timeUntilNextSprite = randomNums.float(4, 7);
-				
-				var newRunningDeer:RunningDeerSprite = new RunningDeerSprite(-64, 490);
-				deerSprites[deerSprites.length] = newRunningDeer;
-				
-				newRunningDeer.scale.set(4, 4);
-				newRunningDeer.y += randomNums.int(0, 60);
-				
-				if(playingCredits){
-					if(creditsIndex >= credits.length){
-						creditsIndex = 0;
-					}
-					
-					newRunningDeer.giveNameText(credits[creditsIndex]);
-					creditsIndex++;
-				}
-				add(newRunningDeer);
-				
-				//remove offscreen deer
-				var i:Int = deerSprites.length - 1;
-				while(i >= 0){
-					if(deerSprites[i].x >= 680){
-						remove(deerSprites[i]);
-						deerSprites.remove(deerSprites[i]);
-					}
-					
-					i--;
-				}
-				
-				//remove and re-add deer in right order
-				haxe.ds.ArraySort.sort(deerSprites, function (a:FlxSprite, b:FlxSprite) return cast(a.y - b.y, Int));
-				for(i in 0...deerSprites.length){
-					remove(deerSprites[i]);
-				}
-				
-				for(i in 0...deerSprites.length){
-					deerSprites[i].refreshNameText();
-					add(deerSprites[i]);
-					remove(deerSprites[i]);
-					insert(this.length, deerSprites[i]);
-				}
-				
-				if (showDeleteButton != null && saveDeleteButtons.length > 0){
-					remove(showDeleteButton);
-					insert(this.length, showDeleteButton);
-				}
+			
+			for(i in 0...deerSprites.length){
+				deerSprites[i].refreshNameText();
+				add(deerSprites[i]);
+				remove(deerSprites[i]);
+				insert(this.length, deerSprites[i]);
+			}
+			
+			if (showDeleteButton != null && saveDeleteButtons.length > 0){
+				remove(showDeleteButton);
+				insert(this.length, showDeleteButton);
 			}
 		}
 	}
@@ -229,15 +200,21 @@ class PlayState extends FlxState
 	}
 	
 	function startNewGame(saveNum:Int){
+		for(i in 0...3){
+			saves[i].close();
+		}
 		clearSavesButtons();
 		saveToStart = saveNum;
 		
 		showDeleteButton.visible = false;
 		
-		rising = true;
+		FlxG.camera.fade(0xFFD8F6F3, 0.5, false, switchToCharacterCreation);
 	}
 	
 	function continueGame(saveNum:Int){
+		for(i in 0...3){
+			saves[i].close();
+		}
 		GameVariables.instance.saveNum = saveNum;
 		GameVariables.instance.loadFromSave();
 		FlxG.switchState(new MainGame());

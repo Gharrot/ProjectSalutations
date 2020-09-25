@@ -4,7 +4,6 @@ import flixel.util.FlxSave;
 
 class SaveManager 
 {
-	
 	static public function loadSave(saveName:String){
 		var save:FlxSave = new FlxSave();
 		save.bind(saveName);
@@ -79,6 +78,8 @@ class SaveManager
 		//move to the correct location
 		gameVariables.currentLocationName = save.data.currentLocationName;
 		gameVariables.changeLocation(gameVariables.currentLocationName, false);
+		
+		save.close();
 	}
 	
 	static public function saveGame(saveName:String){
@@ -153,6 +154,6 @@ class SaveManager
 		save.data.mountVireMountainPathBlockage = gameVariables.mountVireMountainPathBlockage;
 		
 		save.flush();
+		save.close();
 	}
-	
 }

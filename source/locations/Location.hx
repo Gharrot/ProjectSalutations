@@ -44,6 +44,11 @@ class Location{
     public function new() {
 		activeDeer = new Array<Deer>();
     }
+	
+	public function playMusic()
+	{
+		
+	}
 
     public function setOut() {
 		if(!dayStarted){

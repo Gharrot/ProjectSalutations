@@ -825,7 +825,7 @@ class MainGame extends FlxState
 			currentLocationSprite.loadGraphic("assets/images/MapImages/CurrentLocationMarker.png", true);
 			currentLocationSprite.scale.set(3, 3);
 			currentLocationSprite.screenCenter();
-			newButton.y -= 40;
+			currentLocationSprite.y -= 40;
 			mapSprites.push(currentLocationSprite);
 			add(currentLocationSprite);
 			

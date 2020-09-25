@@ -39,6 +39,7 @@ class CharacterCreation extends FlxState
 
 	override public function create():Void
 	{
+		FlxG.camera.fade(0xFFD8F6F3, 0.5, true);
 		super.create();
 		this.bgColor = 0xFFD8F6F3;
 		
@@ -189,9 +190,9 @@ class CharacterCreation extends FlxState
 		
 		if (starterDeer)
 		{
-			GameVariables.instance.addFoundDeer(Deer.buildADeer(13));
-			GameVariables.instance.addFoundDeer(Deer.buildADeer(13));
-			GameVariables.instance.addFoundDeer(Deer.buildADeer(13));
+			GameVariables.instance.addFoundDeer(Deer.buildADeer(13, 6));
+			GameVariables.instance.addFoundDeer(Deer.buildADeer(13, 6));
+			GameVariables.instance.addFoundDeer(Deer.buildADeer(13, 6));
 		}
 		
 		FlxG.switchState(new MainGame());

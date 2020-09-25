@@ -25,8 +25,8 @@ class StoneStrongholdEntrance extends Location
 		exploreOptionFunctions.push(theStoreDoor);
 		
 		//The Wooden Village
-		exploreOptionNames.push("The Wooden Village");
-		exploreOptionFunctions.push(theWoodenVillage); 
+		//exploreOptionNames.push("The Wooden Village");
+		//exploreOptionFunctions.push(theWoodenVillage); 
 
 		showChoice(["Where will you head to?"], exploreOptionNames, exploreOptionFunctions, deer);
 	}

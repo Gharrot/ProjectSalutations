@@ -1,6 +1,7 @@
 package locations;
 
 import statuses.DeerStatusEffect;
+import sound.SoundManager;
 import flixel.ui.FlxButton;
 import flixel.text.FlxText;
 import flixel.FlxG;
@@ -26,6 +27,11 @@ class SquirrelVillage extends Location
 		backgroundImageFile = "assets/images/LocationImages/StoneStrongholdEntrance.png";
 		backgroundImageFileNoFrame = "assets/images/LocationImages/StoneStrongholdEntranceNoFrame.png";
 		backgroundImageFileMiniFramed = "assets/images/LocationImages/StoneStrongholdEntranceEmptyDeerTile.png";
+	}
+	
+	override public function playMusic()
+	{
+		SoundManager.instance.setBackgroundSong("SquirrelVillage");
 	}
 	
 	override public function startDay()

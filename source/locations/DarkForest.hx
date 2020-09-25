@@ -2,6 +2,8 @@ package locations;
 
 import statuses.DeerStatusEffect;
 
+import sound.SoundManager;
+
 import flixel.math.FlxRandom;
 import flixel.text.FlxText;
 import flixel.util.FlxColor;
@@ -19,6 +21,11 @@ class DarkForest extends Location
 		backgroundImageFile = "assets/images/LocationImages/DarkForest.png";
 		backgroundImageFileNoFrame = "assets/images/LocationImages/DarkForestNoFrame.png";
 		backgroundImageFileMiniFramed = "assets/images/LocationImages/DarkForestEmptyDeerTile.png";
+	}
+	
+	override public function playMusic()
+	{
+		SoundManager.instance.setBackgroundSong("DarkWoods");
 	}
 	
 	override public function returnAfterDayEnd()
