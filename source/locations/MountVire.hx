@@ -65,6 +65,20 @@ class MountVire extends Location
 				mountainMovement("Bird land");
 			}
 		}
+		else if (gameVariables.mountVireLocation == "The long windy path")
+		{
+			if (movingUpwards == "Yes")
+			{
+				mountainMovement("Mountaintop");
+			}
+		}
+		else if (gameVariables.mountVireLocation == "Bird land")
+		{
+			if (movingUpwards == "Yes")
+			{
+				mountainMovement("Squirrel fortress");
+			}
+		}
 		
 		movingUpwards = "No";
 		
@@ -148,11 +162,11 @@ class MountVire extends Location
 			
 			if (currentColdness > 0)
 			{
-				message.push("You light a pine fire and hundle around it, but the night is still cold.");
+				message.push("You light a pine fire and huddle around it, but the night is still cold.");
 			}
 			else
 			{
-				message.push("You light a pine fire and hundle around it.");
+				message.push("You light a pine fire and huddle around it.");
 			}
 		}
 		else if (choice == "Burn some maple logs")
@@ -162,11 +176,11 @@ class MountVire extends Location
 			
 			if (currentColdness > 0)
 			{
-				message.push("You light a maple fire and hundle around it, but the night still chills your bones.");
+				message.push("You light a maple fire and huddle around it, but the night is still chilling.");
 			}
 			else
 			{
-				message.push("You light a maple fire and hundle around it.");
+				message.push("You light a maple fire and huddle around it.");
 			}
 		}
 		
@@ -218,6 +232,7 @@ class MountVire extends Location
 		else if (destination == "The long windy path")
 		{
 			gameVariables.mountVireLocation = "The long windy path";
+			gameVariables.mountVireMountainPathBlockage = 8;
 			
 			message.push("Your herd treks up the mountain for a while and comes to a small plateau.");
 			message.push("The mountain path continues upwards, growing colder and colder.");
@@ -226,10 +241,21 @@ class MountVire extends Location
 		else if (destination == "Bird land")
 		{
 			gameVariables.mountVireLocation = "Bird land";
+			gameVariables.mountVireMountainPathBlockage = 7;
 			
 			message.push("You lead your herd through the secret tunnel and onto the other side of the mountain.");
 			message.push("This side is covered with flat plateaus scattered with trees.");
 			message.push("Almost every tree has a few birds sitting on its branches. They eye your food supplies hungrily.");
+			showChoice(message, ["Continue"], [returnToDenChoice], gameVariables.getPlayerDeer());
+		}
+		else if (destination == "Mountaintop")
+		{
+			message.push("Up.");
+			showChoice(message, ["Continue"], [returnToDenChoice], gameVariables.getPlayerDeer());
+		}
+		else if (destination == "Squirrel fortress")
+		{
+			message.push("In.");
 			showChoice(message, ["Continue"], [returnToDenChoice], gameVariables.getPlayerDeer());
 		}
 	}
@@ -279,7 +305,7 @@ class MountVire extends Location
 		{
 			//The upward trail
 			exploreOptionNames.push("Mountain trail");
-			exploreOptionFunctions.push(coffeeTent);
+			exploreOptionFunctions.push(mountainTrail);
 			
 			//The smaller rocks
 			exploreOptionNames.push("Small rocks");
@@ -989,7 +1015,98 @@ class MountVire extends Location
 	
 	override public function defend(deer:Array<Deer>)
 	{
+		var randomNums:FlxRandom = new FlxRandom();
+		var message:Array<String> = new Array<String>();
 		if (GameVariables.instance.mountVireLocation == "Base camp")
+		{
+			if (deer.length > 0)
+			{
+				showResult(["It seems there's nothing that will attack your den on this part of the mountain."]);
+			}
+			else
+			{
+				setOut();
+			}
+		}
+		else if (GameVariables.instance.mountVireLocation == "Bird land")
+		{
+			message.push("Night draws and the birds start to flock over your food supplies.");
+			var birdAttackReduction:Int = 0;
+			
+			for (i in 0...deer.length)
+			{
+				var birdDefendingSkill:Int = deer[i].dex * 2 + deer[i].lck + randomNums.int(0, 5);
+				var currentDeer:Deer = deer[i];
+				
+				if (birdDefendingSkill >= 19)
+				{
+					message.push(currentDeer.getName() + " swats at the birds as they dive at the food, bopping every one of them.");
+					birdAttackReduction += 5;
+				}
+				else if (birdDefendingSkill >= 17)
+				{
+					message.push(currentDeer.getName() + " swats at the birds as they dive at the food, bopping almost all of them.");
+					birdAttackReduction += 4;
+				}
+				else if (birdDefendingSkill >= 15)
+				{
+					message.push(currentDeer.getName() + " jumps up at the birds as they dive at the food, scaring off a bunch of them.");
+					birdAttackReduction += 3;
+				}
+				else if (birdDefendingSkill >= 13)
+				{
+					message.push(currentDeer.getName() + " jumps up at the birds as they dive at the food, scaring off some of them.");
+					birdAttackReduction += 2;
+				}
+				else if (birdDefendingSkill >= 10)
+				{
+					message.push(currentDeer.getName() + " can't keep up with the birds and barely manages to prevent them from stealing food.");
+					birdAttackReduction += 1;
+				}
+				else
+				{
+					message.push(currentDeer.getName() + " can't keep up with the birds and isn't any use of all in defending the food pile.");
+				}
+			}
+			
+			if (birdAttackReduction >= 5)
+			{
+				message.push("The defending deer successfully scared off all of the birds.");
+			}
+			else if (birdAttackReduction >= 4)
+			{
+				message.push("The defending deer warded off most of the birds, but still lost some scraps.");
+				message.push("(-1 food)");
+				GameVariables.instance.modifyFood(-1);
+			}
+			else if (birdAttackReduction >= 2)
+			{
+				message.push("The defending deer only managed to ward off some of the birds.");
+				message.push("(-2 food)");
+				GameVariables.instance.modifyFood(-2);
+			}
+			else if (birdAttackReduction >= 1)
+			{
+				message.push("The defending deer barely managed to ward off any of the birds.");
+				message.push("(-3 food)");
+				GameVariables.instance.modifyFood(-3);
+			}
+			else
+			{
+				if (deer.length == 0)
+				{
+					message.push("With no one defending the food stores the birds take as much as they want.");
+					message.push("(-4 food)");
+				}
+				else
+				{
+					message.push("Your defenders' defense was completely ineffective, and the birds take as much food as they want.");
+					message.push("(-4 food)");
+				}
+				GameVariables.instance.modifyFood(-4);
+			}
+			showResult(message);
+		else
 		{
 			if (deer.length > 0)
 			{
@@ -1085,6 +1202,17 @@ class MountVire extends Location
 				}
 				
 				showResult(message);
+			}
+			else
+			{
+				setOut();
+			}
+		}
+		else
+		{
+			if (deer.length > 0)
+			{
+				showResult(["It seems there's nothing to hunt on this area of the mountain."]);
 			}
 			else
 			{
