@@ -33,7 +33,7 @@ class SoundManager
 	
 	public function playSoundEffect(soundName:String)
 	{
-		if (songName != currentSongName)
+		if (soundName != currentSongName)
 		{
 			var songPath:String = "";
 			if (soundName == "Rockfall")

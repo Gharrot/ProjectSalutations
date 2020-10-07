@@ -226,6 +226,10 @@ class ForgottenWoods extends Location
 		var exploreOptionNames:Array<String> = new Array<String>();
 		var exploreOptionFunctions:Array<(String, Deer)->Void> = new Array<(String, Deer)->Void>();
 
+		//Deer
+		exploreOptionNames.push("Look for Deer");
+		exploreOptionFunctions.push(findDeer);
+		
 		//Cave
 		if (GameVariables.instance.unfamiliarWoodsCaveFound)
 		{
@@ -236,17 +240,6 @@ class ForgottenWoods extends Location
 			exploreOptionNames.push("???");
 		}
 		exploreOptionFunctions.push(cave);
-
-		//Woods
-		if (GameVariables.instance.unfamiliarWoodsDeepWoodsFound)
-		{
-			exploreOptionNames.push("The Deep Woods");
-		}
-		else
-		{
-			exploreOptionNames.push("???");
-		}
-		exploreOptionFunctions.push(deepWoods);
 		
 		//Spring
 		if (GameVariables.instance.unfamiliarWoodsIntellectSpringFound)
@@ -280,10 +273,6 @@ class ForgottenWoods extends Location
 			exploreOptionNames.push("???");
 		}
 		exploreOptionFunctions.push(squirrelVisiting);
-
-		//Deer
-		exploreOptionNames.push("Look for Deer");
-		exploreOptionFunctions.push(findDeer);
 
 		if (exploreOptionNames.length <= 1)
 		{
@@ -413,9 +402,9 @@ class ForgottenWoods extends Location
 			message.push("You place some of the food you brought for the day on the ground in front of you.");
 			message.push("A few squirrels run down the tree to collect the food.");
 			message.push("They look up at you and chitter happily before scampering back up the tree to divide your gift.");
-			message.push("(+2 Luck for 3 days).");
+			message.push("(+3 Luck for 3 days).");
 			
-			deer.addStatusEffect(new DeerStatusEffect("Luck of the Squirrels", 4, 0, 0, 0, 0, 2));
+			deer.addStatusEffect(new DeerStatusEffect("Luck of the Squirrels", 4, 0, 0, 0, 0, 3));
 		}
 		else
 		{
@@ -430,7 +419,7 @@ class ForgottenWoods extends Location
 		var message:Array<String> = new Array<String>();
 		message.push("You ignore the squirrels and keep walking.");
 		
-		deer.addStatusEffect(new DeerStatusEffect("Fury of the Squirrels", 3, 0, 0, 0, 0, -1));
+		deer.addStatusEffect(new DeerStatusEffect("Fury of the Squirrels", 2, 0, 0, 0, 0, -1));
 		
 		showResult(message);
 	}

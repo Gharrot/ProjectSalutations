@@ -25,6 +25,34 @@ class MountVire extends Location
 		backgroundImageFileMiniFramed = "assets/images/LocationImages/TheTrailDay5EmptyDeerTile.png";
 	}
 	
+	public function updateBackgroundImages()
+	{
+		if (GameVariables.instance.mountVireLocation == "Base camp")
+		{
+			backgroundImageFile = "assets/images/LocationImages/AbandonedFields.png";
+			backgroundImageFileNoFrame = "assets/images/LocationImages/AbandonedFieldsNoFrame.png";
+			backgroundImageFileMiniFramed = "assets/images/LocationImages/AbandonedFieldsEmptyDeerTile.png";
+		}
+		else if (GameVariables.instance.mountVireLocation == "Goat plateau")
+		{
+			backgroundImageFile = "assets/images/LocationImages/TheTrailDay2.png";
+			backgroundImageFileNoFrame = "assets/images/LocationImages/TheTrailDay2NoFrame.png";
+			backgroundImageFileMiniFramed = "assets/images/LocationImages/TheTrailDay2EmptyDeerTile.png";
+		}
+		else if (GameVariables.instance.mountVireLocation == "The long windy path")
+		{
+			backgroundImageFile = "assets/images/LocationImages/TheTrailDay3.png";
+			backgroundImageFileNoFrame = "assets/images/LocationImages/TheTrailDay3NoFrame.png";
+			backgroundImageFileMiniFramed = "assets/images/LocationImages/TheTrailDay3EmptyDeerTile.png";
+		}
+		else if (GameVariables.instance.mountVireLocation == "Bird land")
+		{
+			backgroundImageFile = "assets/images/LocationImages/TheTrailDay4.png";
+			backgroundImageFileNoFrame = "assets/images/LocationImages/TheTrailDay4NoFrame.png";
+			backgroundImageFileMiniFramed = "assets/images/LocationImages/TheTrailDay4EmptyDeerTile.png";
+		}
+	}
+	
 	override public function startDay()
 	{
 		coldPhaseCompleted = false;
@@ -1106,6 +1134,7 @@ class MountVire extends Location
 				GameVariables.instance.modifyFood(-4);
 			}
 			showResult(message);
+		}
 		else
 		{
 			if (deer.length > 0)

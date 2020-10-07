@@ -59,11 +59,11 @@ class DeerTile extends FlxButton{
 		
 		if(actionNum == 0){
 			//Looking
-			actionTime = randomNums.float(5, 8);
+			actionTime = randomNums.float(5, 12);
 			deerSprite.animation.play("looking");
 		}else if(actionNum == 1){
 			//Monching
-			actionTime = randomNums.float(2, 8);
+			actionTime = randomNums.float(2, 12);
 			deerSprite.animation.play("monching");
 		}
 	}
@@ -141,6 +141,8 @@ class DeerTile extends FlxButton{
             statTexts[i].visible = true;
 		}
         statusText.visible = true;
+		
+		selected = true;
     }
 
     private function onHoverOut(){
@@ -148,6 +150,8 @@ class DeerTile extends FlxButton{
             statTexts[i].visible = false;
 		}
         statusText.visible = false;
+		
+		selected = false;
     }
 
     public function moveDisplay(x:Int, y:Int):Void{

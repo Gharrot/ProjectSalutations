@@ -75,6 +75,48 @@ class MainGame extends FlxState
 	override public function update(elapsed:Float)
 	{
 		super.update(elapsed);
+		
+		if (currentScreen == "Herd")
+		{
+			if (deerTiles != null)
+			{
+				var selectedDeerTile:DeerTile = null;
+				for (i in 0...4)
+				{
+					if (deerTiles[i].selected)
+					{
+						selectedDeerTile = deerTiles[i];
+						break;
+					}
+				}
+				
+				if (selectedDeerTile != null && selectedDeerTile.deer.health > 0)
+				{
+					if (FlxG.keys.pressed.E)
+					{
+						selectedDeerTile.deer.currentAction = "Exploring";
+					}
+					else if (FlxG.keys.pressed.F)
+					{
+						selectedDeerTile.deer.currentAction = "Foraging";
+					}
+					else if (FlxG.keys.pressed.H)
+					{
+						selectedDeerTile.deer.currentAction = "Hunting";
+					}
+					else if (FlxG.keys.pressed.D)
+					{
+						selectedDeerTile.deer.currentAction = "Defending";
+					}
+					else if (FlxG.keys.pressed.R)
+					{
+						selectedDeerTile.deer.currentAction = "Resting";
+					}
+					
+					selectedDeerTile.updateDeer();
+				}
+			}
+		}
 	}
 
     public function returnToMainScreen() {
@@ -642,24 +684,23 @@ class MainGame extends FlxState
 			mapSprites.push(currentLocationSprite);
 			add(currentLocationSprite);
 			
-			//Dark Forest
-			var newButton:LocationButton = new LocationButton("Dark Forest", 7);
-			newButton.screenCenter();
-			newButton.x -= 130;
-			mapButtons.push(newButton);
-			add(newButton);
-			
-			if (!GameVariables.instance.unfamiliarWoodsPathToDarkWoodsFound)
-			{
-				newButton.lock("You must explore and find a path before you can travel here");
-			}
-			
-			//Ghost Town
-			var newButton:LocationButton = new LocationButton("Ghost Town", 6);
+			//The Trail
+			var newButton:LocationButton = new LocationButton("The Trail", 0);
+			newButton.setMessage("This trail seems to continue for quite a long ways. Are you prepared to set out?");
 			newButton.screenCenter();
 			newButton.x += 100;
 			mapButtons.push(newButton);
 			add(newButton);
+			
+			//Stone Stronghold Entrance
+			if (GameVariables.instance.undergroundCityReached)
+			{
+				var newButton:LocationButton = new LocationButton("Stone Stronghold Entrance", 6);
+				newButton.screenCenter();
+				newButton.x += 180;
+				mapButtons.push(newButton);
+				add(newButton);
+			}
 		}
 		else if (GameVariables.instance.currentLocationName == "Dark Forest")
 		{
@@ -668,42 +709,17 @@ class MainGame extends FlxState
 			currentLocationSprite.loadGraphic("assets/images/MapImages/CurrentLocationMarker.png", true);
 			currentLocationSprite.scale.set(3, 3);
 			currentLocationSprite.screenCenter();
+			currentLocationSprite.y -= 80;
 			mapSprites.push(currentLocationSprite);
 			add(currentLocationSprite);
 			
-			//Unfamiliar Woods
-			var newButton:LocationButton = new LocationButton("Unfamiliar Woods", 2);
+			//Stone Overlook
+			var newButton:LocationButton = new LocationButton("Stone Stronghold Entrance", 0);
+			newButton.setMessage("Flee the dark woods and set out back to the overlook?");
 			newButton.screenCenter();
-			newButton.x += 120;
+			newButton.x += 20;
 			mapButtons.push(newButton);
 			add(newButton);
-		}
-		else if (GameVariables.instance.currentLocationName == "Ghost Town")
-		{
-			//Ghost Town (current location)
-			var currentLocationSprite:FlxSprite = new FlxSprite(0, 0);
-			currentLocationSprite.loadGraphic("assets/images/MapImages/CurrentLocationMarker.png", true);
-			currentLocationSprite.scale.set(3, 3);
-			currentLocationSprite.screenCenter();
-			mapSprites.push(currentLocationSprite);
-			add(currentLocationSprite);
-			
-			//Unfamiliar Woods
-			var newButton:LocationButton = new LocationButton("Unfamiliar Woods", 2);
-			newButton.screenCenter();
-			newButton.x -= 100;
-			mapButtons.push(newButton);
-			add(newButton);
-			
-			//Stone Stronghold Entrance
-			if (GameVariables.instance.undergroundCityReached)
-			{
-				var newButton:LocationButton = new LocationButton("Stone Stronghold Entrance", 0);
-				newButton.screenCenter();
-				newButton.x += 180;
-				mapButtons.push(newButton);
-				add(newButton);
-			}
 		}
 		else if (GameVariables.instance.currentLocationName == "The Trail")
 		{
@@ -715,12 +731,23 @@ class MainGame extends FlxState
 			mapSprites.push(currentLocationSprite);
 			add(currentLocationSprite);
 			
-			//Ghost Town
-			var newButton:LocationButton = new LocationButton("Ghost Town", 2);
+			//Unfamiliar Woods
+			var newButton:LocationButton = new LocationButton("Unfamiliar Woods", 0);
+			newButton.setMessage("Do you want to set off back to the woods you came from?");
 			newButton.screenCenter();
 			newButton.x -= 90;
 			mapButtons.push(newButton);
 			add(newButton);
+			
+			//Stone Stronghold Entrance
+			if (GameVariables.instance.undergroundCityReached)
+			{
+				var newButton:LocationButton = new LocationButton("Stone Stronghold Entrance", 6);
+				newButton.screenCenter();
+				newButton.x += 90;
+				mapButtons.push(newButton);
+				add(newButton);
+			}
 		}
 		else if (GameVariables.instance.currentLocationName == "Stone Stronghold Entrance")
 		{
@@ -732,20 +759,10 @@ class MainGame extends FlxState
 			mapSprites.push(currentLocationSprite);
 			add(currentLocationSprite);
 			
-			//Ghost Town
-			if (GameVariables.instance.undergroundCityReached)
-			{
-				var newButton:LocationButton = new LocationButton("Ghost Town", 0);
-				newButton.screenCenter();
-				newButton.x -= 180;
-				mapButtons.push(newButton);
-				add(newButton);
-			}
-			
 			//Underground City
 			if (GameVariables.instance.undergroundCityOpened)
 			{
-				var newButton:LocationButton = new LocationButton("Underground City", 0);
+				var newButton:LocationButton = new LocationButton("Underground City", 1);
 				newButton.screenCenter();
 				newButton.y += 80;
 				mapButtons.push(newButton);
@@ -753,9 +770,24 @@ class MainGame extends FlxState
 			}
 			
 			//Squirrel Village
-			var newButton:LocationButton = new LocationButton("Squirrel Village", 0);
+			var newButton:LocationButton = new LocationButton("Squirrel Village", 2);
 			newButton.screenCenter();
 			newButton.x += 80;
+			mapButtons.push(newButton);
+			add(newButton);
+			
+			//Dark Forest
+			var newButton:LocationButton = new LocationButton("Dark Forest", 2);
+			newButton.screenCenter();
+			newButton.x -= 20;
+			newButton.y -= 80;
+			mapButtons.push(newButton);
+			add(newButton);
+			
+			//Unfamiliar Woods
+			var newButton:LocationButton = new LocationButton("Unfamiliar Woods", 6);
+			newButton.screenCenter();
+			newButton.x -= 180;
 			mapButtons.push(newButton);
 			add(newButton);
 		}
@@ -770,23 +802,9 @@ class MainGame extends FlxState
 			mapSprites.push(currentLocationSprite);
 			add(currentLocationSprite);
 			
-			//Ghost Town
-			var newButton:LocationButton = new LocationButton("Ghost Town", 0);
-			newButton.screenCenter();
-			newButton.x -= 180;
-			mapButtons.push(newButton);
-			add(newButton);
-			
 			//Stone Stronghold Entrance
-			var newButton:LocationButton = new LocationButton("Stone Stronghold Entrance", 0);
+			var newButton:LocationButton = new LocationButton("Stone Stronghold Entrance", 1);
 			newButton.screenCenter();
-			mapButtons.push(newButton);
-			add(newButton);
-			
-			//Squirrel Village
-			var newButton:LocationButton = new LocationButton("Squirrel Village", 0);
-			newButton.screenCenter();
-			newButton.x += 80;
 			mapButtons.push(newButton);
 			add(newButton);
 		}
@@ -801,22 +819,11 @@ class MainGame extends FlxState
 			add(currentLocationSprite);
 			
 			//Stronghold Entrance
-			var newButton:LocationButton = new LocationButton("Stone Stronghold Entrance", 0);
+			var newButton:LocationButton = new LocationButton("Stone Stronghold Entrance", 2);
 			newButton.screenCenter();
 			newButton.x -= 80;
 			mapButtons.push(newButton);
 			add(newButton);
-			
-			//Underground City
-			if (GameVariables.instance.undergroundCityOpened)
-			{
-				var newButton:LocationButton = new LocationButton("Underground City", 0);
-				newButton.screenCenter();
-				newButton.x -= 80;
-				newButton.y += 80;
-				mapButtons.push(newButton);
-				add(newButton);
-			}
 		}
 		else if (GameVariables.instance.currentLocationName == "Mount Vire")
 		{
@@ -830,7 +837,7 @@ class MainGame extends FlxState
 			add(currentLocationSprite);
 			
 			//Squirrel Village
-			var newButton:LocationButton = new LocationButton("Squirrel Village", 0);
+			var newButton:LocationButton = new LocationButton("Squirrel Village", 2);
 			newButton.screenCenter();
 			newButton.x -= 110;
 			mapButtons.push(newButton);

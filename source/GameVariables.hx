@@ -66,6 +66,7 @@ class GameVariables {
 	public var theTrailDayStreamFound:Bool;
 	public var theTrailDayBridgeFound:Bool;
 	public var theTrailDayMedallionTaken:Bool;
+	public var theTrailCompleted:Bool;
 	
 	//Underground City
 	public var undergroundCityReached:Bool;
@@ -481,6 +482,7 @@ class GameVariables {
 		theTrailDayStreamFound = false;
 		theTrailDayBridgeFound = false;
 		theTrailDayMedallionTaken = false;
+		theTrailCompleted = false;
 		
 		//Underground City
 		undergroundCityReached = false;
@@ -521,15 +523,19 @@ class GameVariables {
 		}
 		else if (locationName == "The Trail")
 		{
-			return "assets/images/LocationImages/AbandonedFields.png";
+			return "assets/images/LocationImages/TheTrailDay3.png";
 		}
 		else if (locationName == "Stone Stronghold Entrance")
 		{
-			return "assets/images/LocationImages/StoneStrongholdEntrance.png";
+			return "assets/images/LocationImages/StoneOverlook.png";
 		}
 		else if (locationName == "Underground City")
 		{
 			return "assets/images/LocationImages/UndergroundCity.png";
+		}
+		else if (locationName == "Squirrel Village")
+		{
+			return "assets/images/LocationImages/SquirrelVillage.png";
 		}
 		
 		return "assets/images/LocationImages/ForgottenWoods.png";

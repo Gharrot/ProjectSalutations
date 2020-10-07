@@ -26,15 +26,15 @@ class TheTrail extends Location
 	{
 		if (GameVariables.instance.theTrailDayNumber == 1)
 		{
-			backgroundImageFile = "assets/images/LocationImages/AbandonedFields.png";
-			backgroundImageFileNoFrame = "assets/images/LocationImages/AbandonedFieldsNoFrame.png";
-			backgroundImageFileMiniFramed = "assets/images/LocationImages/AbandonedFieldsEmptyDeerTile.png";
-		}
-		else if (GameVariables.instance.theTrailDayNumber == 2)
-		{
 			backgroundImageFile = "assets/images/LocationImages/TheTrailDay2.png";
 			backgroundImageFileNoFrame = "assets/images/LocationImages/TheTrailDay2NoFrame.png";
 			backgroundImageFileMiniFramed = "assets/images/LocationImages/TheTrailDay2EmptyDeerTile.png";
+		}
+		else if (GameVariables.instance.theTrailDayNumber == 2)
+		{
+			backgroundImageFile = "assets/images/LocationImages/TheTrailDay25.png";
+			backgroundImageFileNoFrame = "assets/images/LocationImages/TheTrailDay25NoFrame.png";
+			backgroundImageFileMiniFramed = "assets/images/LocationImages/TheTrailDay25EmptyDeerTile.png";
 		}
 		else if (GameVariables.instance.theTrailDayNumber == 3)
 		{
@@ -104,9 +104,16 @@ class TheTrail extends Location
 		}
 		else if (GameVariables.instance.theTrailDayNumber == 5)
 		{
-			message.push("After a short hike through some rocky terrain, you round a corner and your compulsion to travel fades away.");
-			message.push("Before you seems to be a stone door carved into the side of a cliff.");
-			message.push("The trail continues a bit further downhill to the entrance of some sort of settlement. A dozen or so log buildings sit on the plateau below you.");
+			
+			message.push("After a short hike through some rocky terrain, you come to a small hill overlooking the surrounding area.");
+			message.push("Your journey is finished.");
+			
+			if (!GameVariables.instance.theTrailCompleted)
+			{
+				message.push("(You can now spend food to travel back here without going through the whole trail)");
+			}
+			
+			GameVariables.instance.theTrailCompleted = true;
 			showChoice(message, ["Continue"], [finishingTheTrail], gameVariables.getPlayerDeer());
 		}
 		
@@ -640,7 +647,7 @@ class TheTrail extends Location
 					}
 					else if (rabbitScaringSkill >= 17)
 					{
-						message.push(currentDeer.getName() + " dashes around the den, scaring off most of the rabbits the come across.");
+						message.push(currentDeer.getName() + " dashes around the den, scaring off most of the rabbits they come across.");
 						rabbitAttackReduction += 4;
 					}
 					else if (rabbitScaringSkill >= 15)
@@ -677,13 +684,13 @@ class TheTrail extends Location
 				else if (rabbitAttackReduction >= 4)
 				{
 					message.push("You stopped some of the rabbits from stealing your food, but still lose plenty.");
-					message.push("(-5 food)");
+					message.push("(-4 food)");
 					GameVariables.instance.modifyFood(-5);
 				}
 				else if (rabbitAttackReduction >= 2)
 				{
 					message.push("You barely managed to hinder the rabbits' attempts to steal your food.");
-					message.push("(-8 food)");
+					message.push("(-6 food)");
 					GameVariables.instance.modifyFood(-8);
 				}
 				else

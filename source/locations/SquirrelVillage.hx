@@ -24,9 +24,9 @@ class SquirrelVillage extends Location
 		super();
 		
 		name = "Squirrel Village";
-		backgroundImageFile = "assets/images/LocationImages/StoneStrongholdEntrance.png";
-		backgroundImageFileNoFrame = "assets/images/LocationImages/StoneStrongholdEntranceNoFrame.png";
-		backgroundImageFileMiniFramed = "assets/images/LocationImages/StoneStrongholdEntranceEmptyDeerTile.png";
+		backgroundImageFile = "assets/images/LocationImages/SquirrelVillage.png";
+		backgroundImageFileNoFrame = "assets/images/LocationImages/SquirrelVillageNoFrame.png";
+		backgroundImageFileMiniFramed = "assets/images/LocationImages/SquirrelVillageEmptyDeerTile.png";
 	}
 	
 	override public function playMusic()

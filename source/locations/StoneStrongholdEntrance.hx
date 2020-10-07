@@ -10,9 +10,9 @@ class StoneStrongholdEntrance extends Location
 		super();
 		
 		name = "Stone Stronghold Entrance";
-		backgroundImageFile = "assets/images/LocationImages/StoneStrongholdEntrance.png";
-		backgroundImageFileNoFrame = "assets/images/LocationImages/StoneStrongholdEntranceNoFrame.png";
-		backgroundImageFileMiniFramed = "assets/images/LocationImages/StoneStrongholdEntranceEmptyDeerTile.png";
+		backgroundImageFile = "assets/images/LocationImages/StoneOverlook.png";
+		backgroundImageFileNoFrame = "assets/images/LocationImages/StoneOverlookNoFrame.png";
+		backgroundImageFileMiniFramed = "assets/images/LocationImages/StoneOverlookEmptyDeerTile.png";
 	}
 	
 	override public function explore(deer:Deer)
@@ -23,10 +23,6 @@ class StoneStrongholdEntrance extends Location
 		//The Stone Door 
 		exploreOptionNames.push("The Stone Door");
 		exploreOptionFunctions.push(theStoreDoor);
-		
-		//The Wooden Village
-		//exploreOptionNames.push("The Wooden Village");
-		//exploreOptionFunctions.push(theWoodenVillage); 
 
 		showChoice(["Where will you head to?"], exploreOptionNames, exploreOptionFunctions, deer);
 	}
@@ -44,23 +40,8 @@ class StoneStrongholdEntrance extends Location
 		
 		var message:Array<String> = new Array<String>();
 		message.push("You step into a moderate-sized stone room.");
-		message.push("A staircase to your left leads down a bit, then continues as a tunnel. The tunnel seems to lead back to the bar in the ghost town you came from.");
 		message.push("Directly ahead of you is a low stone pedestal.");
-		showChoice(message, ["Follow the tunnel", "Check the pedestal"], [headToTheBar, stonePedestal], deer);
-	}
-	
-	function headToTheBar(choice:String, deer:Deer)
-	{
-		var message:Array<String> = new Array<String>();
-		message.push("You head down the staircase and follow the tunnel back to the ghost town.");
-		showChoice(message, ["Continue"], [takingTheTunnel], deer);
-	}
-	
-	function takingTheTunnel(choice:String, deer:Deer)
-	{
-		GameVariables.instance.changeLocation("Ghost Town");
-		resetDailyVariables();
-		returnAfterDayEnd();
+		showChoice(message, ["Check the pedestal"], [stonePedestal], deer);
 	}
 	
 	function stonePedestal(choice:String, deer:Deer)
@@ -125,15 +106,6 @@ class StoneStrongholdEntrance extends Location
 		GameVariables.instance.changeLocation("Underground City");
 		resetDailyVariables();
 		returnAfterDayEnd();
-	}
-	
-	public function theWoodenVillage(choice:String, deer:Deer)
-	{
-		var message:Array<String> = new Array<String>();
-		message.push("You head over to the entrance of the wooden village, but a group of squirrels scurry over and stop you.");
-		message.push("It seems they're not ready for you yet.");
-		message.push("(You'll have to wait for a future update, sorry)");
-		showResult(message);
 	}
 	
 	override public function forage(deer:Deer) 

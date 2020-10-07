@@ -51,6 +51,37 @@ class DeerActionScreen extends FlxObject{
         setupGraphics();
         setupButtons();
     }
+	
+	override public function update(elapsed:Float):Void
+	{
+		super.update(elapsed);
+		
+		if (FlxG.keys.justPressed.E)
+		{
+			actionOptionClicked("Exploring", 0);
+		}
+		else if (FlxG.keys.justPressed.F)
+		{
+			actionOptionClicked("Foraging", 1);
+		}
+		else if (FlxG.keys.justPressed.H)
+		{
+			actionOptionClicked("Hunting", 2);
+		}
+		else if (FlxG.keys.justPressed.D)
+		{
+			actionOptionClicked("Defending", 3);
+		}
+		else if (FlxG.keys.justPressed.R)
+		{
+			actionOptionClicked("Resting", 4);
+		}
+		
+		if (FlxG.mouse.justReleasedRight)
+		{
+			close();
+		}
+	}
 
     public function close()
 	{

@@ -260,7 +260,7 @@ class Deer{
 		
 		if (resultNames == null)
 		{
-			resultNames = statNames;
+			resultNames = ["Strength", "Resilience", "Dexterity", "Intellect", "Fortune"];
 		}
 		
 		var randomizer:FlxRandom = new FlxRandom();
@@ -271,8 +271,8 @@ class Deer{
 		
 		for(i in 0...statNames.length){
 			if(getStatByName(statNames[i]) > maxSkillValue){
-				maxSkillValue = getStatByName(statNames[i]);
 				maxSkillName = statNames[i];
+				maxSkillValue = getStatByName(statNames[i]);
 			}
 		} 
 		

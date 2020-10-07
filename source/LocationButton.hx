@@ -5,7 +5,7 @@ import flixel.FlxG;
 
 class LocationButton extends FlxButton
 {
-	var lockedMessage:String = "";
+	var message:String;
 	var locked:Bool = false;
 	
 	var locationName:String;
@@ -27,8 +27,13 @@ class LocationButton extends FlxButton
 	
 	public function lock(message:String)
 	{
-		lockedMessage = message;
+		setMessage(message);
 		locked = true;
+	}
+	
+	public function setMessage(message:String)
+	{
+		this.message = message;
 	}
 	
 	public function showTravelConfirmation()
@@ -36,9 +41,9 @@ class LocationButton extends FlxButton
 		var mainGameState:MainGame = cast(FlxG.state, MainGame);
 		var travelConfirmationBox:TravelConfirmationBox = mainGameState.locationMovement(locationName, cost, locked);
 		
-		if (locked)
+		if (message != null)
 		{
-			travelConfirmationBox.questionText.text = lockedMessage;
+			travelConfirmationBox.questionText.text = message;
 		}
 	}
 	

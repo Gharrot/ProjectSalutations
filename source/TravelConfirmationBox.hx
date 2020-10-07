@@ -53,7 +53,7 @@ class TravelConfirmationBox extends ConfirmationBox
 	{
 		super.setupGraphics();
 		
-		locationSprite = new FlxSprite(0, 240);
+		locationSprite = new FlxSprite(0, 270);
 		locationSprite.loadGraphic(GameVariables.getLocationSpriteByName(locationName), true, 190, 134);
 		locationSprite.screenCenter(FlxAxes.X);
 		FlxG.state.add(locationSprite);
