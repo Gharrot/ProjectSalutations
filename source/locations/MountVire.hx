@@ -20,36 +20,37 @@ class MountVire extends Location
 		super();
 		
 		name = "Mount Vire";
-		backgroundImageFile = "assets/images/LocationImages/TheTrailDay5.png";
-		backgroundImageFileNoFrame = "assets/images/LocationImages/TheTrailDay5NoFrame.png";
-		backgroundImageFileMiniFramed = "assets/images/LocationImages/TheTrailDay5EmptyDeerTile.png";
+		backgroundImageFile = "assets/images/LocationImages/Basecamp.png";
+		backgroundImageFileNoFrame = "assets/images/LocationImages/BasecampNoFrame.png";
+		backgroundImageFileMiniFramed = "assets/images/LocationImages/BasecampEmptyDeerTile.png";
+		updateBackgroundImages();
 	}
 	
 	public function updateBackgroundImages()
 	{
 		if (GameVariables.instance.mountVireLocation == "Base camp")
 		{
-			backgroundImageFile = "assets/images/LocationImages/AbandonedFields.png";
-			backgroundImageFileNoFrame = "assets/images/LocationImages/AbandonedFieldsNoFrame.png";
-			backgroundImageFileMiniFramed = "assets/images/LocationImages/AbandonedFieldsEmptyDeerTile.png";
+			backgroundImageFile = "assets/images/LocationImages/Basecamp.png";
+			backgroundImageFileNoFrame = "assets/images/LocationImages/BasecampNoFrame.png";
+			backgroundImageFileMiniFramed = "assets/images/LocationImages/BasecampEmptyDeerTile.png";
 		}
 		else if (GameVariables.instance.mountVireLocation == "Goat plateau")
 		{
-			backgroundImageFile = "assets/images/LocationImages/TheTrailDay2.png";
-			backgroundImageFileNoFrame = "assets/images/LocationImages/TheTrailDay2NoFrame.png";
-			backgroundImageFileMiniFramed = "assets/images/LocationImages/TheTrailDay2EmptyDeerTile.png";
+			backgroundImageFile = "assets/images/LocationImages/GoatPlateau.png";
+			backgroundImageFileNoFrame = "assets/images/LocationImages/GoatPlateauNoFrame.png";
+			backgroundImageFileMiniFramed = "assets/images/LocationImages/GoatPlateauEmptyDeerTile.png";
 		}
 		else if (GameVariables.instance.mountVireLocation == "The long windy path")
 		{
-			backgroundImageFile = "assets/images/LocationImages/TheTrailDay3.png";
-			backgroundImageFileNoFrame = "assets/images/LocationImages/TheTrailDay3NoFrame.png";
-			backgroundImageFileMiniFramed = "assets/images/LocationImages/TheTrailDay3EmptyDeerTile.png";
+			backgroundImageFile = "assets/images/LocationImages/WindyPath.png";
+			backgroundImageFileNoFrame = "assets/images/LocationImages/WindyPathNoFrame.png";
+			backgroundImageFileMiniFramed = "assets/images/LocationImages/WindyPathEmptyDeerTile.png";
 		}
 		else if (GameVariables.instance.mountVireLocation == "Bird land")
 		{
-			backgroundImageFile = "assets/images/LocationImages/TheTrailDay4.png";
-			backgroundImageFileNoFrame = "assets/images/LocationImages/TheTrailDay4NoFrame.png";
-			backgroundImageFileMiniFramed = "assets/images/LocationImages/TheTrailDay4EmptyDeerTile.png";
+			backgroundImageFile = "assets/images/LocationImages/BirdLand.png";
+			backgroundImageFileNoFrame = "assets/images/LocationImages/BirdLandNoFrame.png";
+			backgroundImageFileMiniFramed = "assets/images/LocationImages/BirdLandEmptyDeerTile.png";
 		}
 	}
 	
