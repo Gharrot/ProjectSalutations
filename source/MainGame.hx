@@ -16,7 +16,7 @@ class MainGame extends FlxState
     var continueButton:FlxButton;
 
 	//Topbar
-    var dateText:FlxText;
+    var dayStatusText:FlxText;
     var foodText:FlxText;
 	
     var herdButton:FlxButton;
@@ -347,7 +347,7 @@ class MainGame extends FlxState
         interactButton.labelAlphas[2] = 1.0;
         //add(interactButton);
 		
-		dropoffButton = new FlxButton(290, 292, "Drop off");
+		dropoffButton = new FlxButton(290, 216, "Drop off");
         dropoffButton.loadGraphic("assets/images/DenButton.png", true, 160, 56);
         dropoffButton.updateHitbox();
         dropoffButton.label.size = 22;
@@ -375,9 +375,9 @@ class MainGame extends FlxState
         improveButton.labelAlphas[0] = 1.0;
         improveButton.labelAlphas[2] = 1.0;
 		improveButton.onUp.callback = improvementMenu.bind();
-        add(improveButton);
+        //add(improveButton);
 		
-		breedButton = new FlxButton(290, 216, "Breeding");
+		breedButton = new FlxButton(290, 140, "Breeding");
         breedButton.loadGraphic("assets/images/DenButton.png", true, 160, 56);
         breedButton.updateHitbox();
         breedButton.label.size = 22;
@@ -647,10 +647,10 @@ class MainGame extends FlxState
 	}
 
 	function setupTopBar(){
-        dateText = new FlxText(5, 0, 0, "", 18);
-		dateText.color = 0xFF000000;
-		dateText.alignment = "left";
-		add(dateText);
+        dayStatusText = new FlxText(5, 0, 0, "", 18);
+		dayStatusText.color = 0xFF000000;
+		dayStatusText.alignment = "left";
+		add(dayStatusText);
 
         foodText = new FlxText(315, 1, 160, "Food: " + Std.string(GameVariables.instance.currentFood) + "/" + Std.string(GameVariables.instance.maxFood), 18);
 		foodText.color = 0xFF000000;
@@ -659,8 +659,6 @@ class MainGame extends FlxState
     }
 	
 	public function updateTopBar(){
-        dateText.text = "";
-		
         foodText.text = "Food: ";
 		if(GameVariables.instance.currentFood > GameVariables.instance.maxFood){
 			foodText.text += "(" + Std.string(GameVariables.instance.currentFood) + ")";
@@ -668,6 +666,46 @@ class MainGame extends FlxState
 			foodText.text += Std.string(GameVariables.instance.currentFood);
 		}
 		foodText.text += "/" + Std.string(GameVariables.instance.maxFood);
+		
+		updateDayStatusText();
+	}
+	
+	private function updateDayStatusText()
+	{
+        dayStatusText.text = "";
+		
+		if (GameVariables.instance.currentLocationName == "Unfamiliar Woods")
+		{
+			if (GameVariables.instance.currentDay % 3 == 0)
+			{
+				dayStatusText.text = "Wandering rabbits!";
+			}
+		}
+		else if (GameVariables.instance.currentLocationName == "The Trail")
+		{
+			if (GameVariables.instance.theTrailDayNumber == 4)
+			{
+				dayStatusText.text = "Rabbit horde attack!";
+			}
+		}
+		else if (GameVariables.instance.currentLocationName == "Dark Forest")
+		{
+			dayStatusText.text = "Wolves are prowling...";
+		}
+		else if (GameVariables.instance.currentLocationName == "Squirrel Village")
+		{
+			if (GameVariables.instance.squirrelVillageMountaineeringChallegeDay)
+			{
+				dayStatusText.text = "Suspiscious squirrels scurrying...";
+			}
+		}
+		else if (GameVariables.instance.currentLocationName == "Mount Vire")
+		{
+			if (GameVariables.instance.mountVireLocation == "Bird land")
+			{
+				dayStatusText.text = "Birds overhead...";
+			}
+		}
 	}
 	
 	function setupMap(){
@@ -832,14 +870,32 @@ class MainGame extends FlxState
 			currentLocationSprite.loadGraphic("assets/images/MapImages/CurrentLocationMarker.png", true);
 			currentLocationSprite.scale.set(3, 3);
 			currentLocationSprite.screenCenter();
-			currentLocationSprite.y -= 40;
+			currentLocationSprite.y -= 70;
 			mapSprites.push(currentLocationSprite);
 			add(currentLocationSprite);
 			
 			//Squirrel Village
-			var newButton:LocationButton = new LocationButton("Squirrel Village", 2);
+			var newButton:LocationButton = new LocationButton("Squirrel Village", 4);
 			newButton.screenCenter();
 			newButton.x -= 110;
+			mapButtons.push(newButton);
+			add(newButton);
+		}
+		else if (GameVariables.instance.currentLocationName == "Onsen Peak")
+		{
+			//Onsen Peak (current location)
+			var currentLocationSprite:FlxSprite = new FlxSprite(0, 0);
+			currentLocationSprite.loadGraphic("assets/images/MapImages/CurrentLocationMarker.png", true);
+			currentLocationSprite.scale.set(3, 3);
+			currentLocationSprite.screenCenter();
+			currentLocationSprite.y -= 180;
+			mapSprites.push(currentLocationSprite);
+			add(currentLocationSprite);
+			
+			//Squirrel Village
+			var newButton:LocationButton = new LocationButton("Squirrel Village", 8);
+			newButton.screenCenter();
+			newButton.x -= 140;
 			mapButtons.push(newButton);
 			add(newButton);
 		}

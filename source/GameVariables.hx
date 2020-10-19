@@ -9,6 +9,7 @@ import haxe.Unserializer;
 import flixel.FlxG;
 
 class GameVariables {
+	//General Vars
     public var controlledDeer:Array<Deer>;
 	public var maxPackSize:Int;
 	
@@ -20,6 +21,8 @@ class GameVariables {
     public var currentLocation:Location;
     public var currentLocationName:String;
 
+	public var currentDay:Int;
+	
     public var currentFood:Int;
     public var maxFood:Int;
 	
@@ -85,7 +88,12 @@ class GameVariables {
 	public var mountVireMapleLogs:Int;
 	public var mountVireLocation:String;
 	public var mountVireMountainPathBlockage:Int;
+	public var mountVireSilverCaveBlockage:Int;
 	public var mountVireStoneAcorns:Int;
+	public var mountVireKeyTaken:Bool;
+	
+	//Onsen Peak
+	public var onsenPeakStatChoice:String = "None";
 	
 	public var saveNum:Int;
 
@@ -134,6 +142,10 @@ class GameVariables {
 				
 				if(!darkForestPedestalRaised){
 					darkForestTimeRemaining = 5;
+				}
+				else
+				{
+					darkForestTimeRemaining = 0;
 				}
 			}
 		}
@@ -195,6 +207,11 @@ class GameVariables {
 				mountVireMountainPathBlockage = 5;
 			}
 		}
+		else if (targetLocation == "Onsen Peak")
+		{
+			currentLocation = new MountVire();
+			maxFood = 10;
+		}
 		
 		currentLocationName = targetLocation;
 		setBG();
@@ -227,6 +244,8 @@ class GameVariables {
 			var currentDeer:Deer = babyDeer[originalLength - i];
 			currentDeer.updateStatuses();
 		}
+		
+		currentDay++;
 	}
 	
 	public function modifyFood(amount:Int){
@@ -443,6 +462,8 @@ class GameVariables {
         currentFood = 4;
         maxFood = 10;
 		
+		currentDay = 1;
+		
 		//Unfamiliar Woods
 		unfamiliarWoodsMaxFood = 10;
 		rabbitFur = 0;
@@ -501,6 +522,9 @@ class GameVariables {
 		mountVireMapleLogs = 0;
 		mountVireLocation = "Base camp";
 		mountVireMountainPathBlockage = 5;
+		mountVireSilverCaveBlockage = 8;
+		mountVireStoneAcorns = 0;
+		mountVireKeyTaken = false;
 	}
 	
 	public static function getLocationSpriteByName(locationName:String):String

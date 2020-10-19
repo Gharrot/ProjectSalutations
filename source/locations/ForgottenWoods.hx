@@ -45,34 +45,90 @@ class ForgottenWoods extends Location
 	{
 		var randomNums:FlxRandom = new FlxRandom();
 		randomNums.shuffle(deer);
+		var message:Array<String> = new Array<String>();
 
-		var thisDefenseNums = randomNums.int(1, 100);
-		if (thisDefenseNums >= 70)
+		if (GameVariables.instance.currentDay % 3 == 0)
 		{
 			//rabbit attakk
-			var resultMessage:String = "A few wandering rabbits find your den";
 			if (deer.length == 0)
 			{
-				if (GameVariables.instance.currentFood > 5)
+				var resultMessage:String = "A couple wandering rabbits find your den";
+				if (GameVariables.instance.currentFood > 1)
 				{
-					resultMessage += " and crunch away some of your food (-2 food).";
+					if (GameVariables.instance.currentFood == 2)
+					{
+						resultMessage += " and crunch away all of your food (-2 food).";
+					}
+					else
+					{
+						resultMessage += " and crunch away some of your food (-2 food).";
+					}
 					GameVariables.instance.modifyFood(-2);
 				}
 				else if (GameVariables.instance.currentFood > 0)
 				{
-					resultMessage += " and crunch away some of your food (-1 food).";
+					resultMessage += " and crunch away the last of your food (-1 food).";
 					GameVariables.instance.modifyFood(-1);
 				}
 				else
 				{
 					resultMessage += ", but after finding no food to munch on they quickly wander off.";
 				}
+				
+				message.push(resultMessage);
 			}
 			else
 			{
-				resultMessage += ", but your defending deer are able to scare them off.";
+				message.push("A couple wandering rabbits find your den");
+				
+				var rabbitAttackReduction = 0;
+				
+				for (i in 0...deer.length)
+				{
+					var rabbitScaringSkill:Int = deer[i].dex * 2 + deer[i].lck + randomNums.int(0, 3);
+					var currentDeer:Deer = deer[i];
+					
+					if (rabbitScaringSkill >= 12)
+					{
+						message.push(currentDeer.getName() + " easily catches the two rabbits and chases them off.");
+						rabbitAttackReduction += 2;
+					}
+					else if (rabbitScaringSkill >= 8)
+					{
+						message.push(currentDeer.getName() + " chases the rabbits, distracting one of them.");
+						rabbitAttackReduction += 1;
+					}
+					else
+					{
+						message.push(currentDeer.getName() + " tries to chase the rabbits, but can't keep up.");
+					}
+					
+					if (rabbitAttackReduction >= 2)
+					{
+						break;
+					}
+				}
+				
+				if (rabbitAttackReduction >= 2)
+				{
+					message.push("Your herd defends your den successfully, losing none of your food to the rabbits.");
+				}
+				else if (rabbitAttackReduction == 1)
+				{
+					message.push("Your herd manages to distract the rabbits somewhat, and they only manage to eat a bit of your food (-1 food).");
+					GameVariables.instance.modifyFood(-1);
+				}
+				else
+				{
+					message.push("Your herd fails to hinder the rabbits at all; they eat away at your food supply (-2 food).");
+					GameVariables.instance.modifyFood(-2);
+				}
 			}
-			showResult([resultMessage]);
+			showResult(message);
+		}
+		else if(deer.length > 0)
+		{
+			showResult(["Nothing came to attack your den tonight."]);
 		}
 		else
 		{
@@ -191,9 +247,30 @@ class ForgottenWoods extends Location
 
 					if (damageDealt >= 2)
 					{
-						GameVariables.instance.modifyFood(3);
-						GameVariables.instance.addUnfamiliarWoodsRabbitFur();
-						result.push("The rabbit lies defeated. You bring it to the den to use as food and bedding (+3 food).");
+						GameVariables.instance.modifyFood(5);
+						result.push("The rabbit lies defeated for a moment, then bounds off happily.");
+						
+						if (GameVariables.instance.rabbitFurBeddingMade)
+						{
+							result.push("The rabbit leads you to its den, where it offers you some food (+5 food).");
+						}
+						else
+						{
+							GameVariables.instance.addUnfamiliarWoodsRabbitFur();
+							result.push("The rabbit leads you to its den, where it offers you some food and some of its fluffy shed fur (+5 food) (+1 rabbit fur).");
+							
+							if (GameVariables.instance.rabbitFur >= 2)
+							{
+								GameVariables.instance.rabbitFur = 0;
+								GameVariables.instance.rabbitFurBeddingMade = true;
+								result.push("With the rabbit fur you just got you now have enough to make some bedding with it, so you go ahead and do so.");
+								result.push("(+1 Health and +1 Fortune for deer when resting)");
+							}
+							else 
+							{
+								result.push("If you had a bit more rabbit fur you could make some bedding from it.");
+							}
+						}
 						break;
 					}
 				}
@@ -402,7 +479,7 @@ class ForgottenWoods extends Location
 			message.push("You place some of the food you brought for the day on the ground in front of you.");
 			message.push("A few squirrels run down the tree to collect the food.");
 			message.push("They look up at you and chitter happily before scampering back up the tree to divide your gift.");
-			message.push("(+3 Luck for 3 days).");
+			message.push("(+3 Fortune for 3 days).");
 			
 			deer.addStatusEffect(new DeerStatusEffect("Luck of the Squirrels", 4, 0, 0, 0, 0, 3));
 		}

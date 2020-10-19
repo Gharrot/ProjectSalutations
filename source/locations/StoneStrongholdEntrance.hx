@@ -52,7 +52,8 @@ class StoneStrongholdEntrance extends Location
 		if (GameVariables.instance.undergroundCityOpened)
 		{
 			message.push("As you walk up to the pedestal it slides back, revealing the entrance to the underground city.");
-			showChoice(message, ["Head into the city", "Head back outside"], [enterTheUndergroundCity, continueOnChoice], deer);
+			message.push("(You can head back into the city using the map)");
+			showChoice(message, ["Continue"], [continueOnChoice], deer);
 		}
 		else
 		{
@@ -113,7 +114,7 @@ class StoneStrongholdEntrance extends Location
 		var randomNums:FlxRandom = new FlxRandom();
 		
 		GameVariables.instance.modifyFood(3);
-		showResult(["Some nearby squirrels see you searching for food and offer you some acorns (+3 food)."]);
+		showResult(["Some nearby squirrels see you searching for food and offer you some chestnuts (+3 food)."]);
 	}
 	
 	override public function defend(deer:Array<Deer>)

@@ -16,6 +16,8 @@ class SaveManager
 		gameVariables.maxBabyPackSize = save.data.maxBabyPackSize;
 		
         gameVariables.undergroundCityDeer = save.data.undergroundCityDeer;
+		
+		gameVariables.currentDay = save.data.currentDay;
 
         gameVariables.currentFood = save.data.currentFood;
 		gameVariables.maxFood = save.data.maxFood;
@@ -74,6 +76,9 @@ class SaveManager
 		gameVariables.mountVireMapleLogs = save.data.mountVireMapleLogs;
 		gameVariables.mountVireLocation = save.data.mountVireLocation;
 		gameVariables.mountVireMountainPathBlockage = save.data.mountVireMountainPathBlockage;
+		gameVariables.mountVireSilverCaveBlockage = save.data.mountVireSilverCaveBlockage;
+		gameVariables.mountVireStoneAcorns = save.data.mountVireStoneAcorns;
+		gameVariables.mountVireKeyTaken = save.data.mountVireKeyTaken;
 		
 		//move to the correct location
 		gameVariables.currentLocationName = save.data.currentLocationName;
@@ -92,6 +97,8 @@ class SaveManager
 		save.data.maxPackSize = gameVariables.maxPackSize;
         save.data.babyDeer = gameVariables.babyDeer;
 		save.data.maxBabyPackSize = gameVariables.maxBabyPackSize;
+		
+		save.data.currentDay = gameVariables.currentDay;
 		
         save.data.undergroundCityDeer = gameVariables.undergroundCityDeer;
 
@@ -152,6 +159,9 @@ class SaveManager
 		save.data.mountVireMapleLogs = gameVariables.mountVireMapleLogs;
 		save.data.mountVireLocation = gameVariables.mountVireLocation;
 		save.data.mountVireMountainPathBlockage = gameVariables.mountVireMountainPathBlockage;
+		save.data.mountVireSilverCaveBlockage = gameVariables.mountVireSilverCaveBlockage;
+		save.data.mountVireStoneAcorns = gameVariables.mountVireStoneAcorns;
+		save.data.mountVireKeyTaken = gameVariables.mountVireKeyTaken;
 		
 		save.flush();
 		save.close();

@@ -103,15 +103,64 @@ class MountVire extends Location
 		}
 		else if (gameVariables.mountVireLocation == "Bird land")
 		{
-			if (movingUpwards == "Yes")
+			if (movingUpwards == "Back path")
 			{
-				mountainMovement("Squirrel fortress");
+				mountainMovement("Goat plateau return");
 			}
 		}
 		
 		movingUpwards = "No";
 		
 		returnToDen();
+	}
+	
+	public function mountainMovement(destination:String)
+	{
+		var gameVariables:GameVariables = GameVariables.instance;
+		var message:Array<String> = new Array<String>();
+		if (destination == "Goat plateau")
+		{
+			gameVariables.mountVireLocation = "Goat plateau";
+			gameVariables.mountVireMountainPathBlockage = 6;
+			
+			message.push("Your herd treks up the mountain for a while and comes to a large plateau filled with goats.");
+			message.push("The goats stare at you for a moment then bound off and up the nearby cliffsides.");
+			showChoice(message, ["Continue"], [returnToDenChoice], gameVariables.getPlayerDeer());
+		}
+		else if (destination == "Goat plateau return")
+		{
+			gameVariables.mountVireLocation = "Goat plateau";
+			
+			message.push("Your herd walks back through the tunnel to the plateau with the goats.");
+			message.push("The goats continue to stare at you.");
+			showChoice(message, ["Continue"], [returnToDenChoice], gameVariables.getPlayerDeer());
+		}
+		else if (destination == "The long windy path")
+		{
+			gameVariables.mountVireLocation = "The long windy path";
+			gameVariables.mountVireMountainPathBlockage = 8;
+			
+			message.push("Your herd treks up the mountain for a while and comes to a small plateau.");
+			message.push("The mountain path continues upwards, growing colder and colder.");
+			showChoice(message, ["Continue"], [returnToDenChoice], gameVariables.getPlayerDeer());
+		}
+		else if (destination == "Bird land")
+		{
+			gameVariables.mountVireLocation = "Bird land";
+			
+			message.push("You lead your herd through the secret tunnel and onto the other side of the mountain.");
+			message.push("This side is covered with flat plateaus scattered with trees.");
+			message.push("Almost every tree has a few birds sitting on its branches. They eye your food supplies hungrily.");
+			showChoice(message, ["Continue"], [returnToDenChoice], gameVariables.getPlayerDeer());
+		}
+		else if (destination == "Mountaintop")
+		{
+			message.push("You spend the night hiking up the windy trail. While it's freezing at first, strangely the air begins to warm up as you reach the top");
+			message.push("Finally you reach the peak of the mountain and find yourself on a flat land surrounded by hot springs.");
+			message.push("Groups of squirrels peacefully lounge around in the springs' warm waters.");
+			
+			showChoice(message, ["Continue"], [reachingTheTop], gameVariables.getPlayerDeer());
+		}
 	}
 	
 	public function coldAndFire()
@@ -245,48 +294,11 @@ class MountVire extends Location
 		}
 	}
 	
-	public function mountainMovement(destination:String)
+	public function reachingTheTop(choice:String, deer:Deer)
 	{
-		var gameVariables:GameVariables = GameVariables.instance;
-		var message:Array<String> = new Array<String>();
-		if (destination == "Goat plateau")
-		{
-			gameVariables.mountVireLocation = "Goat plateau";
-			gameVariables.mountVireMountainPathBlockage = 6;
-			
-			message.push("Your herd treks up the mountain for a while and comes to a large plateau filled with goats.");
-			message.push("The goats stare at you for a moment then bound off and up the nearby cliffsides.");
-			showChoice(message, ["Continue"], [returnToDenChoice], gameVariables.getPlayerDeer());
-		}
-		else if (destination == "The long windy path")
-		{
-			gameVariables.mountVireLocation = "The long windy path";
-			gameVariables.mountVireMountainPathBlockage = 8;
-			
-			message.push("Your herd treks up the mountain for a while and comes to a small plateau.");
-			message.push("The mountain path continues upwards, growing colder and colder.");
-			showChoice(message, ["Continue"], [returnToDenChoice], gameVariables.getPlayerDeer());
-		}
-		else if (destination == "Bird land")
-		{
-			gameVariables.mountVireLocation = "Bird land";
-			gameVariables.mountVireMountainPathBlockage = 7;
-			
-			message.push("You lead your herd through the secret tunnel and onto the other side of the mountain.");
-			message.push("This side is covered with flat plateaus scattered with trees.");
-			message.push("Almost every tree has a few birds sitting on its branches. They eye your food supplies hungrily.");
-			showChoice(message, ["Continue"], [returnToDenChoice], gameVariables.getPlayerDeer());
-		}
-		else if (destination == "Mountaintop")
-		{
-			message.push("Up.");
-			showChoice(message, ["Continue"], [returnToDenChoice], gameVariables.getPlayerDeer());
-		}
-		else if (destination == "Squirrel fortress")
-		{
-			message.push("In.");
-			showChoice(message, ["Continue"], [returnToDenChoice], gameVariables.getPlayerDeer());
-		}
+		GameVariables.instance.changeLocation("Onsen Peak");
+		resetDailyVariables();
+		returnToDen();
 	}
 	
 	override public function explore(deer:Deer)
@@ -333,8 +345,12 @@ class MountVire extends Location
 		else if (gameVariables.mountVireLocation == "Bird land")
 		{
 			//The upward trail
-			exploreOptionNames.push("Mountain trail");
+			exploreOptionNames.push("The Silver Cave");
 			exploreOptionFunctions.push(mountainTrail);
+			
+			//The cave
+			exploreOptionNames.push("Back through the tunnel");
+			exploreOptionFunctions.push(returnThroughTheTunnel);
 			
 			//The smaller rocks
 			exploreOptionNames.push("Small rocks");
@@ -342,6 +358,212 @@ class MountVire extends Location
 		}
 
 		showChoice(["Where will you head to?"], exploreOptionNames, exploreOptionFunctions, deer);
+	}
+	
+	public function returnThroughTheTunnel(choice:String, deer:Deer)
+	{
+		var gameVariables:GameVariables = GameVariables.instance;
+		var message:Array<String> = new Array<String>();
+		message.push("You trek up the mountain for a bit, running into no obstacles.");
+		
+		if (movingUpwards == "No")
+		{
+			message.push("Will you head back through the tunnel at the end of the day?");
+			showChoice(message, ["Go through", "Stay put"], [headThroughTheTunnelDayEnd, continueOnChoice], deer);
+		}
+		else
+		{
+			message.push("You're already planning to head back through the tunnel at the end of the day.");
+			message.push("Will you decide not to?.");
+			showChoice(message, ["Don't head through", "Head through"], [noHeadThroughTheTunnelDayEnd, continueOnChoice], deer);
+		}
+	}
+	
+	public function headThroughTheTunnelDayEnd(choice:String, deer:Deer)
+	{
+		movingUpwards = "Back path";
+		continueOn();
+	}
+	
+	public function noHeadThroughTheTunnelDayEnd(choice:String, deer:Deer)
+	{
+		movingUpwards = "No";
+		continueOn();
+	}
+	
+	public function enterTheSquirrelCity(choice:String, deer:Deer)
+	{
+		var message:Array<String> = new Array<String>();
+		
+		message.push("You step through the opening into a room filled with streets of small squirrel-sized buildings.");
+		message.push("Peering inside them, the buildings are all furnished but there's no sign of any one living in them.");
+		message.push("Ahead of you is a low opening leading to another room.");
+		showChoice(message, ["Step inside"], [enterTheChurch], deer);
+	}
+	
+	public function enterTheChurch(choice:String, deer:Deer)
+	{
+		var message:Array<String> = new Array<String>();
+		
+		message.push("The room you step into is empty except for a pedestal at the far end.");
+		message.push("The pedestal has 3 tiny circular indentations on top and a key sticking out of a keyhole below them.");
+		showChoice(message, ["Take the key"], [takeTheKey], deer);
+	}
+	
+	public function takeTheKey(choice:String, deer:Deer)
+	{
+		var message:Array<String> = new Array<String>();
+		GameVariables.instance.mountVireKeyTaken = true;
+		
+		message.push("You twist the key and remove it from the pedestal.");
+		message.push("Not finding anything else to investigate here, you head back.");
+		showChoice(message, ["Continue"], [continueOnChoice], deer);
+	}
+	
+	public function silverCave(choice:String, deer:Deer)
+	{
+		var gameVariables:GameVariables = GameVariables.instance;
+		var message:Array<String> = new Array<String>();
+		
+		if (gameVariables.mountVireMountainPathBlockage > 0)
+		{
+			message.push("The path leading up the mountain quickly leads to the entrance of another cave, this one lined with silver walls.");
+			message.push("A short ways in the tunnel ends at a solid wall with a doorway only a squirrel could enter.");
+			
+			if (gameVariables.mountVireSilverCaveBlockage >= 8)
+			{
+				message.push("The wall ahead is soft enough that you should be able to break through it.");
+			}
+			else if (gameVariables.mountVireSilverCaveBlockage >= 5)
+			{
+				message.push("You've barely made a dent in the wall.");
+			}
+			else if (gameVariables.mountVireSilverCaveBlockage >= 3)
+			{
+				message.push("You've dug a decent way through the wall, but there's still a ways to go.");
+			}
+			else if (gameVariables.mountVireSilverCaveBlockage == 2)
+			{
+				message.push("Knocking on the wall ahead gives out a hollow sound, you've only got a short ways to go.");
+			}
+			else if (gameVariables.mountVireSilverCaveBlockage == 1)
+			{
+				message.push("Knocking on the wall ahead gives out a hollow sound, you're almost all the way through.");
+			}
+			
+			if (gameVariables.mountVireExplosives > 0)
+			{
+				message.push(SquirrelVillage.getExplosivesStatus(false));
+				showChoice(message, ["Set off an explosive", "Chip away at the wall", "Head back"], [setoffExplosionSilverCave, moveRocksSilverCave, continueOnChoice], deer);
+			}
+			else
+			{
+				showChoice(message, ["Chip away at the wall", "Head back"], [moveRocksSilverCave, continueOnChoice], deer);
+			}
+		}
+		else
+		{
+			message.push("You head over to the hole your other deer dug into the silver wall.");
+			showChoice(message, ["Step through the wall", "Head back"], [enterTheSquirrelCity, continueOnChoice], deer);
+		}
+	}
+	
+	public function setoffExplosionSilverCave(choice:String, deer:Deer)
+	{
+		var gameVariables:GameVariables = GameVariables.instance;
+		var message:Array<String> = new Array<String>();
+		gameVariables.mountVireMountainPathBlockage -= 3;
+		
+		if (gameVariables.mountVireMountainPathBlockage > 0)
+		{
+			message.push("You set off an explosive propped up against the silver wall.");
+			message.push("KABLAM!");
+			
+			if (gameVariables.mountVireSilverCaveBlockage >= 5)
+			{
+				message.push("You've barely made a dent in the wall.");
+			}
+			else if (gameVariables.mountVireSilverCaveBlockage >= 3)
+			{
+				message.push("You've blown a decent hole through the wall, but there's still a ways to go.");
+			}
+			else if (gameVariables.mountVireSilverCaveBlockage == 2)
+			{
+				message.push("Knocking on the wall afterwards gives out a hollow sound, you've only got a short ways to go.");
+			}
+			else if (gameVariables.mountVireSilverCaveBlockage == 1)
+			{
+				message.push("Knocking on the wall afterwards gives out a hollow sound, you're almost all the way through.");
+			}
+			
+			message.push(SquirrelVillage.getExplosivesStatus(true));
+			showResult(message);
+		}
+		else
+		{
+			message.push("You set off an explosive and it blasts through the wall revealing an opening big enough to fit through.");
+			message.push(SquirrelVillage.getExplosivesStatus(true));
+			showChoice(message, ["Step inside"], [continueUpTheMountainPath], deer);
+		}
+	}
+	
+	public function moveRocksSilverCave(choice:String, deer:Deer)
+	{
+		var randomNums:FlxRandom = new FlxRandom();
+		var gameVariables:GameVariables = GameVariables.instance;
+		var message:Array<String> = new Array<String>();
+		var rockMovingSkill:Int = deer.str*2 + deer.res + randomNums.int(0, 5);
+		
+		if (rockMovingSkill >= 19)
+		{
+			message.push(deer.getName() + " spends the day grinding away at the wall, making great progress in digging through.");
+			gameVariables.mountVireMountainPathBlockage -= 3;
+		}
+		else if (rockMovingSkill >= 14)
+		{
+			message.push(deer.getName() + " spends the day grinding away at the wall, digging a decent ways forward.");
+			gameVariables.mountVireMountainPathBlockage -= 2;
+		}
+		else if (rockMovingSkill >= 10)
+		{
+			message.push(deer.getName() + " spends the day grinding away at the wall, digging a small ways forward.");
+			gameVariables.mountVireMountainPathBlockage -= 1;
+		}
+		else
+		{
+			message.push(deer.getName() + " spends the day grinding away at the wall, but isn't strong enough to make any real progress.");
+		}
+		
+		if (gameVariables.mountVireSilverCaveBlockage >= 8)
+		{
+			message.push("You don't even manage to make a dent in the wall.");
+		}
+		else if (gameVariables.mountVireSilverCaveBlockage >= 5)
+		{
+			message.push("You've barely made a dent in the wall so far.");
+		}
+		else if (gameVariables.mountVireSilverCaveBlockage >= 3)
+		{
+			message.push("You've dug a decent way through the wall, but there's still a ways to go.");
+		}
+		else if (gameVariables.mountVireSilverCaveBlockage == 2)
+		{
+			message.push("Knocking on the wall ahead gives out a hollow sound, you've only got a short ways to go.");
+		}
+		else if (gameVariables.mountVireSilverCaveBlockage == 1)
+		{
+			message.push("Knocking on the wall ahead gives out a hollow sound, you're almost all the way through.");
+		}
+		
+		if (gameVariables.mountVireMountainPathBlockage <= 0)
+		{
+			message.push("You've managed to dig an opening through the wall big enough to fit through.");
+			showChoice(message, ["Step through"], [enterTheSquirrelCity], deer);
+		}
+		else
+		{
+			showResult(message);
+		}
 	}
 	
 	public function windyTrail(choice:String, deer:Deer)
@@ -1129,7 +1351,7 @@ class MountVire extends Location
 				}
 				else
 				{
-					message.push("Your defenders' defense was completely ineffective, and the birds take as much food as they want.");
+					message.push("Your herd's defense was completely ineffective, and the birds take as much food as they want.");
 					message.push("(-4 food)");
 				}
 				GameVariables.instance.modifyFood(-4);

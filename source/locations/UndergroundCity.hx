@@ -32,11 +32,11 @@ class UndergroundCity extends Location
 		var message:Array<String> = new Array<String>();
 		message.push("On the far end of town you find a tall stone chapel.");
 		message.push("The chapel is completely empty, save for a pedestal on the far end of the room.");
-		message.push("The pedestal is bare, with 3 circular indentations on top.");
+		message.push("The pedestal is bare, with 3 circular indentations on top and a keyhole below them.");
 		message.push("(This area, and more exploration of the city will open up in a later update.)");
-		message.push("(You can still find the 3 medallions in this version though.)");
+		message.push("(You can still find the 3 medallions and key in this version though.)");
 		
-		if (GameVariables.instance.getMedallionCount() >= 3)
+		if (GameVariables.instance.getMedallionCount() >= 3 && GameVariables.instance.mountVireKeyTaken)
 		{
 			message.push("(Which you already did, congratulations!)");
 		}

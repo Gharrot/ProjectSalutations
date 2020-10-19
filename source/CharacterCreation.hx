@@ -186,6 +186,7 @@ class CharacterCreation extends FlxState
 		{
 			GameVariables.instance.unfamiliarWoodsPathToDarkWoodsFound = true;
 			GameVariables.instance.undergroundCityReached = true;
+			GameVariables.instance.theTrailCompleted = true;
 		}	
 		
 		if (starterDeer)

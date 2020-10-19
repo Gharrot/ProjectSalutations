@@ -27,7 +27,7 @@ class SoundManager
 				songPath = "assets/music/SoloAcousticBlues.ogg";
 			}
 			
-			FlxG.sound.playMusic(songPath);
+			//FlxG.sound.playMusic(songPath);
 		}
 	}
 	
@@ -45,7 +45,7 @@ class SoundManager
 				songPath = "assets/music/SoloAcousticBlues.ogg";
 			}
 			
-			FlxG.sound.playMusic(songPath);
+			//FlxG.sound.playMusic(songPath);
 		}
 	}
 	

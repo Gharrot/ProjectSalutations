@@ -53,7 +53,7 @@ class SquirrelVillage extends Location
 	
 	override public function returnAfterDayEnd()
 	{
-		dayEnd("dummy", GameVariables.instance.getPlayerDeer());
+		dayEnd("placeholder", GameVariables.instance.getPlayerDeer());
 	}
 	
 	public function dayEnd(choice:String, deer:Deer)
@@ -291,10 +291,10 @@ class SquirrelVillage extends Location
 		
 		if (choice == "Acorn Brew")
 		{
-			//+2 luck for 4 days
+			//+2 fortune for 4 days
 			message.push("The squirrel runs and grabs you a fresh cup of coffee.");
 			message.push("The flavour tastes just like munching on acorns.");
-			message.push("(+2 luck for 4 days).");
+			message.push("(+2 fortune for 4 days).");
 			deer.addStatusEffect(new DeerStatusEffect("Lucky as an Acorn", 4, 0, 0, 0, 0, 3));
 		}
 		else if (choice == "Sleepy Spruce Tea")
@@ -387,7 +387,7 @@ class SquirrelVillage extends Location
 			}
 			else
 			{
-				message.push("It seems you have to sign up for some mountaineering challenge to work here.");
+				message.push("It seems you have to be signed up for a mountaineering challenge to work in this village.");
 			}
 			showChoice(message, ["Gossip", "Specialty Brews", "Head outside"], [gossip, coffee, exploreWithString], deer);
 		}
@@ -423,8 +423,7 @@ class SquirrelVillage extends Location
 	{
 		var message:Array<String> = new Array<String>();
 		message.push("The squirrel sees you approaching and quickly scribbles something down on a notepad.");
-		message.push("It seems your room is now booked, but you'll need to choose what type of bedding you want the room to have.");
-		message.push("The squirrel lays out a few options for you to choose from.");
+		message.push("Your room is now booked, but you'll need to choose what type of bedding you want the room to have.");
 		
 		var beddingNames:Array<String> = new Array<String>();
 
@@ -507,7 +506,7 @@ class SquirrelVillage extends Location
 			}
 			else
 			{
-				message.push("It seems you have to sign up for some mountaineering challenge to work here.");
+				message.push("It seems you have to be signed up for a mountaineering challenge to work in this village.");
 			}
 			showChoice(message, ["Book a room", "Head outside"], [roomBooking, exploreWithString], deer);
 		}
@@ -617,7 +616,7 @@ class SquirrelVillage extends Location
 	{
 		var message:Array<String> = new Array<String>();
 		message.push("You walk over to the museum and head inside.");
-		message.push("The museum is a small room packed with climbing supplies and framed drawings of squirrels. Over on your right is a counter for a giftshop.");
+		message.push("The museum is a small room packed with climbing supplies and framed drawings of squirrels.");
 		
 		var exploreOptionNames:Array<String> = new Array<String>();
 		var exploreOptionFunctions:Array<(String, Deer)->Void> = new Array<(String, Deer)->Void>();
@@ -637,21 +636,12 @@ class SquirrelVillage extends Location
 	{
 		var message:Array<String> = new Array<String>();
 		
-		if (!GameVariables.instance.leaderShipSkillsEarned)
-		{
-			GameVariables.instance.leaderShipSkillsEarned = true;
-			message.push("Looking through the exhibits, what stands out to you most is a series of drawings depicting the first expedition to climb the mountain.");
-			message.push("A single squirrel seems to lead a few others up the mountain, delegating each one a task for the day.");
-			message.push("You leave the museum with some ideas on how to more quickly organize your herd.");
-			message.push("(This setting can be turned off in the options)");
-			showResult(message);
-		}
-		else
-		{
-			message.push("Looking through the exhibits, what stands out to you most is a series of drawings depicting the first expedition to climb the mountain.");
-			message.push("A single squirrel seems to lead a few others up the mountain, delegating each one a task for the day.");
-			showChoice(message, ["Head outside"], [exploreWithString], deer);
-		}
+		message.push("Looking through the exhibits, what stands out to you most is a series of drawings depicting the first expedition to climb the mountain.");
+		message.push("A single squirrel leads a few others up the mountain, delegating them tasks for the day.");
+		message.push("You leave the museum with some ideas on how to more quickly organize your herd.");
+		message.push("(You can quickly change what each deer's task is by pressing the E, F, H, D, or R key and hovering over their box on the herd screen)");
+		message.push("(You can also close a deer's status screen by right-clicking)");
+		showResult(message);
 	}
 	
 	//Supplies Shop Location
@@ -718,7 +708,7 @@ class SquirrelVillage extends Location
 		else
 		{
 			message.push("You walk over to the store counter.");
-			message.push("You could start a mountaineering challenge, then come here the morning you leave to buy some supplies.");
+			message.push("The squirrels explains that you'll need to sign up for their mountaineering challenge to earn acorns to spend here on climbing supplies.");
 			showChoice(message, ["Chop wood", "Head outside"], [woodChopping, exploreWithString], deer);
 		}
 	}
@@ -891,7 +881,7 @@ class SquirrelVillage extends Location
 			}
 			else
 			{
-				message.push("It seems you have to sign up for some mountaineering challenge to work here.");
+				message.push("It seems you have to be signed up for a mountaineering challenge to work in this village.");
 			}
 			showChoice(message, ["Walk up to the counter", "Head outside"], [suppliesExplanation, exploreWithString], deer);
 		}
@@ -953,7 +943,7 @@ class SquirrelVillage extends Location
 		{
 			if (deer.length > 0)
 			{
-				message.push("It seems there's nothing that will attack your den here for now. It's likely thanks to the squirrel guards patrolling the area.");
+				message.push("There doesn't seem to be anything that will attack your den here for now. It's likely thanks to the squirrel guards patrolling the area.");
 				message.push("You run into some patrolling squirrels and they warn you that you'll have to defend your own stuff during the mountaineering challenge tomorrow.");
 				showResult(message);
 			}
@@ -967,8 +957,8 @@ class SquirrelVillage extends Location
 		{
 			if (deer.length > 0)
 			{
-				message.push("It seems there's nothing that will attack your den here for now. It's likely thanks to the squirrel guards patrolling the area.");
-				message.push("You run into some patrolling squirrels and they warn you that you'll have to defend your own stuff during the mountaineering challenge.");
+				message.push("There doesn't seem to be anything that will attack your den here for now. It's likely thanks to the squirrel guards patrolling the area.");
+				message.push("You run into some patrolling squirrels and they warn you that you'll have to defend your own stuff during a mountaineering challenge.");
 				message.push("They motion for you to head to the visitors center to learn about it.");
 				showResult(message);
 			}
@@ -1072,13 +1062,13 @@ class SquirrelVillage extends Location
 		
 		if (mountaineeringChallengeStartingTomorrow)
 		{
-			message.push("Your hunting pack wanders around the area, but it seems like the squirrels have scared off anything nearby.");
+			message.push("Your hunting pack wanders around the area, but it looks like the squirrels have scared off anything nearby.");
 			message.push("You run into some squirrels heading back to the village after a hunt, they tell you to come back and try hunting tomorrow once your mountaineering challenge has started.");
 			showResult(message);
 		}
 		else if (!mountaineeringChallengeActive)
 		{
-			message.push("Your hunting pack wanders around the area, but it seems like the squirrels have scared off anything nearby.");
+			message.push("Your hunting pack wanders around the area, but it looks like the squirrels have scared off anything nearby.");
 			message.push("You run into some squirrels heading back to the village after a hunt, they let you know you should try to go hunting when you take the mountaineering challenge.");
 			message.push("They motion for you to head to the visitors center to learn about it.");
 			showResult(message);

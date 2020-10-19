@@ -30,10 +30,10 @@ class DarkForest extends Location
 	
 	override public function returnAfterDayEnd()
 	{
+		GameVariables.instance.darkForestWolves.push(new EnemyWolf());
+		GameVariables.instance.darkForestWolves.push(new EnemyWolf());
 		if (GameVariables.instance.darkForestTimeRemaining > 0)
 		{
-			GameVariables.instance.darkForestWolves.push(new EnemyWolf());
-			GameVariables.instance.darkForestWolves.push(new EnemyWolf());
 			if (GameVariables.instance.darkForestTimeRemaining <= 2)
 			{
 				GameVariables.instance.darkForestWolves.push(new EnemyWolf());
