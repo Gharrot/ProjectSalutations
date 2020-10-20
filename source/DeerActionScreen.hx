@@ -32,6 +32,8 @@ class DeerActionScreen extends FlxObject{
     var banishButton:FlxButton;
 
     var xButton:FlxButton;
+	
+	var hidden:Bool = false;
 
     public function new(deer:Deer){
         super();
@@ -50,36 +52,41 @@ class DeerActionScreen extends FlxObject{
         setupStats();
         setupGraphics();
         setupButtons();
+		
+		hidden = false;
     }
 	
 	override public function update(elapsed:Float):Void
 	{
 		super.update(elapsed);
 		
-		if (FlxG.keys.justPressed.E)
+		if (!hidden)
 		{
-			actionOptionClicked("Exploring", 0);
-		}
-		else if (FlxG.keys.justPressed.F)
-		{
-			actionOptionClicked("Foraging", 1);
-		}
-		else if (FlxG.keys.justPressed.H)
-		{
-			actionOptionClicked("Hunting", 2);
-		}
-		else if (FlxG.keys.justPressed.D)
-		{
-			actionOptionClicked("Defending", 3);
-		}
-		else if (FlxG.keys.justPressed.R)
-		{
-			actionOptionClicked("Resting", 4);
-		}
-		
-		if (FlxG.mouse.justReleasedRight)
-		{
-			close();
+			if (FlxG.keys.justPressed.E)
+			{
+				actionOptionClicked("Exploring", 0);
+			}
+			else if (FlxG.keys.justPressed.F)
+			{
+				actionOptionClicked("Foraging", 1);
+			}
+			else if (FlxG.keys.justPressed.H)
+			{
+				actionOptionClicked("Hunting", 2);
+			}
+			else if (FlxG.keys.justPressed.D)
+			{
+				actionOptionClicked("Defending", 3);
+			}
+			else if (FlxG.keys.justPressed.R)
+			{
+				actionOptionClicked("Resting", 4);
+			}
+			
+			if (FlxG.mouse.justReleasedRight)
+			{
+				close();
+			}
 		}
 	}
 
@@ -141,6 +148,8 @@ class DeerActionScreen extends FlxObject{
 		renameButton.visible = false;
         dismissButton.visible = false;
         banishButton.visible = false;
+		
+		hidden = true;
 	}
 	
 	public function show()
@@ -170,6 +179,8 @@ class DeerActionScreen extends FlxObject{
 		renameButton.visible = true;
         dismissButton.visible = true;
         banishButton.visible = true;
+		
+		hidden = false;
 	}
 
     function setupButtons()

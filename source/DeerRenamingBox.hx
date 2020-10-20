@@ -11,6 +11,8 @@ import flixel.addons.ui.FlxInputText;
 
 class DeerRenamingBox extends FlxObject
 {
+	var boxTitle:FlxText;
+	
 	var transparentBG:FlxSprite;
 	var background:FlxSprite;
 	
@@ -23,6 +25,7 @@ class DeerRenamingBox extends FlxObject
 
     var confirmButton:FlxButton;
     var cancelButton:FlxButton;
+    var clearButton:FlxButton;
 	
 	public function new(deer:Deer, actionScreen:DeerActionScreen){
 		super();
@@ -44,12 +47,24 @@ class DeerRenamingBox extends FlxObject
 		nameBox.screenCenter();
 		nameBox.y += 40;
 		FlxG.state.add(nameBox);
+		
+        boxTitle = new FlxText(0, 0, 360, "Deer Renaming", 30);
+        boxTitle.screenCenter();
+        boxTitle.y = boxTitle.y - 175;
+		boxTitle.color = 0xFF000000;
+		boxTitle.alignment = "center";
+        FlxG.state.add(boxTitle);
 
         setupButtons();
 		
         deerCharacterSprite = new DeerTile(deer);
         deerCharacterSprite.moveDisplay(145, 180);
 		FlxG.state.add(deerCharacterSprite);
+	}
+	
+	function clearNameText()
+	{
+		nameBox.text = "";
 	}
 	
 	override public function update(elapsed:Float):Void
@@ -64,6 +79,9 @@ class DeerRenamingBox extends FlxObject
 	}
 	
     public function close(){
+        FlxG.state.remove(boxTitle);
+        FlxG.state.remove(clearButton);
+		
         FlxG.state.remove(background);
         FlxG.state.remove(transparentBG);
 		
@@ -94,6 +112,7 @@ class DeerRenamingBox extends FlxObject
 		confirmButton.y = 410;
 		confirmButton.onUp.callback = confirm.bind();
         FlxG.state.add(confirmButton);
+		confirmButton.updateHitbox();
 		
         cancelButton = new FlxButton(280, 460, "Cancel");
 		cancelButton.loadGraphic("assets/images/OctaButtonSkinny.png", true, 160, 74);
@@ -104,5 +123,17 @@ class DeerRenamingBox extends FlxObject
 		cancelButton.onUp.callback = close.bind();
 		cancelButton.label.color = 0xFF000000;
         FlxG.state.add(cancelButton);
+		cancelButton.updateHitbox();
+		
+        clearButton = new FlxButton(280, 460, "Clear");
+		clearButton.loadGraphic("assets/images/OctaButtonSkinny.png", true, 160, 74);
+		clearButton.scale.set(0.6, 0.6);
+		ButtonUtils.fixButtonText(clearButton, 12, 10, -31);
+		clearButton.screenCenter();
+		clearButton.y = 375;
+		clearButton.onUp.callback = clearNameText.bind();
+		clearButton.label.color = 0xFF000000;
+        FlxG.state.add(clearButton);
+		clearButton.updateHitbox();
     }
 }

@@ -393,7 +393,7 @@ class TheTrail extends Location
 		var message:Array<String> = new Array<String>();
 		var randomNums:FlxRandom = new FlxRandom();
 		
-		var diplomacySkill:Int = deer.int * 2 + deer.lck - randomNums.int(0, 5);
+		var diplomacySkill:Int = deer.int * 2 + deer.lck - randomNums.int(0, 4);
 		
 		if (diplomacySkill >= 10)
 		{
