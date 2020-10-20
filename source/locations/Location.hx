@@ -244,6 +244,11 @@ class Location{
 				currentDeer.addStatusEffect(new DeerStatusEffect("Lucky Bedding", 2, 0, 0, 0, 0, 1));
 			}
 			
+			if (currentDeer.checkForStatusByName("Sleepy as a Spruce Tree"))
+			{
+				currentDeer.heal(2);
+			}
+			
 			if(!statusDetermined){
 				result.push(currentDeer.name + " rests and is now " + currentDeer.getStatus() + ".");
 			}
