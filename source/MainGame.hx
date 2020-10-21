@@ -696,7 +696,7 @@ class MainGame extends FlxState
 		{
 			if (GameVariables.instance.squirrelVillageMountaineeringChallegeDay)
 			{
-				dayStatusText.text = "Suspiscious squirrels scurrying...";
+				dayStatusText.text = "Squirrels scurrying...";
 			}
 		}
 		else if (GameVariables.instance.currentLocationName == "Mount Vire")

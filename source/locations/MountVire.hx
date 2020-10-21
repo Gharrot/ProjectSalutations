@@ -64,6 +64,48 @@ class MountVire extends Location
 		dayEnd("dummy", GameVariables.instance.getPlayerDeer());
 	}
 	
+	override public function eat()
+	{
+		var message:Array<String> = new Array<String>();
+		var amountToEat = GameVariables.instance.controlledDeer.length + GameVariables.instance.babyDeer.length;
+		GameVariables.instance.currentFood -= amountToEat;
+		
+		var packsOpened:Int = 0;
+		while (GameVariables.instance.currentFood < 0 && GameVariables.instance.mountVireFoodPacks > 0)
+		{
+			GameVariables.instance.mountVireFoodPacks--;
+			packsOpened++;
+			GameVariables.instance.currentFood += 3;
+		}
+		
+		if (packsOpened > 0)
+		{
+			message.push("Your pack opens up " + packsOpened + " food packs to have enough food for the day (+" + (packsOpened * 3) + " food).");
+			
+			if (GameVariables.instance.currentFood < 0)
+			{
+				message.push("But it's still not enough...");
+			}
+			else
+			{
+				message.push(SquirrelVillage.getFoodPackStatus());
+			}
+		}
+		
+		if(GameVariables.instance.currentFood < 0){
+			starved = true;
+			GameVariables.instance.currentFood = 0;
+		}
+		
+		if (GameVariables.instance.controlledDeer.length > 1){
+			message.push("Your pack eats away at the food stores (-" + amountToEat + " food).");
+			showResult(message);
+		}else{
+			message.push("You eat away at your food supplies (-" + amountToEat + " food).");
+			showResult(message);
+		}
+	}
+	
 	public function dayEnd(choice:String, deer:Deer)
 	{
 		var gameVariables:GameVariables = GameVariables.instance;
@@ -454,7 +496,7 @@ class MountVire extends Location
 			if (gameVariables.mountVireExplosives > 0)
 			{
 				message.push(SquirrelVillage.getExplosivesStatus(false));
-				showChoice(message, ["Set off an explosive", "Chip away at the wall", "Head back"], [setoffExplosionSilverCave, moveRocksSilverCave, continueOnChoice], deer);
+				showChoice(message, ["Chip away at the wall", "Set off an explosive", "Head back"], [moveRocksSilverCave, setoffExplosionSilverCave, continueOnChoice], deer);
 			}
 			else
 			{
@@ -601,7 +643,7 @@ class MountVire extends Location
 			if (gameVariables.mountVireExplosives > 0)
 			{
 				message.push(SquirrelVillage.getExplosivesStatus(false));
-				showChoice(message, ["Set off an explosive", "Maneuver some rocks", "Head back"], [setoffExplosionMoutainPath, moveRocksMountainPath, continueOnChoice], deer);
+				showChoice(message, ["Maneuver some rocks", "Set off an explosive", "Head back"], [moveRocksMountainPath, setoffExplosionMoutainPath, continueOnChoice], deer);
 			}
 			else
 			{
@@ -1091,7 +1133,7 @@ class MountVire extends Location
 			if (gameVariables.mountVireExplosives > 0)
 			{
 				message.push(SquirrelVillage.getExplosivesStatus(false));
-				showChoice(message, ["Set off an explosive", "Move some rocks", "Head back"], [setoffExplosionMoutainPath, moveRocksMountainPath, continueOnChoice], deer);
+				showChoice(message, ["Move some rocks", "Set off an explosive", "Head back"], [moveRocksMountainPath, setoffExplosionMoutainPath, continueOnChoice], deer);
 			}
 			else
 			{

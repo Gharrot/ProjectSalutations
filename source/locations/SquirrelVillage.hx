@@ -1234,11 +1234,11 @@ class SquirrelVillage extends Location
 		
 		if (GameVariables.instance.mountVireMapleLogs == 1)
 		{
-			result += " bundle of maple logs.)";
+			result += GameVariables.instance.mountVireMapleLogs + " bundle of maple logs.)";
 		}
 		else
 		{
-			result += " bundles of maple logs.)";
+			result += GameVariables.instance.mountVireMapleLogs + " bundles of maple logs.)";
 		}
 		
 		return result;

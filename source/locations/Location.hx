@@ -208,22 +208,26 @@ class Location{
 	}
 	
 	public function eat() {
+		var message:Array<String> = new Array<String>();
+		
 		var amountToEat = GameVariables.instance.controlledDeer.length + GameVariables.instance.babyDeer.length;
 		if(GameVariables.instance.currentFood - amountToEat < 0){
 			starved = true;
 		}
 		
-		if (GameVariables.instance.currentFood > 0) {
-			GameVariables.instance.modifyFood(amountToEat * -1);
-			if(GameVariables.instance.controlledDeer.length > 1){
-				showResult(["Your pack eats away at the food stores (-" + amountToEat + " food)."]);
-			}else{
-				showResult(["You eat away at your food supplies (-" + amountToEat + " food)."]);
-			}	
+		GameVariables.instance.modifyFood(amountToEat * -1);
+		if (GameVariables.instance.controlledDeer.length > 1){
+			message.push("Your pack eats away at the food stores (-" + amountToEat + " food).");
 		}else{
-			starved = true;
-			continueOn();
+			message.push("You eat away at your food supplies (-" + amountToEat + " food).");
 		}
+		
+		if (starved)
+		{
+			message.push("But there's not enough...");
+		}
+		
+		showResult(message);
     }
 	
 	public function rest(deer:Array<Deer>) {
