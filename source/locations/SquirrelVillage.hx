@@ -324,33 +324,34 @@ class SquirrelVillage extends Location
 		if (mountaineeringChallengeActive)
 		{
 			message.push("The barista squirrel ushers you behind the counter, gives you an apron, and puts you to work taking orders.");
+			message.push(deer.getName() + " will needs to speedily take orders while also remembering them correctly.");
 			var cafeSkill:Int = deer.dex + deer.int + randomNums.int(2, 5);
 			
-			if (cafeSkill >= 17)
+			if (cafeSkill >= 14)
 			{
 				message.push(deer.getName() + " speedily takes the orders of every squirrel and remembers them all without a mistake.");
-				message.push("The barista squirrel gives you 5 acorns for your outstanding work.");
-				GameVariables.instance.mountVireAcorns += 5;
+				message.push("The barista squirrel gives you 7 acorns for your outstanding work.");
+				GameVariables.instance.mountVireAcorns += 7;
 			}
-			else if (cafeSkill >= 15)
+			else if (cafeSkill >= 12)
 			{
 				message.push(deer.getName() + " quickly takes the orders of every squirrel and remembers almost all of them without mistake.");
-				message.push("The barista squirrel gives you 4 acorns for your excellent work.");
-				GameVariables.instance.mountVireAcorns += 4;
+				message.push("The barista squirrel gives you 5 acorns for your excellent work.");
+				GameVariables.instance.mountVireAcorns += 5;
 			}
-			else if (cafeSkill >= 13)
+			else if (cafeSkill >= 10)
 			{
 				message.push(deer.getName() + " manages to get all the squirrels orders before they get mad, but makes a couple mistakes.");
-				message.push("The barista squirrel gives you 3 acorns for your decent performance.");
-				GameVariables.instance.mountVireAcorns += 3;
+				message.push("The barista squirrel gives you 4 acorns for your decent performance.");
+				GameVariables.instance.mountVireAcorns += 4;
 			}
-			else if (cafeSkill >= 11)
+			else if (cafeSkill >= 9)
 			{
 				message.push(deer.getName() + " scrambles to take every squirrel's order, recieving a couple complaints of the poor service.");
-				message.push("The barista squirrel gives you 2 acorns for finishing your work.");
-				GameVariables.instance.mountVireAcorns += 2;
+				message.push("The barista squirrel gives you 3 acorns for finishing your work.");
+				GameVariables.instance.mountVireAcorns += 3;
 			}
-			else if (cafeSkill >= 8)
+			else if (cafeSkill >= 6)
 			{
 				message.push(deer.getName() + " scrambles to take every squirrel's order, and some leave because of the poor service.");
 				message.push("The barista squirrel gives you a single acorn; you suspect they're just taking pity on you.");
@@ -457,7 +458,7 @@ class SquirrelVillage extends Location
 		if (mountaineeringChallengeActive)
 		{
 			message.push("The squirrel ushers you behind the counter, hands you a broom, and puts you to work cleaning rooms.");
-			var cleaningSkill:Int = deer.res + deer.lck + randomNums.int(0, 4);
+			var cleaningSkill:Int = deer.res*2 + deer.lck + randomNums.int(0, 4);
 			
 			if (cleaningSkill >= 16)
 			{
@@ -1011,8 +1012,8 @@ class SquirrelVillage extends Location
 			if (squirrelAttackReduction >= 5)
 			{
 				message.push("When all is said and done you lose none of your food to the ninja squirrels.");
-				message.push("The squirrels leave you a pile of 5 acorns, impressed by your skills.");
-				GameVariables.instance.mountVireAcorns += 5;
+				message.push("The squirrels leave you a pile of 10 acorns, impressed by your skills.");
+				GameVariables.instance.mountVireAcorns += 10;
 				message.push(getAcornStatus());
 			}
 			else if (squirrelAttackReduction >= 3)
@@ -1020,8 +1021,8 @@ class SquirrelVillage extends Location
 				message.push("You stopped most of the ninja squirrels' attempts at stealing your food, but still lose some scraps.");
 				message.push("(-2 food)");
 				GameVariables.instance.modifyFood(-2);
-				message.push("The squirrels leave you a pile of 3 acorns, impressed by your skills.");
-				GameVariables.instance.mountVireAcorns += 3;
+				message.push("The squirrels leave you a pile of 5 acorns, impressed by your skills.");
+				GameVariables.instance.mountVireAcorns += 5;
 				message.push(getAcornStatus());
 			}
 			else if (squirrelAttackReduction >= 1)
@@ -1038,17 +1039,17 @@ class SquirrelVillage extends Location
 				if (deer.length == 0)
 				{
 					message.push("With your den undefended, the squirrels take some food and leave unhindered.");
-					message.push("(-4 food)");
+					message.push("(-6 food)");
 				}
 				else
 				{
 					message.push("Your deer were completely ineffective at preventing the ninja squirrels' attempts to steal your food.");
-					message.push("(-4 food)");
+					message.push("(-6 food)");
 					message.push("The squirrels leave you a couple acorns for your admirable attempt to defend your stash.");
 					GameVariables.instance.mountVireAcorns += 2;
 					message.push(getAcornStatus());
 				}
-				GameVariables.instance.modifyFood(-4);
+				GameVariables.instance.modifyFood(-6);
 			}
 		
 			showResult(message);
@@ -1085,7 +1086,7 @@ class SquirrelVillage extends Location
 				var currentDeer:Deer = deer[i];
 				var climbingSkill:Int = currentDeer.dex * 2 + currentDeer.lck + randomNums.int(0, 4);
 				
-				if (climbingSkill >= 10)
+				if (climbingSkill >= 12)
 				{
 					message.push(currentDeer.getName() + " manages to scramble up the cliffside to where the goat is.");
 					

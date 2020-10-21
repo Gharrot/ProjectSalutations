@@ -28,7 +28,14 @@ class RunningDeerSprite extends FlxSprite
 		
 		runningSpeed = randomNums.float(60, 80);
 		
-		loadGraphic("assets/images/MaleDeer.png", true, 32, 32);
+		if (randomNums.bool())
+		{
+			loadGraphic("assets/images/FemaleDeer.png", true, 32, 32);
+		}
+		else
+		{
+			loadGraphic("assets/images/MaleDeer.png", true, 32, 32);
+		}
 		animation.add("running", [10, 11, 12, 13, 14], 8, true);
 		animation.add("looking", [0, 1, 1, 1, 1, 2, 2, 3, 3, 3, 3, 3, 4, 4, 4, 4, 4, 0, 0, 0, 0], 5, true);
 		animation.add("monching", [5, 6, 7, 7, 7, 8, 9, 0, 0, 0, 0, 0, 0,], 4, true);
