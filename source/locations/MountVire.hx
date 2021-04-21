@@ -28,6 +28,7 @@ class MountVire extends Location
 	
 	public function updateBackgroundImages()
 	{
+		trace(GameVariables.instance.mountVireLocation);
 		if (GameVariables.instance.mountVireLocation == "Base camp")
 		{
 			backgroundImageFile = "assets/images/LocationImages/Basecamp.png";
@@ -124,6 +125,10 @@ class MountVire extends Location
 			{
 				mountainMovement("Goat plateau");
 			}
+			else
+			{
+				returnToDen();
+			}
 		}
 		else if (gameVariables.mountVireLocation == "Goat plateau")
 		{
@@ -135,12 +140,20 @@ class MountVire extends Location
 			{
 				mountainMovement("Bird land");
 			}
+			else
+			{
+				returnToDen();
+			}
 		}
 		else if (gameVariables.mountVireLocation == "The long windy path")
 		{
 			if (movingUpwards == "Yes")
 			{
 				mountainMovement("Mountaintop");
+			}
+			else
+			{
+				returnToDen();
 			}
 		}
 		else if (gameVariables.mountVireLocation == "Bird land")
@@ -149,11 +162,13 @@ class MountVire extends Location
 			{
 				mountainMovement("Goat plateau return");
 			}
+			else
+			{
+				returnToDen();
+			}
 		}
 		
 		movingUpwards = "No";
-		
-		returnToDen();
 	}
 	
 	public function mountainMovement(destination:String)
@@ -368,7 +383,7 @@ class MountVire extends Location
 			
 			//The cave
 			exploreOptionNames.push("The cave");
-			exploreOptionFunctions.push(mountainTrail);
+			exploreOptionFunctions.push(theCaveEntrance);
 			
 			//The smaller rocks
 			exploreOptionNames.push("Small rocks");
@@ -952,7 +967,7 @@ class MountVire extends Location
 	
 	public function continueUpTheSecretPath(choice:String, deer:Deer)
 	{
-		movingUpwards = "Secret path";
+		movingUpwards = "Secret";
 		continueOn();
 	}
 	
@@ -991,6 +1006,7 @@ class MountVire extends Location
 		message.push("You walk up to the squirrel and they gesture at the trinkets surrounding them.");
 		message.push("It seems like the squirrel is selling them in exchange for stone acorns.");
 		message.push("Each trinket costs 1 stone acorn.");
+		message.push(getStoneAcornStatus());
 		
 		var exploreOptionNames:Array<String> = new Array<String>();
 		var exploreOptionFunctions:Array<(String, Deer)->Void> = new Array<(String, Deer)->Void>();
@@ -1020,6 +1036,7 @@ class MountVire extends Location
 			else
 			{
 				GameVariables.instance.mountVireStoneAcorns--;
+				GameVariables.instance.inventory.addItem(choice);
 				message.push("You give the squirrel a stone acorn and they hand you the " + choice.toLowerCase() + ".");
 				message.push(getStoneAcornStatus());
 			}
@@ -1271,36 +1288,32 @@ class MountVire extends Location
 	override public function forage(deer:Deer) {
 		var randomNums:FlxRandom = new FlxRandom();
 		var message:Array<String> = new Array<String>();
-		
-		if (GameVariables.instance.mountVireLocation == "Base camp")
-		{
-			var forageResult = (deer.int * 2) + (deer.lck) + randomNums.int(0, 10);
+		var forageResult = (deer.int * 2) + (deer.lck) + randomNums.int(0, 10);
 
-			if (forageResult <= 9)
-			{
-				//Found nothing
-				message.push("You are unable to find any food today.");
-			}
-			else if (forageResult <= 14)
-			{
-				GameVariables.instance.modifyFood(1);
-				message.push("You find a small patch of herbs growing on the mountainside (+1 food).");
-			}
-			else if (forageResult <= 19)
-			{
-				GameVariables.instance.modifyFood(2);
-				message.push("You find a blueberry bush just off a mountain trail (+2 food).");
-			}
-			else if (forageResult <= 23)
-			{
-				GameVariables.instance.modifyFood(3);
-				message.push("You find a small crabapples tree just off a mountain trail (+3 food).");
-			}
-			else
-			{
-				GameVariables.instance.modifyFood(4);
-				message.push("You find a tree filled with chestnuts in a small mountain grove (+4 food).");
-			}
+		if (forageResult <= 9)
+		{
+			//Found nothing
+			message.push("You are unable to find any food today.");
+		}
+		else if (forageResult <= 14)
+		{
+			GameVariables.instance.modifyFood(1);
+			message.push("You find a small patch of herbs growing on the mountainside (+1 food).");
+		}
+		else if (forageResult <= 19)
+		{
+			GameVariables.instance.modifyFood(2);
+			message.push("You find a blueberry bush just off a mountain trail (+2 food).");
+		}
+		else if (forageResult <= 23)
+		{
+			GameVariables.instance.modifyFood(3);
+			message.push("You find a small crabapples tree just off a mountain trail (+3 food).");
+		}
+		else
+		{
+			GameVariables.instance.modifyFood(4);
+			message.push("You find a tree filled with chestnuts in a small mountain grove (+4 food).");
 		}
 		
 		showResult(message);
@@ -1487,8 +1500,13 @@ class MountVire extends Location
 						message.push("The goat quickly hops off, then comes back with a mouthful of " + rewardValue + " stone acorns to offer as a gift.");
 					}
 					
+					if (GameVariables.instance.mountVireStoneAcorns == null)
+					{
+						GameVariables.instance.mountVireStoneAcorns = 0;
+					}
+					
 					GameVariables.instance.mountVireStoneAcorns += rewardValue;
-					message.push(SquirrelVillage.getAcornStatus());
+					message.push(getStoneAcornStatus());
 				}
 				else
 				{

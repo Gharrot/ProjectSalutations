@@ -18,7 +18,13 @@ class SaveManager
         gameVariables.undergroundCityDeer = save.data.undergroundCityDeer;
 		
 		gameVariables.currentDay = save.data.currentDay;
-
+		
+		gameVariables.inventory = save.data.inventory;
+		if(gameVariables.inventory == null)
+		{
+			gameVariables.inventory = new Inventory();
+		}
+		
         gameVariables.currentFood = save.data.currentFood;
 		gameVariables.maxFood = save.data.maxFood;
 		
@@ -78,6 +84,7 @@ class SaveManager
 		gameVariables.mountVireMountainPathBlockage = save.data.mountVireMountainPathBlockage;
 		gameVariables.mountVireSilverCaveBlockage = save.data.mountVireSilverCaveBlockage;
 		gameVariables.mountVireStoneAcorns = save.data.mountVireStoneAcorns;
+		
 		gameVariables.mountVireKeyTaken = save.data.mountVireKeyTaken;
 		
 		//move to the correct location
@@ -102,6 +109,7 @@ class SaveManager
 		
         save.data.undergroundCityDeer = gameVariables.undergroundCityDeer;
 
+		save.data.inventory = gameVariables.inventory;
 		save.data.currentLocationName = gameVariables.currentLocationName;
         save.data.currentFood = gameVariables.currentFood;
 		

@@ -195,6 +195,11 @@ class GameVariables {
 					cast(currentLocation, SquirrelVillage).mountaineeringChallengeActive = true;
 				}
 			}
+			
+			mountVireFoodPacks = 0;
+			mountVireExplosives = 0;
+			mountVirePineLogs = 0;
+			mountVireMapleLogs = 0;
 		}
 		else if (targetLocation == "Mount Vire")
 		{
@@ -456,6 +461,8 @@ class GameVariables {
 		maxBabyPackSize = 2;
 		
         undergroundCityDeer = new Array();
+		
+		inventory = new Inventory();
 		
         currentLocation = new ForgottenWoods();
 		currentLocationName = "Unfamiliar Woods";
