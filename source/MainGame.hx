@@ -491,6 +491,11 @@ class MainGame extends FlxState
 		{
 			medallions[2].loadGraphic("assets/images/Medallions/TheTrailMedallion.png");
 		}
+		
+		if (GameVariables.instance.mountVireKeyTaken)
+		{
+			medallions[3].loadGraphic("assets/images/Medallions/TheKey.png");
+		}
 	}
 
     function continueClicked(){

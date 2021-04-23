@@ -38,7 +38,7 @@ class UndergroundCity extends Location
 		
 		if (GameVariables.instance.getMedallionCount() >= 3 && GameVariables.instance.mountVireKeyTaken)
 		{
-			message.push("(Which you already did, congratulations!)");
+			message.push("(Which you already did, congratulations! This is as far as the game goes right now, thank you so much for playing!)");
 		}
 		
 		showResult(message);
