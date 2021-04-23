@@ -532,7 +532,7 @@ class SquirrelVillage extends Location
 		
 		//Study the maps
 		exploreOptionNames.push("Study the maps");
-		exploreOptionFunctions.push(exploreWithString); 
+		exploreOptionFunctions.push(mapStudying); 
 		
 		//Back
 		exploreOptionNames.push("Head outside");
@@ -565,7 +565,7 @@ class SquirrelVillage extends Location
 			message.push("You tilt your head at the squirrel and it starts frantically chirping at you.");
 			message.push("Your challenge starts tomorrow. You should help out around town to earn acorns today, then spend them on supplies tomorrow morning.");
 			message.push("After that you'll head out to climb the mountain.");
-			showChoice(message, ["Study the maps", "Head outside"], [mountaineeringChallengeStart, mapStudying, exploreWithString], deer);
+			showChoice(message, ["Study the maps", "Head outside"], [mapStudying, exploreWithString], deer);
 		}
 		else if (mountaineeringChallengeActive)
 		{
@@ -573,7 +573,7 @@ class SquirrelVillage extends Location
 			message.push("Your challenge is currently underway. You should help out around town to earn acorns today, then spend them on supplies tomorrow morning.");
 			message.push("After that you'll head out to climb the mountain.");
 			message.push("You can also spend time today studying the route you'll be following.");
-			showChoice(message, ["Study the maps", "Head outside"], [mountaineeringChallengeStart, mapStudying, exploreWithString], deer);
+			showChoice(message, ["Study the maps", "Head outside"], [mapStudying, exploreWithString], deer);
 		}
 		else
 		{
@@ -581,7 +581,7 @@ class SquirrelVillage extends Location
 			message.push("It seems the village runs a program for anyone wanting to climb the nearby mountain.");
 			message.push("If you sign the clipboard next to them then you'll start the mountaineering challenge tomorrow.");
 			message.push("During the challenge tomorrow you should help out squirrels to earn acorns.");
-			message.push("Then the next morning you can those acorns on supplies, then head out on an expedition to climb the nearby mountain.");
+			message.push("Then the next morning you can spend those acorns on supplies, then head out on an expedition to climb the nearby mountain.");
 			showChoice(message, ["Start the challenge", "Study the maps", "Head outside"], [mountaineeringChallengeStart, mapStudying, exploreWithString], deer);
 		}
 	}
@@ -599,7 +599,8 @@ class SquirrelVillage extends Location
 	public function mapStudying(choice:String, deer:Deer)
 	{
 		var message:Array<String> = new Array<String>();
-		message.push("Map studying to be added here later on.");
+		message.push("The maps detail a standard climb to the top, stopping at 3 rest points.");
+		message.push("Some of the older maps' climbs don't seem to line up exactly but it's not clear how.");
 		
 		if (!buyingPhase)
 		{
@@ -609,7 +610,6 @@ class SquirrelVillage extends Location
 		{
 			showChoice(message, ["Head outside"], [exploreWithString], deer);
 		}
-		showResult(message);
 	}
 	
 	//Museum Location

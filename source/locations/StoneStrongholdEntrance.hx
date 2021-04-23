@@ -94,9 +94,9 @@ class StoneStrongholdEntrance extends Location
 	function explainingTheUndergroundCity(choice:String, deer:Deer)
 	{
 		var message:Array<String> = new Array<String>();
-		message.push("As you walk along the streets the doors of buildings you pass slide open.");
-		message.push("Looking inside a few of them, you find a walk-in cold storage area filled with produce in each one.");
-		message.push("Each building also a room with bedding, and another with a fountain of water.");
+		message.push("As you walk the city streets the doors of buildings you pass slide open.");
+		message.push("Looking inside a few of them, you find cold storage areas filled with produce in each one.");
+		message.push("Each building also has a room with bedding, and another with a fountain.");
 		message.push("Any deer you leave here should be safe, well fed, and happy to wait around for you.");
 		message.push("(You can leave deer here and pick them up later using the 'drop off' button found on the den menu)");
 		showChoice(message, ["Continue"], [enterTheUndergroundCity], deer);

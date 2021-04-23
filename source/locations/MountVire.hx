@@ -28,7 +28,6 @@ class MountVire extends Location
 	
 	public function updateBackgroundImages()
 	{
-		trace(GameVariables.instance.mountVireLocation);
 		if (GameVariables.instance.mountVireLocation == "Base camp")
 		{
 			backgroundImageFile = "assets/images/LocationImages/Basecamp.png";
@@ -180,6 +179,8 @@ class MountVire extends Location
 			gameVariables.mountVireLocation = "Goat plateau";
 			gameVariables.mountVireMountainPathBlockage = 6;
 			
+			updateBackgroundImages();
+			
 			message.push("Your herd treks up the mountain for a while and comes to a large plateau filled with goats.");
 			message.push("The goats stare at you for a moment then bound off and up the nearby cliffsides.");
 			showChoice(message, ["Continue"], [returnToDenChoice], gameVariables.getPlayerDeer());
@@ -187,6 +188,8 @@ class MountVire extends Location
 		else if (destination == "Goat plateau return")
 		{
 			gameVariables.mountVireLocation = "Goat plateau";
+			
+			updateBackgroundImages();
 			
 			message.push("Your herd walks back through the tunnel to the plateau with the goats.");
 			message.push("The goats continue to stare at you.");
@@ -197,6 +200,8 @@ class MountVire extends Location
 			gameVariables.mountVireLocation = "The long windy path";
 			gameVariables.mountVireMountainPathBlockage = 8;
 			
+			updateBackgroundImages();
+			
 			message.push("Your herd treks up the mountain for a while and comes to a small plateau.");
 			message.push("The mountain path continues upwards, growing colder and colder.");
 			showChoice(message, ["Continue"], [returnToDenChoice], gameVariables.getPlayerDeer());
@@ -204,6 +209,8 @@ class MountVire extends Location
 		else if (destination == "Bird land")
 		{
 			gameVariables.mountVireLocation = "Bird land";
+			
+			updateBackgroundImages();
 			
 			message.push("You lead your herd through the secret tunnel and onto the other side of the mountain.");
 			message.push("This side is covered with flat plateaus scattered with trees.");
@@ -250,7 +257,8 @@ class MountVire extends Location
 			exploreOptionNames.push("Burn some pine logs");
 			exploreOptionFunctions.push(burnLogs);
 		}
-		else if (gameVariables.mountVireMapleLogs > 0)
+		
+		if (gameVariables.mountVireMapleLogs > 0)
 		{
 			exploreOptionNames.push("Burn some maple logs");
 			exploreOptionFunctions.push(burnLogs);
@@ -403,7 +411,7 @@ class MountVire extends Location
 		{
 			//The upward trail
 			exploreOptionNames.push("The Silver Cave");
-			exploreOptionFunctions.push(mountainTrail);
+			exploreOptionFunctions.push(silverCave);
 			
 			//The cave
 			exploreOptionNames.push("Back through the tunnel");
@@ -487,7 +495,7 @@ class MountVire extends Location
 			message.push("The path leading up the mountain quickly leads to the entrance of another cave, this one lined with silver walls.");
 			message.push("A short ways in the tunnel ends at a solid wall with a doorway only a squirrel could enter.");
 			
-			if (gameVariables.mountVireSilverCaveBlockage >= 8)
+			if (gameVariables.mountVireSilverCaveBlockage >= 7)
 			{
 				message.push("The wall ahead is soft enough that you should be able to break through it.");
 			}
@@ -529,9 +537,11 @@ class MountVire extends Location
 	{
 		var gameVariables:GameVariables = GameVariables.instance;
 		var message:Array<String> = new Array<String>();
-		gameVariables.mountVireMountainPathBlockage -= 3;
+		gameVariables.mountVireSilverCaveBlockage -= 3;
 		
-		if (gameVariables.mountVireMountainPathBlockage > 0)
+		gameVariables.mountVireExplosives--;
+		
+		if (gameVariables.mountVireSilverCaveBlockage > 0)
 		{
 			message.push("You set off an explosive propped up against the silver wall.");
 			message.push("KABLAM!");
@@ -560,7 +570,7 @@ class MountVire extends Location
 		{
 			message.push("You set off an explosive and it blasts through the wall revealing an opening big enough to fit through.");
 			message.push(SquirrelVillage.getExplosivesStatus(true));
-			showChoice(message, ["Step inside"], [continueUpTheMountainPath], deer);
+			showChoice(message, ["Step inside"], [enterTheSquirrelCity], deer);
 		}
 	}
 	
@@ -658,7 +668,7 @@ class MountVire extends Location
 			if (gameVariables.mountVireExplosives > 0)
 			{
 				message.push(SquirrelVillage.getExplosivesStatus(false));
-				showChoice(message, ["Maneuver some rocks", "Set off an explosive", "Head back"], [moveRocksMountainPath, setoffExplosionMoutainPath, continueOnChoice], deer);
+				showChoice(message, ["Maneuver some rocks", "Set off an explosive", "Head back"], [moveRocksMountainPath, setoffExplosionMountainPath, continueOnChoice], deer);
 			}
 			else
 			{
@@ -689,6 +699,8 @@ class MountVire extends Location
 		var message:Array<String> = new Array<String>();
 		gameVariables.mountVireMountainPathBlockage -= 3;
 		message.push("KABLAM!");
+		
+		gameVariables.mountVireExplosives--;
 		
 		if (gameVariables.mountVireMountainPathBlockage > 0)
 		{
@@ -1150,7 +1162,7 @@ class MountVire extends Location
 			if (gameVariables.mountVireExplosives > 0)
 			{
 				message.push(SquirrelVillage.getExplosivesStatus(false));
-				showChoice(message, ["Move some rocks", "Set off an explosive", "Head back"], [moveRocksMountainPath, setoffExplosionMoutainPath, continueOnChoice], deer);
+				showChoice(message, ["Move some rocks", "Set off an explosive", "Head back"], [moveRocksMountainPath, setoffExplosionMountainPath, continueOnChoice], deer);
 			}
 			else
 			{
@@ -1175,12 +1187,14 @@ class MountVire extends Location
 		}
 	}
 	
-	public function setoffExplosionMoutainPath(choice:String, deer:Deer)
+	public function setoffExplosionMountainPath(choice:String, deer:Deer)
 	{
 		var gameVariables:GameVariables = GameVariables.instance;
 		var message:Array<String> = new Array<String>();
 		gameVariables.mountVireMountainPathBlockage -= 3;
 		message.push("KABLAM!");
+		
+		gameVariables.mountVireExplosives--;
 		
 		if (gameVariables.mountVireMountainPathBlockage > 0)
 		{
@@ -1295,12 +1309,12 @@ class MountVire extends Location
 			//Found nothing
 			message.push("You are unable to find any food today.");
 		}
-		else if (forageResult <= 14)
+		else if (forageResult <= 13)
 		{
 			GameVariables.instance.modifyFood(1);
 			message.push("You find a small patch of herbs growing on the mountainside (+1 food).");
 		}
-		else if (forageResult <= 19)
+		else if (forageResult <= 18)
 		{
 			GameVariables.instance.modifyFood(2);
 			message.push("You find a blueberry bush just off a mountain trail (+2 food).");

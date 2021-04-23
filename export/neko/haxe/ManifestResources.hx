@@ -140,6 +140,9 @@ null
 @:keep @:bind @:noCompletion #if display private #end class __ASSET__assets_images_locationimages_basecampemptydeertile_png extends flash.display.BitmapData { public function new () { super (0, 0, true, 0); } }
 @:keep @:bind @:noCompletion #if display private #end class __ASSET__assets_images_locationimages_basecampnoframe_png extends flash.display.BitmapData { public function new () { super (0, 0, true, 0); } }
 @:keep @:bind @:noCompletion #if display private #end class __ASSET__assets_images_locationimages_birdland_ase extends null { }
+@:keep @:bind @:noCompletion #if display private #end class __ASSET__assets_images_locationimages_birdland_png extends flash.display.BitmapData { public function new () { super (0, 0, true, 0); } }
+@:keep @:bind @:noCompletion #if display private #end class __ASSET__assets_images_locationimages_birdlandemptydeertile_png extends flash.display.BitmapData { public function new () { super (0, 0, true, 0); } }
+@:keep @:bind @:noCompletion #if display private #end class __ASSET__assets_images_locationimages_birdlandnoframe_png extends flash.display.BitmapData { public function new () { super (0, 0, true, 0); } }
 @:keep @:bind @:noCompletion #if display private #end class __ASSET__assets_images_locationimages_currentlocationmarker_png extends flash.display.BitmapData { public function new () { super (0, 0, true, 0); } }
 @:keep @:bind @:noCompletion #if display private #end class __ASSET__assets_images_locationimages_darkforest_png extends flash.display.BitmapData { public function new () { super (0, 0, true, 0); } }
 @:keep @:bind @:noCompletion #if display private #end class __ASSET__assets_images_locationimages_darkforestemptydeertile_png extends flash.display.BitmapData { public function new () { super (0, 0, true, 0); } }
@@ -161,7 +164,7 @@ null
 @:keep @:bind @:noCompletion #if display private #end class __ASSET__assets_images_locationimages_newstonestronghold_ase extends null { }
 @:keep @:bind @:noCompletion #if display private #end class __ASSET__assets_images_locationimages_onsentop_ase extends null { }
 @:keep @:bind @:noCompletion #if display private #end class __ASSET__assets_images_locationimages_onsentop_png extends flash.display.BitmapData { public function new () { super (0, 0, true, 0); } }
-@:keep @:bind @:noCompletion #if display private #end class __ASSET__assets_images_locationimages_onsentopdeertile_png extends flash.display.BitmapData { public function new () { super (0, 0, true, 0); } }
+@:keep @:bind @:noCompletion #if display private #end class __ASSET__assets_images_locationimages_onsentopemptydeertile_png extends flash.display.BitmapData { public function new () { super (0, 0, true, 0); } }
 @:keep @:bind @:noCompletion #if display private #end class __ASSET__assets_images_locationimages_onsentopnoframe_png extends flash.display.BitmapData { public function new () { super (0, 0, true, 0); } }
 @:keep @:bind @:noCompletion #if display private #end class __ASSET__assets_images_locationimages_squirrelvillage_ase extends null { }
 @:keep @:bind @:noCompletion #if display private #end class __ASSET__assets_images_locationimages_squirrelvillage_png extends flash.display.BitmapData { public function new () { super (0, 0, true, 0); } }

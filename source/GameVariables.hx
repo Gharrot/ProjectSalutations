@@ -210,11 +210,13 @@ class GameVariables {
 			{
 				mountVireLocation = "Base camp";
 				mountVireMountainPathBlockage = 5;
+				mountVireSilverCaveBlockage = 7;
+				cast(currentLocation, MountVire).updateBackgroundImages();
 			}
 		}
 		else if (targetLocation == "Onsen Peak")
 		{
-			currentLocation = new MountVire();
+			currentLocation = new OnsenPeak();
 			maxFood = 10;
 		}
 		

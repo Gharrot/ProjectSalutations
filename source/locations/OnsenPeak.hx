@@ -1,5 +1,15 @@
 package locations;
 
+import haxe.Int64Helper;
+import statuses.DeerStatusEffect;
+import flixel.ui.FlxButton;
+import flixel.text.FlxText;
+import flixel.FlxG;
+import flixel.FlxSprite;
+import flixel.FlxObject;
+import flixel.util.FlxAxes;
+import flixel.math.FlxRandom;
+
 
 class OnsenPeak extends Location
 {
@@ -25,7 +35,7 @@ class OnsenPeak extends Location
 		showChoice(["Where will you head to?"], exploreOptionNames, exploreOptionFunctions, deer);
 	}
 	
-	public function theHotSpring(deer:Deer, choice:String)
+	public function theHotSpring(choice:String, deer:Deer)
 	{
 		var gameVariables:GameVariables = GameVariables.instance;
 		var message:Array<String> = new Array<String>();
@@ -47,7 +57,7 @@ class OnsenPeak extends Location
 			
 			message.push("(Or you can just relax for a stat boost)");
 			
-			showChoice(message, ["Strength", "Resilience", "Dexterity", "Intelligence", "Fortune", "Relax"], [playerOnsenRelaxing], deer);
+			showChoice(message, ["Strength", "Resilience", "Dexterity", "Intellect", "Fortune", "Relax"], [playerOnsenRelaxing], deer);
 		}
 		else
 		{
@@ -57,10 +67,10 @@ class OnsenPeak extends Location
 			
 			if (gameVariables.onsenPeakStatChoice == "None")
 			{
-				message.push("(You feel " + gameVariables.getPlayerDeer().getName + " would appreciate this spring even better)");
+				message.push("(You feel " + gameVariables.getPlayerDeer().getName() + " would appreciate this spring even better)");
 			}
 			
-			showChoice(message, ["Continue"], [enterTheUndergroundCity], deer);
+			showChoice(message, ["Continue"], [continueOnChoice], deer);
 		}
 	}
 	
@@ -79,9 +89,10 @@ class OnsenPeak extends Location
 			//Remove stat
 			if (GameVariables.instance.onsenPeakStatChoice != "None")
 			{
-				GameVariables.instance.getPlayerDeer().modifyStatByName(choice, -1);
+				GameVariables.instance.getPlayerDeer().modifyStatByName(GameVariables.instance.onsenPeakStatChoice, -1);
 			}
 			
+			GameVariables.instance.onsenPeakStatChoice = choice;
 			GameVariables.instance.getPlayerDeer().modifyStatByName(choice, 1);
 			message.push("(+1 permanent " + choice + ")");
 		}
