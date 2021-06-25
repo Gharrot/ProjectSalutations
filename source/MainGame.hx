@@ -736,7 +736,7 @@ class MainGame extends FlxState
 			add(newButton);
 			
 			//Stone Stronghold Entrance
-			if (GameVariables.instance.undergroundCityReached)
+			if (GameVariables.instance.theTrailCompleted)
 			{
 				var newButton:LocationButton = new LocationButton("Stone Stronghold Entrance", 6);
 				newButton.screenCenter();
@@ -783,7 +783,7 @@ class MainGame extends FlxState
 			add(newButton);
 			
 			//Stone Stronghold Entrance
-			if (GameVariables.instance.undergroundCityReached)
+			if (GameVariables.instance.theTrailCompleted)
 			{
 				var newButton:LocationButton = new LocationButton("Stone Stronghold Entrance", 6);
 				newButton.screenCenter();
