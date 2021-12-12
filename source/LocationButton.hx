@@ -11,12 +11,11 @@ class LocationButton extends FlxButton
 	var locationName:String;
 	var cost:Int;
 	
-	public function new(locationName:String, cost:Int) 
+	public function new(locationName:String, cost:Int, x:Int = 0, y:Int = 0) 
 	{
-		super();
+		super(x, y);
 		
 		loadGraphic("assets/images/MapImages/LocationButton.png", true, 23, 23);
-		scale.set(3, 3);
 		updateHitbox();
 		
 		this.locationName = locationName;

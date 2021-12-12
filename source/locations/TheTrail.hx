@@ -26,9 +26,12 @@ class TheTrail extends Location
 	{
 		if (GameVariables.instance.theTrailDayNumber == 1)
 		{
-			backgroundImageFile = "assets/images/LocationImages/TheTrailDay2.png";
-			backgroundImageFileNoFrame = "assets/images/LocationImages/TheTrailDay2NoFrame.png";
-			backgroundImageFileMiniFramed = "assets/images/LocationImages/TheTrailDay2EmptyDeerTile.png";
+			backgroundImageFile = "assets/images/LocationImages/AbandonedFields.png";
+			backgroundImageFileNoFrame = "assets/images/LocationImages/AbandonedFieldsNoFrame.png";
+			backgroundImageFileMiniFramed = "assets/images/LocationImages/AbandonedFieldsEmptyDeerTile.png";
+			//backgroundImageFile = "assets/images/LocationImages/TheTrailDay2.png";
+			//backgroundImageFileNoFrame = "assets/images/LocationImages/TheTrailDay2NoFrame.png";
+			//backgroundImageFileMiniFramed = "assets/images/LocationImages/TheTrailDay2EmptyDeerTile.png";
 		}
 		else if (GameVariables.instance.theTrailDayNumber == 2)
 		{

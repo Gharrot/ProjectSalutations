@@ -197,8 +197,7 @@ class Location{
 	
 	public function wakeUp(choice:String, deer:Deer) {
 		if (choice == "Wake up") {
-			var message:String = "You wake up alone in your den in the Unfamiliar Woods.";
-			showChoice(["You wake up alone in your den in the Unfamiliar Woods with a small pile of berries sitting at your side."], ["Continue on"], [wakeUp], deer);
+			showChoice(["You wake up in your den in the Unfamiliar Woods with a small pile of berries sitting at your side."], ["Continue on"], [wakeUp], deer);
 		}else if (choice == "Continue on") {
 			GameVariables.instance.currentFood = 1;
 			GameVariables.instance.changeLocation("Unfamiliar Woods");

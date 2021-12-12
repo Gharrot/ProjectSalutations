@@ -95,6 +95,12 @@ class GameVariables {
 	//Onsen Peak
 	public var onsenPeakStatChoice:String = "None";
 	
+	//Dark City
+	public var darkCityPodBlockage:Int;
+	public var darkCityNumberDeciphering:Int;
+	public var darkCityBarricade:Int;
+	public var darkCityScurriers:Int;
+	
 	public var saveNum:Int;
 
     public static var instance(default, null):GameVariables = new GameVariables();
@@ -556,7 +562,7 @@ class GameVariables {
 		}
 		else if (locationName == "The Trail")
 		{
-			return "assets/images/LocationImages/TheTrailDay3.png";
+			return "assets/images/LocationImages/AbandonedFields.png";
 		}
 		else if (locationName == "Stone Stronghold Entrance")
 		{

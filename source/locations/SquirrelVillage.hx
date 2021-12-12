@@ -912,7 +912,7 @@ class SquirrelVillage extends Location
 		else if (forageResult <= 23)
 		{
 			GameVariables.instance.modifyFood(3);
-			message.push("You find a small crabapples tree just off a mountain trail (+3 food).");
+			message.push("You find a small crabapple tree just off a mountain trail (+3 food).");
 		}
 		else
 		{

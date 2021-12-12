@@ -64,6 +64,7 @@ class SaveManager
 		gameVariables.theTrailDayStreamFound = save.data.theTrailDayStreamFound;
 		gameVariables.theTrailDayBridgeFound = save.data.theTrailDayBridgeFound;
 		gameVariables.theTrailDayMedallionTaken = save.data.theTrailDayMedallionTaken;
+		gameVariables.theTrailCompleted = save.data.theTrailCompleted;
 		
 		//Underground City
 		gameVariables.undergroundCityReached = save.data.undergroundCityReached;
@@ -149,6 +150,7 @@ class SaveManager
 		save.data.theTrailDayStreamFound = gameVariables.theTrailDayStreamFound;
 		save.data.theTrailDayBridgeFound = gameVariables.theTrailDayBridgeFound;
 		save.data.theTrailDayMedallionTaken = gameVariables.theTrailDayMedallionTaken;
+		save.data.theTrailCompleted = gameVariables.theTrailCompleted;
 		
 		//Underground City
 		save.data.undergroundCityReached = gameVariables.undergroundCityReached;

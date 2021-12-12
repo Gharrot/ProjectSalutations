@@ -19,7 +19,7 @@ class TravelConfirmationBox extends ConfirmationBox
 		
 		var currentFood:Int = GameVariables.instance.currentFood;
 		
-		questionText.text = "Travelling here will use up " + travelCost + " food.";
+		questionText.text = "Travelling here will\ncost " + travelCost + " food.";
 		confirmButton.text = "Set out";
 		cancelButton.text = "Stay put";
 		

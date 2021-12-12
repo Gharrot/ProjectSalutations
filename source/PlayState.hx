@@ -249,7 +249,7 @@ class PlayState extends FlxState
 	
 	function startCredits(){
 		credits = new Array<String>();
-		credits.push("Coding & Art\nGharry/Gharrot");
+		credits.push("Coding & Art\nPajamaBee");
 		credits.push("Deer Sprites & Animations\nCalciumtrice");
 		
 		remove(creditsButton);
