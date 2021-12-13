@@ -69,6 +69,9 @@ class SaveManager
 		//Underground City
 		gameVariables.undergroundCityReached = save.data.undergroundCityReached;
 		gameVariables.undergroundCityOpened = save.data.undergroundCityOpened;
+		gameVariables.undergroundCityChurchViewed = save.data.undergroundCityChurchViewed;
+		gameVariables.undergroundCityLabsViewed = save.data.undergroundCityLabsViewed;
+		gameVariables.undergroundCityObservatoryViewed = save.data.undergroundCityObservatoryViewed;
 		
 		//Squirrel Village
 		gameVariables.squirrelVillageBeddingChoice = save.data.beddingChoice;
@@ -155,6 +158,9 @@ class SaveManager
 		//Underground City
 		save.data.undergroundCityReached = gameVariables.undergroundCityReached;
 		save.data.undergroundCityOpened = gameVariables.undergroundCityOpened;
+		save.data.undergroundCityChurchViewed = gameVariables.undergroundCityChurchViewed;
+		save.data.undergroundCityLabsViewed = gameVariables.undergroundCityLabsViewed;
+		save.data.undergroundCityObservatoryViewed = gameVariables.undergroundCityObservatoryViewed;
 		
 		//Squirrel Village
 		save.data.beddingChoice = gameVariables.squirrelVillageBeddingChoice;

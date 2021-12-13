@@ -74,6 +74,9 @@ class GameVariables {
 	//Underground City
 	public var undergroundCityReached:Bool;
 	public var undergroundCityOpened:Bool;
+	public var undergroundCityChurchViewed:Bool;
+	public var undergroundCityLabsViewed:Bool;
+	public var undergroundCityObservatoryViewed:Bool;
 	
 	//Squirrel Village
 	public var squirrelVillageBeddingChoice:String;
@@ -115,9 +118,9 @@ class GameVariables {
         currentLocation = new ForgottenWoods();
 		currentLocationName = "Unfamiliar Woods";
         currentFood = 4;
-        maxFood = 10;
+        maxFood = 12;
 		
-		unfamiliarWoodsMaxFood = 10;
+		unfamiliarWoodsMaxFood = 12;
 		rabbitFur = 0;
 		rabbitFurBeddingMade = false;
 		unfamiliarWoodsLostDeer = new Array<Deer>();
@@ -174,17 +177,17 @@ class GameVariables {
 		else if (targetLocation == "Stone Stronghold Entrance")
 		{
 			currentLocation = new StoneStrongholdEntrance();
-			maxFood = 10;
+			maxFood = 12;
 		}
 		else if (targetLocation == "Underground City")
 		{
 			currentLocation = new UndergroundCity();
-			maxFood = 10;
+			maxFood = 20;
 		}
 		else if (targetLocation == "Squirrel Village")
 		{
 			currentLocation = new SquirrelVillage();
-			maxFood = 10;
+			maxFood = 15;
 			
 			if (resetLocationVariables)
 			{
@@ -210,7 +213,7 @@ class GameVariables {
 		else if (targetLocation == "Mount Vire")
 		{
 			currentLocation = new MountVire();
-			maxFood = 10;
+			maxFood = 12;
 			
 			if (resetLocationVariables)
 			{
@@ -223,7 +226,7 @@ class GameVariables {
 		else if (targetLocation == "Onsen Peak")
 		{
 			currentLocation = new OnsenPeak();
-			maxFood = 10;
+			maxFood = 12;
 		}
 		
 		currentLocationName = targetLocation;
@@ -475,12 +478,12 @@ class GameVariables {
         currentLocation = new ForgottenWoods();
 		currentLocationName = "Unfamiliar Woods";
         currentFood = 4;
-        maxFood = 10;
+        maxFood = 12;
 		
 		currentDay = 1;
 		
 		//Unfamiliar Woods
-		unfamiliarWoodsMaxFood = 10;
+		unfamiliarWoodsMaxFood = 12;
 		rabbitFur = 0;
 		unfamiliarWoodsLostDeer = new Array<Deer>();
 		unfamiliarWoodsCaveFound = false;
@@ -523,6 +526,9 @@ class GameVariables {
 		//Underground City
 		undergroundCityReached = false;
 		undergroundCityOpened = false;
+		undergroundCityChurchViewed = false;
+		undergroundCityLabsViewed = false;
+		undergroundCityObservatoryViewed = false;
 	
 		//Squirrel Village
 		squirrelVillageBeddingChoice = "None";

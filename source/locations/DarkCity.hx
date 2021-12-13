@@ -29,15 +29,36 @@ class DarkCity extends Location
 		var exploreOptionFunctions:Array<(String, Deer)->Void> = new Array<(String, Deer)->Void>();
 
 		//Astronomy Lab 
-		exploreOptionNames.push("The Observatory");
+		if (GameVariables.instance.undergroundCityObservatoryViewed)
+		{
+			exploreOptionNames.push("The Observatory");
+		}
+		else
+		{
+			exploreOptionNames.push("???");
+		}
 		exploreOptionFunctions.push(enterObservatory);
 
 		//The Church 
-		exploreOptionNames.push("The Church");
+		if (GameVariables.instance.undergroundCityChurchViewed)
+		{
+			exploreOptionNames.push("The Chapel");
+		}
+		else
+		{
+			exploreOptionNames.push("???");
+		}
 		exploreOptionFunctions.push(enterChurch);
 
 		//The Pods 
-		exploreOptionNames.push("The Lab");
+		if (GameVariables.instance.undergroundCityLabsViewed)
+		{
+			exploreOptionNames.push("The Lab");
+		}
+		else
+		{
+			exploreOptionNames.push("???");
+		}
 		exploreOptionFunctions.push(enterPods);
 
 		showChoice(["Where will you head to?"], exploreOptionNames, exploreOptionFunctions, deer);

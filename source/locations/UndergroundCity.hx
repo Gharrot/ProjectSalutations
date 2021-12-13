@@ -20,9 +20,38 @@ class UndergroundCity extends Location
 		var exploreOptionNames:Array<String> = new Array<String>();
 		var exploreOptionFunctions:Array<(String, Deer)->Void> = new Array<(String, Deer)->Void>();
 
-		//The Shrine 
-		exploreOptionNames.push("The Chapel");
-		exploreOptionFunctions.push(medallionPedestal);
+		//Astronomy Lab 
+		if (GameVariables.instance.undergroundCityObservatoryViewed)
+		{
+			exploreOptionNames.push("The Observatory");
+		}
+		else
+		{
+			exploreOptionNames.push("???");
+		}
+		exploreOptionFunctions.push(enterObservatory);
+
+		//The Church 
+		if (GameVariables.instance.undergroundCityChurchViewed)
+		{
+			exploreOptionNames.push("The Chapel");
+		}
+		else
+		{
+			exploreOptionNames.push("???");
+		}
+		exploreOptionFunctions.push(enterChurch);
+
+		//The Pods 
+		if (GameVariables.instance.undergroundCityLabsViewed)
+		{
+			exploreOptionNames.push("The Lab");
+		}
+		else
+		{
+			exploreOptionNames.push("???");
+		}
+		exploreOptionFunctions.push(enterPods);
 
 		showChoice(["Where will you head to?"], exploreOptionNames, exploreOptionFunctions, deer);
 	}
@@ -41,6 +70,37 @@ class UndergroundCity extends Location
 			message.push("(Which you already did, congratulations! This is as far as the game goes right now, thank you so much for playing!)");
 		}
 		
+		showResult(message);
+	}
+	
+	public function enterObservatory(choice:String, deer:Deer)
+	{
+		GameVariables.instance.undergroundCityObservatoryViewed = true;
+		var message:Array<String> = new Array<String>();
+		message.push("You walk into a small tall room carved into the back wall of the city.");
+		message.push("The room is filled with screens and devices connected to a center terminal.");
+		message.push("The domed ceiling is lined with diagrams of stars, though they're impossible to clearly make out in the dim light.");
+		message.push("Rocks seem to have fallen from the roof smashing important part of the system, rendering everything unusable.");
+		showResult(message);
+	}
+	
+	public function enterChurch(choice:String, deer:Deer)
+	{
+		GameVariables.instance.undergroundCityChurchViewed = true;
+		var message:Array<String> = new Array<String>();
+		message.push("You walk over to investigate the chapel located at the back of the city.");
+		message.push("Unfortunately the entrance has completely caved in and there's no hope of getting through.");
+		showResult(message);
+	}
+	
+	public function enterPods(choice:String, deer:Deer)
+	{
+		GameVariables.instance.undergroundCityLabsViewed = true;
+		var message:Array<String> = new Array<String>();
+		message.push("You walk into a large room carved into the back wall of the city.");
+		message.push("The walls of the room are lined with glass pods attached to machines by clear tubes. The floor is covered in a slimy green residue.");
+		message.push("Nearly all of the pods appear to have been broken open by chunks of rock that fell from the roof.");
+		message.push("There doesn't seem to be anything useful still able to be done here.");
 		showResult(message);
 	}
 	
