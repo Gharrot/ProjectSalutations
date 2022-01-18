@@ -52,6 +52,9 @@ class UndergroundCity extends Location
 			exploreOptionNames.push("???");
 		}
 		exploreOptionFunctions.push(enterPods);
+		
+		exploreOptionNames.push("The Crimson Door");
+		exploreOptionFunctions.push(checkKeyhole);
 
 		showChoice(["Where will you head to?"], exploreOptionNames, exploreOptionFunctions, deer);
 	}
@@ -101,6 +104,44 @@ class UndergroundCity extends Location
 		message.push("The walls of the room are lined with glass pods attached to machines by clear tubes. The floor is covered in a slimy green residue.");
 		message.push("Nearly all of the pods appear to have been broken open by chunks of rock that fell from the roof.");
 		message.push("There doesn't seem to be anything useful still able to be done here.");
+		showResult(message);
+	}
+	
+	public function checkKeyhole(choice:String, deer:Deer)
+	{
+		var message:Array<String> = new Array<String>();
+		message.push("You walk over to a hallway dug into the side wall of the city.");
+		message.push("It leads you a short ways away from the city before you are halted by a solid wall of crimson stone.");
+		message.push("The wall has an indentation in its center in the shape of a key.");
+		showResult(message);
+		if (GameVariables.instance.mountVireKeyTaken)
+		{
+			showChoice(message, ["Insert the key"], [unlockingTheDoor], deer);
+		}
+		else
+		{
+			message.push("There doesn't seem to be anything you can do here for now.");
+			showResult(message);
+		}
+	}
+	
+	public function unlockingTheDoor(choice:String, deer:Deer)
+	{
+		var message:Array<String> = new Array<String>();
+		message.push("You slot the crimson key into its place in the matching wall.");
+		message.push("Once it's inserted it you hear a click, and upon removing it the wall slides into the floor.");
+		showChoice(message, ["Head deeper"], [exploringTheDarkCity], deer);
+	}
+	
+	public function exploringTheDarkCity(choice:String, deer:Deer)
+	{
+		var message:Array<String> = new Array<String>();
+		message.push("The tunnel leads you further and further away from the stone city, and eventually it opens up into a massive chamber.");
+		message.push("The light in the chamber is incredibly dim, but as your eyes adjust begin to recognize familiar buildings.");
+		message.push("You seem to be in an exact, though slightly smaller copy of the stone city you just came from.");
+		message.push("You hear scurrying in the darkness ahead and decide to head back to the rest of the herd.");
+		//message.push("(You can now access the darkened city through the map)");
+		message.push("(Sorry but this is where this version of the game ends, thank you so much for playing!!)");
 		showResult(message);
 	}
 	

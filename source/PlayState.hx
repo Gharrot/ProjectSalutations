@@ -244,7 +244,7 @@ class PlayState extends FlxState
 	
 	function switchToCharacterCreation(){
 		GameVariables.instance.saveNum = saveToStart;
-		FlxG.switchState(new CharacterCreation());
+		FlxG.switchState(new Tutorial());
 	}
 	
 	function startCredits(){

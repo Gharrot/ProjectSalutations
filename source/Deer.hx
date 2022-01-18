@@ -433,7 +433,7 @@ class Deer{
 			newDeer.gender = "Male";
 		}
 		
-		newDeer.name = NameGenerator.getRandomName(newDeer.gender);
+		newDeer.name = NameGenerator.getRandomName();
 		
 		return newDeer;
 	}
@@ -502,7 +502,7 @@ class Deer{
 			newDeer.gender = "Male";
 		}
 		
-		newDeer.name = NameGenerator.getRandomName(newDeer.gender);
+		newDeer.name = NameGenerator.getRandomName();
 		
 		newDeer.becomeABaby();
 		

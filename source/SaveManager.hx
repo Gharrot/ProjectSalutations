@@ -91,6 +91,9 @@ class SaveManager
 		
 		gameVariables.mountVireKeyTaken = save.data.mountVireKeyTaken;
 		
+		//Dark City
+		gameVariables.darkCityReached = save.data.darkCityReached;
+		
 		//move to the correct location
 		gameVariables.currentLocationName = save.data.currentLocationName;
 		gameVariables.changeLocation(gameVariables.currentLocationName, false);
@@ -178,6 +181,9 @@ class SaveManager
 		save.data.mountVireSilverCaveBlockage = gameVariables.mountVireSilverCaveBlockage;
 		save.data.mountVireStoneAcorns = gameVariables.mountVireStoneAcorns;
 		save.data.mountVireKeyTaken = gameVariables.mountVireKeyTaken;
+		
+		//Dark City
+		save.data.darkCityReached = gameVariables.darkCityReached;
 		
 		save.flush();
 		save.close();

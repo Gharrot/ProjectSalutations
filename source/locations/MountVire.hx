@@ -409,7 +409,7 @@ class MountVire extends Location
 		}
 		else if (gameVariables.mountVireLocation == "Bird land")
 		{
-			//The upward trail
+			//The silver cave
 			exploreOptionNames.push("The Silver Cave");
 			exploreOptionFunctions.push(silverCave);
 			
@@ -460,19 +460,31 @@ class MountVire extends Location
 	{
 		var message:Array<String> = new Array<String>();
 		
-		message.push("You step through the opening into a room filled with streets of small squirrel-sized buildings.");
-		message.push("Peering inside them, the buildings are all furnished but there's no sign of any one living in them.");
-		message.push("Ahead of you is a low opening leading to another room.");
-		showChoice(message, ["Step inside"], [enterTheChurch], deer);
+		message.push("You step through the opening into a small stone room.");
+		message.push("Against the wall ahead of you is a tiny stone pedestal, with a small staircase in front of it descending deep into the mountain.");
+		showChoice(message, ["Continue"], [investigateTheStaircase], deer);
+		
+		//message.push("You step through the opening into a room filled with streets of small squirrel-sized buildings.");
+		//message.push("Peering inside them, the buildings are all furnished but there's no sign of any one living in them.");
+		//message.push("Ahead of you is a low opening leading to another room.");
+		//showChoice(message, ["Step inside"], [enterTheChurch], deer);
 	}
 	
-	public function enterTheChurch(choice:String, deer:Deer)
+	public function investigateTheStaircase(choice:String, deer:Deer)
 	{
 		var message:Array<String> = new Array<String>();
 		
-		message.push("The room you step into is empty except for a pedestal at the far end.");
-		message.push("The pedestal has 3 tiny circular indentations on top and a key sticking out of a keyhole below them.");
-		showChoice(message, ["Take the key"], [takeTheKey], deer);
+		if (GameVariables.instance.mountVireKeyTaken)
+		{
+			message.push("The staircase is much too small to you to use, but looking closer you see a small red key sitting on the top step.");
+			showChoice(message, ["Take the key"], [takeTheKey], deer);
+		}
+		else
+		{
+			message.push("The staircase is much too small to you to use, but you remember that you found a key last time you were here.");
+			message.push("Not finding anything else to investigate here, you head back.");
+			showChoice(message, ["Continue"], [continueOnChoice], deer);
+		}	
 	}
 	
 	public function takeTheKey(choice:String, deer:Deer)
@@ -480,7 +492,7 @@ class MountVire extends Location
 		var message:Array<String> = new Array<String>();
 		GameVariables.instance.mountVireKeyTaken = true;
 		
-		message.push("You twist the key and remove it from the pedestal.");
+		message.push("You kneel down and pick up the key.");
 		message.push("Not finding anything else to investigate here, you head back.");
 		showChoice(message, ["Continue"], [continueOnChoice], deer);
 	}
@@ -501,7 +513,7 @@ class MountVire extends Location
 			}
 			else if (gameVariables.mountVireSilverCaveBlockage >= 5)
 			{
-				message.push("You've barely made a dent in the wall.");
+				message.push("You've made a small dent in the wall.");
 			}
 			else if (gameVariables.mountVireSilverCaveBlockage >= 3)
 			{
@@ -548,7 +560,7 @@ class MountVire extends Location
 			
 			if (gameVariables.mountVireSilverCaveBlockage >= 5)
 			{
-				message.push("You've barely made a dent in the wall.");
+				message.push("You've made a small dent in the wall.");
 			}
 			else if (gameVariables.mountVireSilverCaveBlockage >= 3)
 			{
@@ -598,7 +610,7 @@ class MountVire extends Location
 		}
 		else
 		{
-			message.push(deer.getName() + " spends the day grinding away at the wall, but isn't strong enough to make any real progress.");
+			message.push(deer.getName() + " spends the day grinding away at the wall, but isn't able enough to make any real progress.");
 		}
 		
 		if (gameVariables.mountVireSilverCaveBlockage >= 8)
@@ -607,7 +619,7 @@ class MountVire extends Location
 		}
 		else if (gameVariables.mountVireSilverCaveBlockage >= 5)
 		{
-			message.push("You've barely made a dent in the wall so far.");
+			message.push("You've made a small dent in the wall so far.");
 		}
 		else if (gameVariables.mountVireSilverCaveBlockage >= 3)
 		{

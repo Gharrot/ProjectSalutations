@@ -147,7 +147,7 @@ class ForgottenWoods extends Location
 
 		if (forageResult <= 6)
 		{
-			//Found nothing
+			message.push("You are unable to find any food today.");
 		}
 		else if (forageResult <= 9)
 		{
@@ -169,25 +169,26 @@ class ForgottenWoods extends Location
 			GameVariables.instance.modifyFood(4);
 			message.push("You find a tree filled with full juicy apples (+4 food).");
 		}
+		
+		showResult(message);
 
 		
-		var challengeEvent = randomNums.int(0, 6);
-		//Risky apple
-		if(challengeEvent == 0){
-			message.push("You see a particularily juicy apple hanging off a small precipice.");
-			showChoice(message, ["Jump for it", "Continue on"], [riskyApple, continueOnChoice], deer);
-		}
-		//Perseverance apple
-		else if(challengeEvent == 1){
-			message.push("You see a tree filled with apples ahead, but an especially dense and prickly thicket lies before you.");
-			showChoice(message, ["Trudge through it", "Turn back"], [perseveranceApple, continueOnChoice], deer);
-		}
-		else{
-			if(message.length == 0){
-				message.push("You are unable to find any food today.");
-			}
-			showResult(message);
-		}
+		//var challengeEvent = randomNums.int(0, 6);
+		////Risky apple
+		//if(challengeEvent == 0){
+		//	message.push("You see a particularily juicy apple hanging off a small precipice.");
+		//	showChoice(message, ["Jump for it", "Continue on"], [riskyApple, continueOnChoice], deer);
+		//}
+		////Perseverance apple
+		//else if(challengeEvent == 1){
+		//	message.push("You see a tree filled with apples ahead, but an especially dense and prickly thicket lies before you.");
+		//	showChoice(message, ["Trudge through it", "Turn back"], [perseveranceApple, continueOnChoice], deer);
+		//}
+		//else{
+		//	if(message.length == 0){
+		//	}
+		//	showResult(message);
+		//}
 	}
 
 	override public function hunt(deer:Array<Deer>)
@@ -900,26 +901,22 @@ class ForgottenWoods extends Location
 
 			var message:Array<String> = new Array<String>();
 			message.push("You come across " + foundDeer.name + ", a lost deer from your pack.");
-			message.push("You see they are ");
-			message[1] += foundDeer.gender;
-			message[1] += " and have a glimmer of ";
+			message.push("You see a glimmer of ");
 			message[1] += foundDeer.getGlimmer();
 			message[1] += " in their eye.";
 			showChoice(message, ["Welcome back", "Scare off", "Continue on"], [returningDeer, scareOffDeer, declineDeerFriend], deer);
 		}
 		else
 		{
-			var newDeerFriend:Deer = Deer.buildADeer(randomNums.int(11, 13));
+			var newDeerFriend:Deer = Deer.buildADeer(randomNums.int(11, 13), 6);
 			foundDeer = newDeerFriend;
 
 			if (foundDeer.str <= 2 && (randomNums.int(0,1) == 0))
 			{
 				var message:Array<String> = new Array<String>();
 				message.push("You come across another deer lying on the ground under a large branch. They seem to be stuck.");
-				message.push("You see they are ");
-				message[1] += newDeerFriend.gender;
-				message[1] += " and have a glimmer of ";
-				message[1] += newDeerFriend.getGlimmer();
+				message.push("You see a glimmer of ");
+				message[1] += foundDeer.getGlimmer();
 				message[1] += " in their eye.";
 				showChoice(message, ["Try to help", "Continue on"], [helpStuckDeer, declineDeerFriend], deer);
 			}
@@ -927,18 +924,14 @@ class ForgottenWoods extends Location
 			{
 				var message:Array<String> = new Array<String>();
 				message.push("You come across another deer. They look like they haven't eaten much recently.");
-				message.push("You see they are ");
-				message[1] += newDeerFriend.gender;
-				message[1] += " and have a glimmer of ";
-				message[1] += newDeerFriend.getGlimmer();
+				message.push("You see a glimmer of ");
+				message[1] += foundDeer.getGlimmer();
 				message[1] += " in their eye.";
 				showChoice(message, ["Offer food (1)", "Continue on"], [offerFood, declineDeerFriend], deer);
 			}
 			else
 			{
-				var message:String = "You come across another deer. You see they are ";
-				message += newDeerFriend.gender;
-				message += " and have a glimmer of ";
+				var message:String = "You come across another deer. You see a glimmer of ";
 				message += newDeerFriend.getGlimmer();
 				message += " in their eye.";
 				showChoice([message], ["Recruit", "Continue on"], [recruitDeer, declineDeerFriend], deer);

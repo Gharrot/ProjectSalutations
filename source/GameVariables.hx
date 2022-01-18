@@ -99,6 +99,7 @@ class GameVariables {
 	public var onsenPeakStatChoice:String = "None";
 	
 	//Dark City
+	public var darkCityReached:Bool;
 	public var darkCityPodBlockage:Int;
 	public var darkCityNumberDeciphering:Int;
 	public var darkCityBarricade:Int;
@@ -546,6 +547,9 @@ class GameVariables {
 		mountVireSilverCaveBlockage = 8;
 		mountVireStoneAcorns = 0;
 		mountVireKeyTaken = false;
+		
+		//Dark City
+		darkCityReached = false;
 	}
 	
 	public static function getLocationSpriteByName(locationName:String):String
@@ -599,6 +603,10 @@ class GameVariables {
 		else if (currentLocationName == "Dark Forest")
 		{
 			FlxG.state.bgColor = 0xFF363641;
+		}
+		else if (currentLocationName == "Underground City")
+		{
+			FlxG.state.bgColor = 0xFFA6A6A6;
 		}
 		else
 		{

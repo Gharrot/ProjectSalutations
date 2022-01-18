@@ -59,13 +59,12 @@ class StoneStrongholdEntrance extends Location
 		{
 			if (GameVariables.instance.getMedallionCount() >= 1)
 			{
-				message.push("The stone pedestal is bare other than shallow circular indentation on top.");
+				message.push("The stone pedestal is bare other than a shallow circular indentation on top.");
 				showChoice(message, ["Place a medallion"], [placingAMedallion], deer);
 			}
 			else
 			{
-				message.push("The stone pedestal is bare other than shallow circular indentation on top.");
-				message.push("There doesn't seem to be any way to interact with it.");
+				message.push("The stone pedestal is bare other than a shallow circular indentation on top.");
 				showResult(message);
 			}
 		}

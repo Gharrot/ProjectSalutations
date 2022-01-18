@@ -6,7 +6,7 @@ class NameGenerator
 {
 	private static var names:Array<String>;
 	
-	public static function getRandomName(?gender:String):String
+	public static function getRandomName():String
 	{
 		if(names == null){
 			setupNames();

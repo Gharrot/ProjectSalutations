@@ -767,7 +767,7 @@ class MainGame extends FlxState
 			add(currentLocationSprite);
 			
 			//Unfamiliar Woods
-			var newButton:LocationButton = new LocationButton("Unfamiliar Woods", 19, 467);
+			var newButton:LocationButton = new LocationButton("Unfamiliar Woods", 0, 19, 467);
 			newButton.setMessage("Do you want to return back to the woods you came from?");
 			mapButtons.push(newButton);
 			add(newButton);

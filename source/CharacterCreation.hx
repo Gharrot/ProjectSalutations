@@ -62,11 +62,10 @@ class CharacterCreation extends FlxState
 		setupGenderButtons();
 		if(FlxG.random.bool(50)){
 			maleClicked(false);
-			nameBox.text = NameGenerator.getRandomName("Male");
 		}else{
 			femaleClicked(false);
-			nameBox.text = NameGenerator.getRandomName("Female");
 		}
+		nameBox.text = NameGenerator.getRandomName();
 
 		setupStats();
 
@@ -211,11 +210,10 @@ class CharacterCreation extends FlxState
 		
 		if(FlxG.random.bool(50)){
 			maleClicked(false);
-			nameBox.text = NameGenerator.getRandomName("Male");
 		}else{
 			femaleClicked(false);
-			nameBox.text = NameGenerator.getRandomName("Female");
 		}
+		nameBox.text = NameGenerator.getRandomName();
 		
 		statPointsRemaining = 0;
 		pointsRemainingText.text = "Points remaining: " + statPointsRemaining;
@@ -283,11 +281,15 @@ class CharacterCreation extends FlxState
 	}
 	
 	private function setupGenderButtons(){
-		var maleText = new flixel.text.FlxText(50, 280, 0, "Male", 16);
+		var maleText = new flixel.text.FlxText(50, 280, 0, "Y", 16);
 		maleText.color = 0xFF000000;
 		add(maleText);
 		
-		var femaleText = new flixel.text.FlxText(50, 310, 0, "Female", 16);
+		var femaleText = new flixel.text.FlxText(50, 310, 0, "N", 16);
+		femaleText.color = 0xFF000000;
+		add(femaleText);
+		
+		var femaleText = new flixel.text.FlxText(70, 295, 0, "Antlers", 16);
 		femaleText.color = 0xFF000000;
 		add(femaleText);
 

@@ -249,12 +249,11 @@ class SquirrelVillage extends Location
 	{
 		var randomNums:FlxRandom = new FlxRandom();
 		
-		var newDeerFriend:Deer = Deer.buildADeer(randomNums.int(14, 15), -1, 0, [[33, 55, 70, 82, 100], [22, 55, 70, 82, 100], [29, 58, 70, 80, 100]], false);
+		var newDeerFriend:Deer = Deer.buildADeer(randomNums.int(14, 15), 6, 0, [[33, 55, 70, 82, 100], [22, 55, 70, 82, 100], [29, 58, 70, 80, 100]], false);
 		foundDeer = newDeerFriend;
 		
 		var message:String = "You ask the squirrels if they've met any other deer around here. They say that a ";
-		message += newDeerFriend.gender;
-		message += " deer named " + newDeerFriend.getName() + " came by often, and that they were very ";
+		message += "deer named " + newDeerFriend.getName() + " came by often, and that they were very ";
 		message += newDeerFriend.getGlimmer(["strong", "resilient", "quick", "wise", "good at cards"]);
 		message += ".";
 		showChoice([message], ["Ask to meet them", "Head back"], [recruitGossipDeer, continueOnChoice], deer);
@@ -709,7 +708,7 @@ class SquirrelVillage extends Location
 		else
 		{
 			message.push("You walk over to the store counter.");
-			message.push("The squirrels explains that you'll need to sign up for their mountaineering challenge to earn acorns to spend here on climbing supplies.");
+			message.push("The squirrel explains that you'll need to sign up for their mountaineering challenge to earn acorns to spend here on climbing supplies.");
 			showChoice(message, ["Chop wood", "Head outside"], [woodChopping, exploreWithString], deer);
 		}
 	}
