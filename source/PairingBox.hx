@@ -40,11 +40,19 @@ class PairingBox extends FlxObject
 	public function new(){
 		super();
 		
-		maleDeer = GameVariables.instance.getMaleDeer();
-		femaleDeer = GameVariables.instance.getFemaleDeer();
+		//slightly hacky code, male/female deer arrays are the same now because i have succeeded in destroying gemder
+		maleDeer = GameVariables.instance.getControlledDeer();
+		femaleDeer = GameVariables.instance.getControlledDeer();
 		
 		malePage = 0;
-		femalePage = 0;
+		if(femaleDeer.length > 1)
+		{
+			femalePage = 1;
+		}
+		else
+		{
+			femalePage = 0;
+		}
 
 		transparentBG = new FlxSprite(0, 0);
 		transparentBG.loadGraphic("assets/images/TransparentBG.png");
@@ -104,7 +112,7 @@ class PairingBox extends FlxObject
 	}
 	
 	function setupDeerDisplays(){
-		maleDeerCharacterDisplay = new DeerDisplay(maleDeer[0]);
+		maleDeerCharacterDisplay = new DeerDisplay(maleDeer[malePage]);
 		maleDeerCharacterDisplay.moveDisplay(67, 240);
 		FlxG.state.add(maleDeerCharacterDisplay);
 		
@@ -113,7 +121,7 @@ class PairingBox extends FlxObject
 			
 			maleDeerCharacterDisplay.emptyDisplay();
 			
-			maleDeerEmptyText = new FlxText(0, 0, 360, "No available males", 13);
+			maleDeerEmptyText = new FlxText(0, 0, 360, "No available deer", 13);
 			maleDeerEmptyText.screenCenter();
 			maleDeerEmptyText.x -= 95;
 			maleDeerEmptyText.y -= 95;
@@ -124,7 +132,7 @@ class PairingBox extends FlxObject
 			noMales = false;
 		}
 		
-		femaleDeerCharacterDisplay = new DeerDisplay(femaleDeer[0]);
+		femaleDeerCharacterDisplay = new DeerDisplay(femaleDeer[femalePage]);
 		femaleDeerCharacterDisplay.moveDisplay(253, 240);
 		FlxG.state.add(femaleDeerCharacterDisplay);
 		
@@ -133,7 +141,7 @@ class PairingBox extends FlxObject
 			
 			femaleDeerCharacterDisplay.emptyDisplay();
 			
-			femaleDeerEmptyText = new FlxText(0, 0, 360, "No available females", 13);
+			femaleDeerEmptyText = new FlxText(0, 0, 360, "No available deer", 13);
 			femaleDeerEmptyText.screenCenter();
 			femaleDeerEmptyText.x += 90;
 			femaleDeerEmptyText.y -= 95;
@@ -142,6 +150,51 @@ class PairingBox extends FlxObject
 			FlxG.state.add(femaleDeerEmptyText);
 		}else{
 			noFemales = false;
+		}
+		
+		if (maleDeer.length == 1)
+		{
+			noFemales = true;
+			femaleDeerCharacterDisplay.emptyDisplay();
+			femaleDeerEmptyText = new FlxText(0, 0, 360, "No available pairings", 13);
+			femaleDeerEmptyText.screenCenter();
+			femaleDeerEmptyText.x += 90;
+			femaleDeerEmptyText.y -= 95;
+			femaleDeerEmptyText.color = 0xFF000000;
+			femaleDeerEmptyText.alignment = "center";
+			FlxG.state.add(femaleDeerEmptyText);
+		}
+	}
+	
+	function disableConfirmButton()
+	{
+		confirmButton.loadGraphic("assets/images/DenButtonStatic.png", false);
+		confirmButton.labelAlphas[1] = 0.6;
+		confirmButton.onUp.callback = null;
+		confirmButton.scale.set(0.9, 0.9);
+		confirmButton.alpha = 0.6;
+	}
+	
+	function enableConfirmButton()
+	{
+		confirmButton.loadGraphic("assets/images/DenButton.png", true, 160, 56);
+		confirmButton.labelAlphas[1] = 1;
+		confirmButton.onUp.callback = confirm.bind();
+		confirmButton.scale.set(0.9, 0.9);
+		confirmButton.alpha = 1;
+	}
+	
+	function updateConfirmButton()
+	{
+		if (maleDeer[malePage] == femaleDeer[femalePage] || GameVariables.instance.babyDeer.length >= GameVariables.instance.maxBabyPackSize)
+		{
+			disableConfirmButton();
+			disabledText.visible = true;
+		}
+		else
+		{
+			enableConfirmButton();
+			disabledText.visible = false;
 		}
 	}
 
@@ -153,7 +206,7 @@ class PairingBox extends FlxObject
         xButton.onUp.callback = close.bind();
         FlxG.state.add(xButton);
 		
-		var confirmButtonDisabled:Bool = (maleDeer.length == 0 || femaleDeer.length == 0 || GameVariables.instance.babyDeer.length >= GameVariables.instance.maxBabyPackSize);
+		var confirmButtonDisabled:Bool = (maleDeer.length <= 1 || femaleDeer.length == 0 || GameVariables.instance.babyDeer.length >= GameVariables.instance.maxBabyPackSize);
 		
 		confirmButton = new FlxButton(0, 460, "Breed");
 		if(confirmButtonDisabled){
@@ -220,6 +273,16 @@ class PairingBox extends FlxObject
 			disabledText.alignment = "center";
 			FlxG.state.add(disabledText);
 		}
+		else
+		{
+			disabledText = new FlxText(0, 425, 360, "Deer cannot pair with themselves", 13);
+			disabledText.screenCenter();
+			disabledText.y = 430;
+			disabledText.color = 0xFF000000;
+			disabledText.alignment = "center";
+			FlxG.state.add(disabledText);
+			disabledText.visible = false;
+		}
     }
 	
 	function updateArrowButtons(){
@@ -263,7 +326,6 @@ class PairingBox extends FlxObject
 			femaleRightButton.onUp.callback = scrollFemaleDeer.bind(1);
 		}
 		
-		
         maleLeftButton.updateHitbox();
         maleRightButton.updateHitbox();
         femaleLeftButton.updateHitbox();
@@ -284,6 +346,7 @@ class PairingBox extends FlxObject
 		}
 		
 		updateArrowButtons();
+		updateConfirmButton();
 	}
 	
 	function scrollFemaleDeer(amount:Int){
@@ -300,5 +363,6 @@ class PairingBox extends FlxObject
 		}
 		
 		updateArrowButtons();
+		updateConfirmButton();
 	}
 }
