@@ -1,6 +1,7 @@
 package;
 
 import flixel.FlxG;
+import flixel.FlxSubState;
 import org.flixel.*;
 import flixel.FlxState;
 import flixel.ui.FlxButton;
@@ -18,6 +19,7 @@ class MainGame extends FlxState
 	//Topbar
     var dayStatusText:FlxText;
     var foodText:FlxText;
+	var appleSprite:FlxSprite;
 	
     var herdButton:FlxButton;
     var mapButton:FlxButton;
@@ -49,6 +51,9 @@ class MainGame extends FlxState
 	var dropoffMenu:DropoffMenu;
 	var improvementBox:ImprovementBox;
 	var pairingBox:PairingBox;
+	
+	//MenuState
+	var pauseMenuState:FlxSubState;
 
 	override public function create()
 	{
@@ -57,7 +62,10 @@ class MainGame extends FlxState
 		GameVariables.instance.setBG();
 		
         GameObjects.instance.mainGameMenu = this;
-
+		
+		pauseMenuState = new PauseMenu();
+		destroySubStates = false;
+		
         setupTopBar();
         setupDeerTiles();
 		setupMap();
@@ -76,8 +84,14 @@ class MainGame extends FlxState
 	{
 		super.update(elapsed);
 		
+		if (FlxG.keys.justPressed.ESCAPE)
+		{
+			openPauseMenu();
+		}
+		
 		if (currentScreen == "Herd")
 		{
+			
 			if (deerTiles != null)
 			{
 				var selectedDeerTile:DeerTile = null;
@@ -657,10 +671,13 @@ class MainGame extends FlxState
 		dayStatusText.alignment = "left";
 		add(dayStatusText);
 
-        foodText = new FlxText(315, 1, 160, "Food: " + Std.string(GameVariables.instance.currentFood) + "/" + Std.string(GameVariables.instance.maxFood), 18);
+        foodText = new FlxText(300, 1, 160, "Food: " + Std.string(GameVariables.instance.currentFood) + "/" + Std.string(GameVariables.instance.maxFood), 18);
 		foodText.color = 0xFF000000;
 		foodText.alignment = "right";
 		add(foodText);
+		
+		appleSprite = new FlxSprite(460, 4, "assets/images/apple.png");
+		add(appleSprite);
     }
 	
 	public function updateTopBar(){
@@ -923,5 +940,10 @@ class MainGame extends FlxState
 	function improvementMenu(){
 		improvementBox = new ImprovementBox();
 		hide();
+	}
+	
+	function openPauseMenu()
+	{
+		openSubState(pauseMenuState);
 	}
 }

@@ -10,6 +10,8 @@ import locations.Location;
 
 class Tutorial extends FlxState
 {
+	var textBG:FlxSprite;
+	
 	var title:FlxText;
 	var text1:FlxText;
 	var text2:FlxText;
@@ -20,8 +22,6 @@ class Tutorial extends FlxState
 	var nextButton:FlxButton;
 	var backButton:FlxButton;
 	var beginButton:FlxButton;
-	
-	var textBG:FlxSprite;
 
 	override public function create():Void
 	{
