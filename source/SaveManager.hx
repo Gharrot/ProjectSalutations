@@ -10,6 +10,8 @@ class SaveManager
 		
 		var gameVariables:GameVariables = GameVariables.instance;
 		
+		gameVariables.infiniteFood = save.data.infiniteFood;
+		
         gameVariables.controlledDeer = save.data.controlledDeer;
 		gameVariables.maxPackSize = save.data.maxPackSize;
         gameVariables.babyDeer = save.data.babyDeer;
@@ -106,6 +108,8 @@ class SaveManager
 		save.bind(saveName);
 		
 		var gameVariables:GameVariables = GameVariables.instance;
+		
+		save.data.infiniteFood = gameVariables.infiniteFood;
 		
         save.data.controlledDeer = gameVariables.controlledDeer;
 		save.data.maxPackSize = gameVariables.maxPackSize;

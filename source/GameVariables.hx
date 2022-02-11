@@ -9,6 +9,9 @@ import haxe.Unserializer;
 import flixel.FlxG;
 
 class GameVariables {
+	//Option Vars
+	public var infiniteFood:Bool;
+	
 	//General Vars
     public var controlledDeer:Array<Deer>;
 	public var maxPackSize:Int;
@@ -467,6 +470,10 @@ class GameVariables {
 	}
 	
 	public function initializeVariables(){
+		//Option Vars
+		infiniteFood = false;
+		
+		//General Vars
         controlledDeer = new Array();
 		maxPackSize = 4;
         babyDeer = new Array();

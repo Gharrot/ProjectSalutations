@@ -21,7 +21,7 @@ class Tutorial extends FlxState
 	
 	var nextButton:FlxButton;
 	var backButton:FlxButton;
-	var beginButton:FlxButton;
+	public var beginButton:FlxButton;
 
 	override public function create():Void
 	{

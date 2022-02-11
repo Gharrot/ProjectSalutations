@@ -188,10 +188,26 @@ class Location{
 	}
 	
 	public function outOfFood(deer:Deer){
-		if(GameVariables.instance.controlledDeer.length > 1){
-			showChoice(["Unable to feed the whole pack and unwilling to eat while others starve, you black out."], ["Wake up"], [wakeUp], deer);
+		if (GameVariables.instance.controlledDeer.length > 1){
+			if (GameVariables.instance.infiniteFood)
+			{
+				GameVariables.instance.currentFood = 1;
+				showChoice(["You almost don't have enough food to feed the whole pack, but you scavenge up enough berries to keep going."], ["Continue"], [returnToDenChoice], deer);
+			}
+			else
+			{
+				showChoice(["Unable to feed the whole pack and unwilling to eat while others starve, you black out."], ["Wake up"], [wakeUp], deer);
+			}
 		}else{
-			showChoice(["Without enough food to last the day, you black out."], ["Wake up"], [wakeUp], deer);
+			if (GameVariables.instance.infiniteFood)
+			{
+				GameVariables.instance.currentFood = 1;
+				showChoice(["You almost don't have enough food to last the night, but you scavenge up enough berries to keep going."], ["Continue"], [returnToDenChoice], deer);
+			}
+			else
+			{
+				showChoice(["Without enough food to last the night, you black out."], ["Wake up"], [wakeUp], deer);
+			}
 		}
 	}
 	
@@ -199,7 +215,7 @@ class Location{
 		if (choice == "Wake up") {
 			showChoice(["You wake up in your den in the Unfamiliar Woods with a small pile of berries sitting at your side."], ["Continue on"], [wakeUp], deer);
 		}else if (choice == "Continue on") {
-			GameVariables.instance.currentFood = 1;
+			GameVariables.instance.currentFood = 3;
 			GameVariables.instance.changeLocation("Unfamiliar Woods");
 			GameVariables.instance.healAllDeer();
 			returnToDen();
