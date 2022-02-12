@@ -99,7 +99,7 @@ class GameVariables {
 	public var mountVireKeyTaken:Bool;
 	
 	//Onsen Peak
-	public var onsenPeakStatChoice:String = "None";
+	public var onsenPeakStatChoice:String;
 	
 	//Dark City
 	public var darkCityReached:Bool;
@@ -113,6 +113,11 @@ class GameVariables {
     public static var instance(default, null):GameVariables = new GameVariables();
 
     private function new() {
+		initialize();
+    }
+	
+	public function initialize()
+	{
 		initializeVariables();
         controlledDeer = new Array();
 		maxPackSize = 4;
@@ -130,7 +135,7 @@ class GameVariables {
 		unfamiliarWoodsLostDeer = new Array<Deer>();
 		
 		abandonedFieldsMaxFood = 12;
-    }
+	}
 	
 	public function changeLocation(targetLocation:String, ?resetLocationVariables:Bool = true){		
 		if (targetLocation == "Unfamiliar Woods")
@@ -554,6 +559,9 @@ class GameVariables {
 		mountVireSilverCaveBlockage = 8;
 		mountVireStoneAcorns = 0;
 		mountVireKeyTaken = false;
+		
+		//Onsen Peak
+		onsenPeakStatChoice = "None";
 		
 		//Dark City
 		darkCityReached = false;

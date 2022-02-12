@@ -1,6 +1,7 @@
 package;
 
 import flixel.FlxState;
+import flixel.FlxSubState;
 import flixel.FlxG;
 import flixel.ui.FlxButton;
 import flixel.FlxSprite;
@@ -8,7 +9,7 @@ import flixel.text.FlxText;
 import flixel.util.FlxAxes;
 import locations.Location;
 
-class Tutorial extends FlxState
+class Tutorial extends FlxSubState
 {
 	var textBG:FlxSprite;
 	
@@ -25,9 +26,17 @@ class Tutorial extends FlxState
 
 	override public function create():Void
 	{
-		FlxG.camera.fade(0xFFD8F6F3, 0.5, true);
+		if (!Std.is(this, TutorialSubState))
+		{
+			FlxG.camera.fade(0xFFD8F6F3, 0.5, true);
+		}
+		
 		super.create();
-		this.bgColor = 0xFFD8F6F3;
+		
+		if (!Std.is(this, TutorialSubState))
+		{
+			this.bgColor = 0xFFD8F6F3;
+		}
 		
 		textBG = new FlxSprite(0, 0, "assets/images/tutorialBG.png");
 		add(textBG);
@@ -134,7 +143,7 @@ class Tutorial extends FlxState
 		beginButton.visible = true;
 	}
 	
-	private function startGame()
+	public function startGame()
 	{
 		FlxG.switchState(new CharacterCreation());
 	}

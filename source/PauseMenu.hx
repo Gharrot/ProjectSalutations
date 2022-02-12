@@ -25,7 +25,6 @@ class PauseMenu extends FlxSubState
 	override public function create():Void
 	{
 		super.create();
-		this.bgColor = 0xFFD8F6F3;
 		
 		textBG = new FlxSprite(0, 0, "assets/images/tutorialBG.png");
 		add(textBG);
@@ -38,7 +37,7 @@ class PauseMenu extends FlxSubState
 		title.screenCenter();
 		title.y = 70;
 		
-		tutorialButton = new FlxButton(370, 415, "Tutorial", returnToGame);
+		tutorialButton = new FlxButton(370, 415, "Tutorial", viewTutorial);
 		tutorialButton.loadGraphic("assets/images/DenButton.png", true, 160, 56);
 		ButtonUtils.fixButtonText(tutorialButton, 24, 9, 1);
 		tutorialButton.screenCenter(FlxAxes.X);
@@ -106,19 +105,23 @@ class PauseMenu extends FlxSubState
 	{
 		if (GameVariables.instance.infiniteFood)
 		{
-			infiniteFoodToggle.loadGraphic("assets/images/Checkbox.png", true, 128, 128);
+			infiniteFoodToggle.loadGraphic("assets/images/CheckedCheckboxAnimated.png", true, 128, 128);
 			infiniteFoodToggle.updateHitbox();
 		}
 		else
 		{
-			infiniteFoodToggle.loadGraphic("assets/images/CheckedCheckboxAnimated.png", true, 128, 128);
+			infiniteFoodToggle.loadGraphic("assets/images/Checkbox.png", true, 128, 128);
 			infiniteFoodToggle.updateHitbox();
 		}
 	}
 	
 	private function viewTutorial()
 	{
+		var tutorial = new TutorialSubState();
+		var color = FlxG.state.bgColor;
 		
+		openSubState(tutorial);
+		tutorial.bgColor = color;
 	}
 	
 	private function saveAndQuit()

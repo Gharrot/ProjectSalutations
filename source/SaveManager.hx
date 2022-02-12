@@ -93,6 +93,9 @@ class SaveManager
 		
 		gameVariables.mountVireKeyTaken = save.data.mountVireKeyTaken;
 		
+		//Onsen Peak
+		gameVariables.onsenPeakStatChoice = save.data.onsenPeakStatChoice;
+		
 		//Dark City
 		gameVariables.darkCityReached = save.data.darkCityReached;
 		
@@ -185,6 +188,9 @@ class SaveManager
 		save.data.mountVireSilverCaveBlockage = gameVariables.mountVireSilverCaveBlockage;
 		save.data.mountVireStoneAcorns = gameVariables.mountVireStoneAcorns;
 		save.data.mountVireKeyTaken = gameVariables.mountVireKeyTaken;
+		
+		//Onsen Peak 
+		save.data.onsenPeakStatChoice = gameVariables.onsenPeakStatChoice;
 		
 		//Dark City
 		save.data.darkCityReached = gameVariables.darkCityReached;

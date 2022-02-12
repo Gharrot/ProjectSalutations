@@ -15,6 +15,12 @@ class MainGame extends FlxState
     
 	var setOutDisabledText:FlxText;
     var continueButton:FlxButton;
+	
+	var pairing:Bool = false;
+	var droppingOff:Bool = false;
+	var viewingDeer:Bool = false;
+	
+	var currentDeerActionScreen:DeerActionScreen;
 
 	//Topbar
     var dayStatusText:FlxText;
@@ -62,8 +68,6 @@ class MainGame extends FlxState
 		GameVariables.instance.setBG();
 		
         GameObjects.instance.mainGameMenu = this;
-		
-		pauseMenuState = new PauseMenu();
 		destroySubStates = false;
 		
         setupTopBar();
@@ -77,6 +81,8 @@ class MainGame extends FlxState
         currentScreen = "Setup";
 		herdClicked();
 		
+		pauseMenuState = new PauseMenu();
+		
 		GameVariables.instance.saveGameData();
 	}
 
@@ -84,9 +90,31 @@ class MainGame extends FlxState
 	{
 		super.update(elapsed);
 		
-		if (FlxG.keys.justPressed.ESCAPE)
+		if (FlxG.keys.justPressed.ESCAPE || FlxG.mouse.justReleasedRight)
 		{
-			openPauseMenu();
+			if (pairing)
+			{
+				pairingBox.close();
+			}
+			else if (droppingOff)
+			{
+				dropoffMenu.close();
+			}
+			else if (viewingDeer)
+			{
+				if (currentDeerActionScreen.renaming)
+				{
+					currentDeerActionScreen.renamingBox.close();
+				}
+				else
+				{
+					currentDeerActionScreen.close();
+				}
+			}
+			else
+			{
+				openPauseMenu();
+			}
 		}
 		
 		if (currentScreen == "Herd")
@@ -158,6 +186,10 @@ class MainGame extends FlxState
 			currentScreen = "Transition";
 			denClicked();
 		}
+		
+		pairing = false;
+		droppingOff = false;
+		viewingDeer = false;
     }
 
     public function hide(){
@@ -223,7 +255,9 @@ class MainGame extends FlxState
 	}
 
     function deerTileClicked(deer:Deer){
-        add(new DeerActionScreen(deer));
+		currentDeerActionScreen = new DeerActionScreen(deer);
+        add(currentDeerActionScreen);
+		viewingDeer = true;
         hide();
     }
 
@@ -929,11 +963,13 @@ class MainGame extends FlxState
 	function openDropoffMenu()
 	{
 		dropoffMenu = new DropoffMenu();
+		droppingOff = true;
 		hide();
 	}
 	
 	function pairingMenu(){
 		pairingBox = new PairingBox();
+		pairing = true;
 		hide();
 	}
 	
@@ -944,6 +980,7 @@ class MainGame extends FlxState
 	
 	function openPauseMenu()
 	{
+		pauseMenuState.bgColor = FlxG.state.bgColor;
 		openSubState(pauseMenuState);
 	}
 }

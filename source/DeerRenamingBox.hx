@@ -78,7 +78,7 @@ class DeerRenamingBox extends FlxObject
 		deerCharacterSprite.nameText.text = nameBox.text;
 	}
 	
-    public function close(){
+    public function close(showActionScreen:Bool = true){
         FlxG.state.remove(boxTitle);
         FlxG.state.remove(clearButton);
 		
@@ -92,8 +92,12 @@ class DeerRenamingBox extends FlxObject
 		
         FlxG.state.remove(deerCharacterSprite);
 		deerCharacterSprite.destroyChildren();
-
-        actionScreen.show();
+		
+		actionScreen.renaming = false;
+		if (showActionScreen)
+		{
+			actionScreen.show();
+		}
         FlxG.state.remove(this);
     }
 	
@@ -104,22 +108,22 @@ class DeerRenamingBox extends FlxObject
 	}
 
     public function setupButtons(){
-        confirmButton = new FlxButton(200, 460, "Confirm");
+        confirmButton = new FlxButton(200, 455, "Confirm");
 		confirmButton.loadGraphic("assets/images/OctaButtonSkinny.png", true, 160, 74);
 		ButtonUtils.fixButtonText(confirmButton, 14, 24, 1);
 		confirmButton.screenCenter();
 		confirmButton.x -= 80;
-		confirmButton.y = 410;
+		confirmButton.y = 455;
 		confirmButton.onUp.callback = confirm.bind();
         FlxG.state.add(confirmButton);
 		confirmButton.updateHitbox();
 		
-        cancelButton = new FlxButton(280, 460, "Cancel");
+        cancelButton = new FlxButton(280, 455, "Cancel");
 		cancelButton.loadGraphic("assets/images/OctaButtonSkinny.png", true, 160, 74);
 		ButtonUtils.fixButtonText(cancelButton, 14, 24, 1);
 		cancelButton.screenCenter();
 		cancelButton.x += 80;
-		cancelButton.y = 410;
+		cancelButton.y = 455;
 		cancelButton.onUp.callback = close.bind();
 		cancelButton.label.color = 0xFF000000;
         FlxG.state.add(cancelButton);

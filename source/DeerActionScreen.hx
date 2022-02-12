@@ -22,7 +22,8 @@ class DeerActionScreen extends FlxObject{
 	
     var statusText:FlxText;
 	
-	var renamingBox:DeerRenamingBox;
+	public var renamingBox:DeerRenamingBox;
+	public var renaming:Bool;
     
 	var actionOptions:Array<FlxButton>;
 	var actionOptionLabels:Array<FlxText>;
@@ -54,6 +55,7 @@ class DeerActionScreen extends FlxObject{
         setupButtons();
 		
 		hidden = false;
+		renaming = false;
     }
 	
 	override public function update(elapsed:Float):Void
@@ -81,11 +83,6 @@ class DeerActionScreen extends FlxObject{
 			else if (FlxG.keys.justPressed.R)
 			{
 				actionOptionClicked("Resting", 4);
-			}
-			
-			if (FlxG.mouse.justReleasedRight)
-			{
-				close();
 			}
 		}
 	}
@@ -116,6 +113,10 @@ class DeerActionScreen extends FlxObject{
         FlxG.state.remove(dismissButton);
         FlxG.state.remove(banishButton);
 		
+		if (renamingBox != null)
+		{
+			renamingBox.close(false);
+		}
         FlxG.state.remove(renamingBox);
 
         GameObjects.instance.mainGameMenu.returnToMainScreen();
@@ -263,6 +264,7 @@ class DeerActionScreen extends FlxObject{
 		
 		renamingBox = new DeerRenamingBox(deer, this);
 		FlxG.state.add(renamingBox);
+		renaming = true;
 	}
 	
 	function dismissDeer()
