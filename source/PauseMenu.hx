@@ -8,6 +8,7 @@ import flixel.FlxSprite;
 import flixel.text.FlxText;
 import flixel.util.FlxAxes;
 import locations.Location;
+import sound.SoundManager;
 
 class PauseMenu extends FlxSubState
 {
@@ -31,6 +32,9 @@ class PauseMenu extends FlxSubState
 	
 	var infiniteFoodText:FlxText;
 	var infiniteFoodToggle:FlxButton;
+	
+	var volumeChangeDelay:Float = 0.1;
+	var volumeChangeTimer:Float = 0;
 
 	override public function create():Void
 	{
@@ -49,6 +53,8 @@ class PauseMenu extends FlxSubState
 		
 		setupVolumeControls();
 		setupButtons();
+		
+		updateVolumeDisplays();
 	}
 	
 	override public function update(elapsed:Float)
@@ -59,6 +65,46 @@ class PauseMenu extends FlxSubState
 		{
 			returnToGame();
 		}
+		
+		if (volumeChangeTimer <= 0)
+		{
+			if (musicVolDecreaseButton.pressed)
+			{
+				modifyMusicVolumeLevel(-5);
+				volumeChangeTimer = volumeChangeDelay;
+			}
+			if (musicVolIncreaseButton.pressed)
+			{
+				modifyMusicVolumeLevel(5);
+				volumeChangeTimer = volumeChangeDelay;
+			}
+			
+			if (sfxVolDecreaseButton.pressed)
+			{
+				modifySFXVolumeLevel(-5);
+				volumeChangeTimer = volumeChangeDelay;
+			}
+			if (sfxVolIncreaseButton.pressed)
+			{
+				modifySFXVolumeLevel(5);
+				volumeChangeTimer = volumeChangeDelay;
+			}
+		}
+		else
+		{
+			volumeChangeTimer -= elapsed;
+		}
+		
+		updateVolumeDisplays();
+	}
+	
+	public function updateVolumeDisplays()
+	{
+		musicVolAmount.text = Std.string(SoundManager.instance.currentMusicVol);
+		musicVolAmount.screenCenter(FlxAxes.X);
+		
+		sfxVolAmount.text = Std.string(SoundManager.instance.currentSFXVol);
+		sfxVolAmount.screenCenter(FlxAxes.X);
 	}
 	
 	public function setupVolumeControls()
@@ -78,7 +124,6 @@ class PauseMenu extends FlxSubState
 		musicVolAmount.y = 200;
 		
 		musicVolIncreaseButton = new FlxButton(272, 199);
-		musicVolIncreaseButton.onDown.callback = modifyMusicVolumeLevel.bind(5);
 		musicVolIncreaseButton.loadGraphic("assets/images/PlusButton.png", true, 32, 32);
 		musicVolIncreaseButton.screenCenter(FlxAxes.X);
 		musicVolIncreaseButton.x += 50;
@@ -86,7 +131,6 @@ class PauseMenu extends FlxSubState
 		add(musicVolIncreaseButton);
 		
 		musicVolDecreaseButton = new FlxButton(272, 199);
-		musicVolDecreaseButton.onDown.callback = modifyMusicVolumeLevel.bind(-5);
 		musicVolDecreaseButton.loadGraphic("assets/images/MinusButton.png", true, 32, 32);
 		musicVolDecreaseButton.screenCenter(FlxAxes.X);
 		musicVolDecreaseButton.x -= 50;
@@ -110,7 +154,6 @@ class PauseMenu extends FlxSubState
 		sfxVolAmount.y = 200 + sfxOffset;
 		
 		sfxVolIncreaseButton = new FlxButton(272, 199 + sfxOffset);
-		sfxVolIncreaseButton.onDown.callback = modifySFXVolumeLevel.bind(5);
 		sfxVolIncreaseButton.loadGraphic("assets/images/PlusButton.png", true, 32, 32);
 		sfxVolIncreaseButton.screenCenter(FlxAxes.X);
 		sfxVolIncreaseButton.x += 50;
@@ -118,7 +161,6 @@ class PauseMenu extends FlxSubState
 		add(sfxVolIncreaseButton);
 		
 		sfxVolDecreaseButton = new FlxButton(272, 199 + sfxOffset);
-		sfxVolDecreaseButton.onDown.callback = modifySFXVolumeLevel.bind(-5);
 		sfxVolDecreaseButton.loadGraphic("assets/images/MinusButton.png", true, 32, 32);
 		sfxVolDecreaseButton.screenCenter(FlxAxes.X);
 		sfxVolDecreaseButton.x -= 50;
@@ -128,12 +170,12 @@ class PauseMenu extends FlxSubState
 	
 	public function modifyMusicVolumeLevel(amount:Int)
 	{
-		
+		SoundManager.instance.modifyMusicVol(amount);
 	}
 	
 	public function modifySFXVolumeLevel(amount:Int)
 	{
-		
+		SoundManager.instance.modifySFXVol(amount);
 	}
 	
 	public function setupButtons()
