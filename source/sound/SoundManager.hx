@@ -19,6 +19,7 @@ class SoundManager
 		currentSFXVol = 100;
 		muted = false;
 		
+		loadSoundSettings();
 	}
 	
 	public function modifyMusicVol(amount:Int)
@@ -34,6 +35,8 @@ class SoundManager
 		{
 			currentMusicVol = 100;
 		}
+		
+		saveSoundSettings();
 	}
 	
 	public function modifySFXVol(amount:Int)
@@ -49,6 +52,8 @@ class SoundManager
 		{
 			currentSFXVol = 100;
 		}
+		
+		saveSoundSettings();
 	}
 	
 	public function setBackgroundSong(songName:String)
@@ -92,11 +97,26 @@ class SoundManager
 		var save:FlxSave = new FlxSave();
 		save.bind("settings");
 		
+		if (save.data.muted != null)
+		{
+			currentMusicVol = save.data.currentMusicVol;
+			currentSFXVol = save.data.currentSFXVol;
+			muted = save.data.muted;
+		}
 		
+		save.close();
 	}
 	
 	private function saveSoundSettings()
 	{
+		var save:FlxSave = new FlxSave();
+		save.bind("settings");
 		
+		save.data.currentMusicVol = currentMusicVol;
+		save.data.currentSFXVol = currentSFXVol;
+		save.data.muted = muted;
+		
+		save.flush();
+		save.close();
 	}
 }
