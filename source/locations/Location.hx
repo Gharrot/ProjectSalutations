@@ -589,23 +589,23 @@ class Location{
 		var gameVariables:GameVariables = GameVariables.instance;
 		var texts:Array<FlxText> = new Array<FlxText>();
 		
-		var deerInDenText:FlxText = new FlxText(25, 140, 0, "Deer: " + gameVariables.controlledDeer.length + "/" + gameVariables.maxPackSize, 18);
+		var deerInDenText:FlxText = new FlxText(25, 140, 0, "Deer: " + gameVariables.controlledDeer.length + "/" + gameVariables.maxPackSize, 16);
 		deerInDenText.color = FlxColor.BLACK;
 		texts.push(deerInDenText);
 		
-		var kidsInDenText:FlxText = new FlxText(25, 140, 0, "Young Deer: " + gameVariables.babyDeer.length + "/" + gameVariables.maxBabyPackSize, 18);
+		var kidsInDenText:FlxText = new FlxText(25, 140, 0, "Young Deer: " + gameVariables.babyDeer.length + "/" + gameVariables.maxBabyPackSize, 16);
 		kidsInDenText.color = FlxColor.BLACK;
 		texts.push(kidsInDenText);
 		
 		var bunnyFurAmount:Int = gameVariables.rabbitFur;
 		if(bunnyFurAmount > 0){
-			var bunnyFurText:FlxText = new FlxText(25, 140, 0, "Rabbit fur: " + Std.string(bunnyFurAmount), 18);
+			var bunnyFurText:FlxText = new FlxText(25, 140, 0, "Rabbit fur: " + Std.string(bunnyFurAmount), 16);
 			bunnyFurText.color = FlxColor.BLACK;
 			texts.push(bunnyFurText);
 		}
 		
 		if(gameVariables.rabbitFurBeddingMade){
-			var bunnyFurText:FlxText = new FlxText(25, 140, 0, "Bedding: Rabbit fur", 18);
+			var bunnyFurText:FlxText = new FlxText(25, 140, 0, "Bedding: Rabbit fur", 16);
 			bunnyFurText.color = FlxColor.BLACK;
 			texts.push(bunnyFurText);
 		}

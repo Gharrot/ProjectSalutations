@@ -33,6 +33,7 @@ class SaveManager
 		//Unfamiliar Woods
 		gameVariables.unfamiliarWoodsMaxFood = save.data.unfamiliarWoodsMaxFood;
 		gameVariables.rabbitFur = save.data.rabbitFur;
+		gameVariables.rabbitFurBeddingMade = save.data.rabbitFurBeddingMade;
 		gameVariables.unfamiliarWoodsLostDeer = save.data.unfamiliarWoodsLostDeer;
 		gameVariables.unfamiliarWoodsCaveFound = save.data.unfamiliarWoodsCaveFound;
 		gameVariables.unfamiliarWoodsMedallionTaken = save.data.unfamiliarWoodsMedallionTaken;
@@ -130,6 +131,7 @@ class SaveManager
 		//Unfamiliar Woods
 		save.data.unfamiliarWoodsMaxFood = gameVariables.unfamiliarWoodsMaxFood;
 		save.data.rabbitFur = gameVariables.rabbitFur;
+		save.data.rabbitFurBeddingMade = gameVariables.rabbitFurBeddingMade;
 		save.data.unfamiliarWoodsLostDeer = gameVariables.unfamiliarWoodsLostDeer;
 		save.data.unfamiliarWoodsCaveFound = gameVariables.unfamiliarWoodsCaveFound;
 		save.data.unfamiliarWoodsMedallionTaken = gameVariables.unfamiliarWoodsMedallionTaken;

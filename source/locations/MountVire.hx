@@ -9,6 +9,7 @@ import flixel.FlxSprite;
 import flixel.FlxObject;
 import flixel.util.FlxAxes;
 import flixel.math.FlxRandom;
+import flixel.util.FlxColor;
 
 class MountVire extends Location
 {
@@ -1582,5 +1583,39 @@ class MountVire extends Location
 		}
 		
 		return result;
+	}
+	
+	override public function createItemDescriptions():Array<FlxText>
+	{
+		var texts:Array<FlxText> = super.createItemDescriptions();
+		
+		var stoneAcorns:Int = GameVariables.instance.mountVireStoneAcorns;
+		var mountVireFoodPacks:Int = GameVariables.instance.mountVireFoodPacks;
+		var mountVireExplosives:Int = GameVariables.instance.mountVireExplosives;
+		var mountVirePineLogs:Int = GameVariables.instance.mountVirePineLogs;
+		var mountVireMapleLogs:Int = GameVariables.instance.mountVireMapleLogs;
+		
+	
+		var invText:FlxText = new FlxText(25, 140, 0, "Stone Acorns: " + GameVariables.instance.mountVireStoneAcorns, 16);
+		invText.color = FlxColor.BLACK;
+		texts.push(invText);
+		
+		invText = new FlxText(25, 140, 0, "Food Packs: " + GameVariables.instance.mountVireFoodPacks, 16);
+		invText.color = FlxColor.BLACK;
+		texts.push(invText);
+	
+		invText = new FlxText(25, 140, 0, "Explosives: " + GameVariables.instance.mountVireExplosives, 16);
+		invText.color = FlxColor.BLACK;
+		texts.push(invText);
+	
+		invText = new FlxText(25, 140, 0, "Pine Logs: " + GameVariables.instance.mountVirePineLogs, 16);
+		invText.color = FlxColor.BLACK;
+		texts.push(invText);
+	
+		invText = new FlxText(25, 140, 0, "Maple Logs: " + GameVariables.instance.mountVireMapleLogs, 16);
+		invText.color = FlxColor.BLACK;
+		texts.push(invText);
+		
+		return texts;
 	}
 }

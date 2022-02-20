@@ -372,9 +372,22 @@ class MainGame extends FlxState
 		
 		//den items
 		itemDescriptions = GameVariables.instance.currentLocation.createItemDescriptions();
+		
+		var itemDescriptionsYOffset = 140;
+		
+		if (itemDescriptions.length >= 6)
+		{
+			itemDescriptionsYOffset -= 19;
+		}
+		
+		if (itemDescriptions.length >= 7)
+		{
+			itemDescriptionsYOffset -= 19;
+		}
+		
 		for(i in 0...itemDescriptions.length){
 			add(itemDescriptions[i]);
-			itemDescriptions[i].y = 140 + (30 * i);
+			itemDescriptions[i].y = itemDescriptionsYOffset + (26 * i);
 		}
 		
 		//medallions
