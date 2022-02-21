@@ -233,6 +233,11 @@ class DeerDisplay extends FlxObject
 		updateDeerStatusIcons();
 	}
 	
+	public function loadBGSprite(path:String)
+	{
+		bgSprite.loadGraphic(path);
+	}
+	
 	function updateDeerStatusIcons()
 	{
 		if (otherStatusSprites != null)

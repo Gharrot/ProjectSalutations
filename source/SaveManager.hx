@@ -99,7 +99,12 @@ class SaveManager
 		
 		//Dark City
 		gameVariables.darkCityReached = save.data.darkCityReached;
-		
+		gameVariables.darkCityPodBlockage = save.data.darkCityPodBlockage;
+		gameVariables.darkCityNumberDeciphering = save.data.darkCityNumberDeciphering;
+		gameVariables.darkCitySticks = save.data.darkCitySticks;
+		gameVariables.darkCityBarricade = save.data.darkCityBarricade;
+		gameVariables.darkCityScurriers = save.data.darkCityScurriers;
+	
 		//move to the correct location
 		gameVariables.currentLocationName = save.data.currentLocationName;
 		gameVariables.changeLocation(gameVariables.currentLocationName, false);
@@ -196,6 +201,11 @@ class SaveManager
 		
 		//Dark City
 		save.data.darkCityReached = gameVariables.darkCityReached;
+		save.data.darkCityPodBlockage = gameVariables.darkCityPodBlockage;
+		save.data.darkCityNumberDeciphering = gameVariables.darkCityNumberDeciphering;
+		save.data.darkCitySticks = gameVariables.darkCitySticks;
+		save.data.darkCityBarricade = gameVariables.darkCityBarricade;
+		save.data.darkCityScurriers = gameVariables.darkCityScurriers;
 		
 		save.flush();
 		save.close();

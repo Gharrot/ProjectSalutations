@@ -87,6 +87,25 @@ class DarkCity extends Location
 	
 	override public function forage(deer:Deer) 
 	{
+		var message:Array<String> = new Array<String>();
+		message.push("You can either forage for food, or scavenge up some sticks for defenders to build barricades with.");
+		
+		var exploreOptionNames:Array<String> = new Array<String>();
+		var exploreOptionFunctions:Array<(String, Deer)->Void> = new Array<(String, Deer)->Void>();
+		
+		//Food
+		exploreOptionNames.push("Food");
+		exploreOptionFunctions.push(foodForaging); 
+		
+		//Sticks
+		exploreOptionNames.push("Sticks");
+		exploreOptionFunctions.push(stickForaging); 
+
+		showChoice(message, exploreOptionNames, exploreOptionFunctions, deer);
+	}
+	
+	public function foodForaging(choice:String, deer:Deer)
+	{
 		var randomNums:FlxRandom = new FlxRandom();
 		var forageResult = (deer.int * 2) + (deer.lck) + randomNums.int(0, 10);
 		
@@ -101,6 +120,26 @@ class DarkCity extends Location
 		}else{
 			GameVariables.instance.modifyFood(4);
 			showResult(["You find a giant stash of chestnuts buried behind a house (+4 food)."]);
+		}
+	}
+	
+	public function stickForaging(choice:String, deer:Deer)
+	{
+		var randomNums:FlxRandom = new FlxRandom();
+		var forageResult = (deer.int * 2) + (deer.lck) + randomNums.int(0, 10);
+		
+		if (forageResult <= 6){
+			GameVariables.instance.darkCitySticks += 1;
+			showResult(["You find a stick (+1 stick)."]);
+		}else if(forageResult <= 11){
+			GameVariables.instance.darkCitySticks += 2;
+			showResult(["You gather a couple good sticks from a barren shrub (+2 sticks)."]);
+		}else if(forageResult <= 17){
+			GameVariables.instance.darkCitySticks += 3;
+			showResult(["You gather a few nice sticks from a hidden patch of shrubbery (+3 sticks)."]);
+		}else{
+			GameVariables.instance.darkCitySticks += 4;
+			showResult(["You find what seems to be an abandoned tiny barricade and collect the sticks (+4 sticks)."]);
 		}
 	}
 	

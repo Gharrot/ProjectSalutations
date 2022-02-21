@@ -81,6 +81,10 @@ class PlayState extends FlxState
 				var saveDeleteButton = new FlxButton(41 + (159 * i), 435, "Delete Save");
 				saveDeleteButton.onUp.callback = deleteSave.bind(i, saveDeleteButton);
 				saveDeleteButtons.push(saveDeleteButton);
+				
+				//set background for save display
+				saveDeerDisplay.loadBGSprite(GameVariables.getLocationByName(saves[i].data.currentLocationName).backgroundImageFileMiniFramed);
+				
 			}else{
 				saveStartButton.onUp.callback = startNewGame.bind(i);
 				saveDeerDisplay.emptyDisplay();

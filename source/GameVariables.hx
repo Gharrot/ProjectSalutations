@@ -105,6 +105,7 @@ class GameVariables {
 	public var darkCityReached:Bool;
 	public var darkCityPodBlockage:Int;
 	public var darkCityNumberDeciphering:Int;
+	public var darkCitySticks:Int;
 	public var darkCityBarricade:Int;
 	public var darkCityScurriers:Int;
 	
@@ -137,7 +138,7 @@ class GameVariables {
 		abandonedFieldsMaxFood = 12;
 	}
 	
-	public function changeLocation(targetLocation:String, ?resetLocationVariables:Bool = true){		
+	public function changeLocation(targetLocation:String, ?resetLocationVariables:Bool = true){
 		if (targetLocation == "Unfamiliar Woods")
 		{
 			currentLocation = new ForgottenWoods();
@@ -237,6 +238,20 @@ class GameVariables {
 			currentLocation = new OnsenPeak();
 			maxFood = 12;
 		}
+		else if (targetLocation == "Dark City")
+		{
+			currentLocation = new DarkCity();
+			maxFood = 20;
+			
+			if (resetLocationVariables)
+			{
+				darkCityBarricade = 0;
+				darkCityNumberDeciphering = 0;
+				darkCityPodBlockage = 10;
+				darkCityScurriers = 0;
+				darkCitySticks = 0;
+			}
+		}
 		
 		currentLocationName = targetLocation;
 		setBG();
@@ -247,6 +262,58 @@ class GameVariables {
 			removeLocationLockedStatuses();
 		}
 		checkVariables();
+	}
+	
+	public static function getLocationByName(targetLocation:String):Location
+	{
+		if (targetLocation == "Unfamiliar Woods")
+		{
+			return new ForgottenWoods();
+		}
+		else if (targetLocation == "Abandoned Fields")
+		{
+			return new AbandonedFields();
+		}
+		else if (targetLocation == "Dark Forest")
+		{
+			return new DarkForest();
+		}
+		else if (targetLocation == "Ghost Town")
+		{
+			return new GhostTown();
+		}
+		else if (targetLocation == "The Trail")
+		{
+			return new TheTrail();
+		}
+		else if (targetLocation == "Stone Stronghold Entrance")
+		{
+			return new StoneStrongholdEntrance();
+		}
+		else if (targetLocation == "Underground City")
+		{
+			return new UndergroundCity();
+		}
+		else if (targetLocation == "Squirrel Village")
+		{
+			return new SquirrelVillage();
+		}
+		else if (targetLocation == "Mount Vire")
+		{
+			return new MountVire();
+		}
+		else if (targetLocation == "Onsen Peak")
+		{
+			return new OnsenPeak();
+		}
+		else if (targetLocation == "Dark City")
+		{
+			return new DarkCity();
+		}
+		else
+		{
+			return new ForgottenWoods();
+		}
 	}
 	
 	public function checkVariables(){
