@@ -12,6 +12,7 @@ import flixel.util.FlxAxes;
 import haxe.ds.ArraySort;
 import haxe.Serializer;
 import haxe.Unserializer;
+import sound.SoundManager;
 
 class PlayState extends FlxState
 {
@@ -43,6 +44,8 @@ class PlayState extends FlxState
 	{
 		super.create();
 		this.bgColor = 0xFFD8F6F3;
+		
+		SoundManager.instance.setBackgroundSong("MainMenu");
 		
 		bgSprite = new FlxSprite(0, 0, "assets/images/mainMenuBg.png");
 		add(bgSprite);
@@ -134,6 +137,9 @@ class PlayState extends FlxState
 	override public function update(elapsed:Float)
 	{
 		super.update(elapsed);
+		
+		SoundManager.instance.initializeSoundManager();
+		
 		timeUntilNextSprite -= FlxG.elapsed;
 		if(timeUntilNextSprite <= 0){
 			var randomNums:FlxRandom = new FlxRandom();

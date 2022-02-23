@@ -2,8 +2,10 @@ package sound;
 
 import flixel.FlxG;
 import flixel.util.FlxSave;
+import flixel.system.FlxSound;
+import flixel.FlxObject;
 
-class SoundManager 
+class SoundManager
 {
     public static var instance(default, null):SoundManager = new SoundManager();
 	
@@ -22,6 +24,14 @@ class SoundManager
 		loadSoundSettings();
 	}
 	
+	public function initializeSoundManager()
+	{
+		FlxG.sound.soundTrayEnabled = false;
+		
+		FlxG.sound.changeVolume(1);
+		updateVolumes();
+	}
+	
 	public function modifyMusicVol(amount:Int)
 	{
 		currentMusicVol += amount;
@@ -37,6 +47,7 @@ class SoundManager
 		}
 		
 		saveSoundSettings();
+		updateVolumes();
 	}
 	
 	public function modifySFXVol(amount:Int)
@@ -54,6 +65,13 @@ class SoundManager
 		}
 		
 		saveSoundSettings();
+		updateVolumes();
+	}
+	
+	public function updateVolumes()
+	{
+		FlxG.sound.defaultMusicGroup.volume = (cast(currentMusicVol, Float) / 100.0);
+		FlxG.sound.defaultSoundGroup.volume = (cast(currentSFXVol, Float) / 100.0);
 	}
 	
 	public function setBackgroundSong(songName:String)
@@ -61,7 +79,28 @@ class SoundManager
 		if (songName != currentSongName)
 		{
 			var songPath:String = "";
-			if (songName == "DarkWoods")
+			
+			if (songName == "MainMenu")
+			{
+				songPath = "assets/music/shimmer.ogg";
+			}
+			else if (songName == "Forest")
+			{
+				songPath = "assets/music/NoMoon.ogg";
+			}
+			else if (songName == "Trail")
+			{
+				songPath = "assets/music/NoMoon.ogg";
+			}
+			else if (songName == "StoneOverlook")
+			{
+				songPath = "assets/music/NoMoon.ogg";
+			}
+			else if (songName == "UndergroundCity")
+			{
+				songPath = "assets/music/reNovation.ogg";
+			}
+			else if (songName == "DarkWoods")
 			{
 				songPath = "assets/music/NoMoon.ogg";
 			}
@@ -69,8 +108,24 @@ class SoundManager
 			{
 				songPath = "assets/music/SoloAcousticBlues.ogg";
 			}
+			else if (songName == "Mountain")
+			{
+				songPath = "assets/music/SoloAcousticBlues.ogg";
+			}
+			else if (songName == "Peak")
+			{
+				songPath = "assets/music/SoloAcousticBlues.ogg";
+			}
+			else if (songName == "DarkCity")
+			{
+				songPath = "assets/music/SoloAcousticBlues.ogg";
+			}
+			else if (songName == "Credits")
+			{
+				songPath = "assets/music/SoloAcousticBlues.ogg";
+			}
 			
-			//FlxG.sound.playMusic(songPath);
+			FlxG.sound.playMusic(songPath);
 		}
 	}
 	

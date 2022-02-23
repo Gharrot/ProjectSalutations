@@ -113,7 +113,7 @@ class DeerRenamingBox extends FlxObject
 		ButtonUtils.fixButtonText(confirmButton, 14, 24, 1);
 		confirmButton.screenCenter();
 		confirmButton.x -= 80;
-		confirmButton.y = 455;
+		confirmButton.y = 435;
 		confirmButton.onUp.callback = confirm.bind();
         FlxG.state.add(confirmButton);
 		confirmButton.updateHitbox();
@@ -123,7 +123,7 @@ class DeerRenamingBox extends FlxObject
 		ButtonUtils.fixButtonText(cancelButton, 14, 24, 1);
 		cancelButton.screenCenter();
 		cancelButton.x += 80;
-		cancelButton.y = 455;
+		cancelButton.y = 435;
 		cancelButton.onUp.callback = close.bind();
 		cancelButton.label.color = 0xFF000000;
         FlxG.state.add(cancelButton);

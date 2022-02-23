@@ -3,6 +3,7 @@ package locations;
 import flixel.math.FlxRandom;
 import flixel.text.FlxText;
 import flixel.util.FlxColor;
+import sound.SoundManager;
 
 class UndergroundCity extends Location
 {
@@ -13,6 +14,11 @@ class UndergroundCity extends Location
 		backgroundImageFile = "assets/images/LocationImages/UndergroundCity.png";
 		backgroundImageFileNoFrame = "assets/images/LocationImages/UndergroundCityNoFrame.png";
 		backgroundImageFileMiniFramed = "assets/images/LocationImages/UndergroundCityEmptyDeerTile.png";
+	}
+	
+	override public function playMusic()
+	{
+		SoundManager.instance.setBackgroundSong("UndergroundCity");
 	}
 	
 	override public function explore(deer:Deer)
@@ -113,7 +119,6 @@ class UndergroundCity extends Location
 		message.push("You walk over to a hallway dug into the side wall of the city.");
 		message.push("It leads you a short ways away from the city before you are halted by a solid wall of crimson stone.");
 		message.push("The wall has an indentation in its center in the shape of a key.");
-		showResult(message);
 		if (GameVariables.instance.mountVireKeyTaken)
 		{
 			showChoice(message, ["Insert the key"], [unlockingTheDoor], deer);
