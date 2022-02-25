@@ -24,6 +24,8 @@ class PlayState extends FlxState
 	
 	var startGameButton:FlxButton;
 	
+	var settingsButton:FlxButton;
+	
 	var creditsButton:FlxButton;
 	var credits:Array<String>;
 	var creditsIndex:Int;

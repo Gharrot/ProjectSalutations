@@ -10,6 +10,7 @@ import flixel.FlxObject;
 import flixel.util.FlxAxes;
 import flixel.math.FlxRandom;
 
+import sound.SoundManager;
 
 class OnsenPeak extends Location
 {
@@ -21,6 +22,11 @@ class OnsenPeak extends Location
 		backgroundImageFile = "assets/images/LocationImages/OnsenTop.png";
 		backgroundImageFileNoFrame = "assets/images/LocationImages/OnsenTopNoFrame.png";
 		backgroundImageFileMiniFramed = "assets/images/LocationImages/OnsenTopEmptyDeerTile.png";
+	}
+	
+	override public function playMusic()
+	{
+		SoundManager.instance.setBackgroundSong("Peak");
 	}
 	
 	override public function explore(deer:Deer)

@@ -15,6 +15,8 @@ class SoundManager
 	public var currentSFXVol:Int;
 	public var muted:Bool;
 	
+	var initialized:Bool = false;
+	
 	public function new() 
 	{
 		currentMusicVol = 100;
@@ -26,9 +28,32 @@ class SoundManager
 	
 	public function initializeSoundManager()
 	{
+		if (initialized)
+		{
+			return;
+		}
+		
+		initialized = true;
+		FlxG.sound.cacheAll();
+		
 		FlxG.sound.soundTrayEnabled = false;
 		
 		FlxG.sound.changeVolume(1);
+		updateVolumes();
+	}
+	
+	public function toggleMute()
+	{
+		if (muted)
+		{
+			muted = false;
+		}
+		else
+		{
+			muted = true;
+		}
+		
+		saveSoundSettings();
 		updateVolumes();
 	}
 	
@@ -72,6 +97,8 @@ class SoundManager
 	{
 		FlxG.sound.defaultMusicGroup.volume = (cast(currentMusicVol, Float) / 100.0);
 		FlxG.sound.defaultSoundGroup.volume = (cast(currentSFXVol, Float) / 100.0);
+		
+		FlxG.sound.muted = muted;
 	}
 	
 	public function setBackgroundSong(songName:String)
@@ -82,19 +109,19 @@ class SoundManager
 			
 			if (songName == "MainMenu")
 			{
-				songPath = "assets/music/shimmer.ogg";
+				songPath = "assets/music/Here.ogg";
 			}
 			else if (songName == "Forest")
 			{
-				songPath = "assets/music/NoMoon.ogg";
+				songPath = "";
 			}
 			else if (songName == "Trail")
 			{
-				songPath = "assets/music/NoMoon.ogg";
+				songPath = "";
 			}
 			else if (songName == "StoneOverlook")
 			{
-				songPath = "assets/music/NoMoon.ogg";
+				songPath = "assets/music/Here.ogg";
 			}
 			else if (songName == "UndergroundCity")
 			{
@@ -110,23 +137,28 @@ class SoundManager
 			}
 			else if (songName == "Mountain")
 			{
-				songPath = "assets/music/SoloAcousticBlues.ogg";
+				songPath = "";
 			}
 			else if (songName == "Peak")
 			{
-				songPath = "assets/music/SoloAcousticBlues.ogg";
+				songPath = "";
 			}
 			else if (songName == "DarkCity")
 			{
-				songPath = "assets/music/SoloAcousticBlues.ogg";
+				songPath = "assets/music/shimmer.ogg";
 			}
 			else if (songName == "Credits")
 			{
-				songPath = "assets/music/SoloAcousticBlues.ogg";
+				songPath = "assets/music/Here.ogg";
 			}
 			
 			FlxG.sound.playMusic(songPath);
 		}
+	}
+	
+	public function playClickSound()
+	{
+		FlxG.sound.play("assets/sounds/click1.ogg");
 	}
 	
 	public function playSoundEffect(soundName:String)

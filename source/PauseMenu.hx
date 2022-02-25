@@ -26,6 +26,9 @@ class PauseMenu extends FlxSubState
 	var sfxVolIncreaseButton:FlxButton;
 	var sfxVolDecreaseButton:FlxButton;
 	
+	var muteText:FlxText;
+	var muteToggle:FlxButton;
+	
 	var tutorialButton:FlxButton;
 	var saveAndQuitButton:FlxButton;
 	var unpauseButton:FlxButton;
@@ -200,6 +203,23 @@ class PauseMenu extends FlxSubState
 		unpauseButton.screenCenter(FlxAxes.X);
 		add(unpauseButton);
 		
+		muteText = new flixel.text.FlxText(50, 0, 0, "Mute", 20);
+		muteText.color = 0xFF000000;
+		muteText.alignment = FlxTextAlign.CENTER;
+		add(muteText);
+		muteText.screenCenter();
+		muteText.y = 352;
+		muteText.x += 16;
+
+        muteToggle = new FlxButton(25, 354, "");
+        muteToggle.loadGraphic("assets/images/Checkbox.png", true, 128, 128);
+		muteToggle.onUp.callback = toggleMute.bind();
+		muteToggle.scale.set(0.18, 0.18);
+		muteToggle.screenCenter(FlxAxes.X);
+		muteToggle.x += 18;
+		muteToggle.updateHitbox();
+        add(muteToggle);
+		
 		infiniteFoodText = new flixel.text.FlxText(50, 0, 0, "Infinite Food", 20);
 		infiniteFoodText.color = 0xFF000000;
 		infiniteFoodText.alignment = FlxTextAlign.CENTER;
@@ -218,6 +238,27 @@ class PauseMenu extends FlxSubState
         add(infiniteFoodToggle);
 		
 		updateInfiniteFoodToggle();
+		updateMuteToggle();
+	}
+	
+	private function toggleMute()
+	{
+		SoundManager.instance.toggleMute();
+		updateMuteToggle();
+	}
+	
+	private function updateMuteToggle()
+	{
+		if (SoundManager.instance.muted)
+		{
+			muteToggle.loadGraphic("assets/images/CheckedCheckboxAnimated.png", true, 128, 128);
+			muteToggle.updateHitbox();
+		}
+		else
+		{
+			muteToggle.loadGraphic("assets/images/Checkbox.png", true, 128, 128);
+			muteToggle.updateHitbox();
+		}
 	}
 	
 	private function toggleInfiniteFood()

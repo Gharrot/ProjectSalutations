@@ -4,6 +4,8 @@ import flixel.math.FlxRandom;
 import flixel.text.FlxText;
 import flixel.util.FlxColor;
 
+import sound.SoundManager;
+
 class StoneStrongholdEntrance extends Location
 {
 	public function new(){
@@ -13,6 +15,11 @@ class StoneStrongholdEntrance extends Location
 		backgroundImageFile = "assets/images/LocationImages/StoneOverlook.png";
 		backgroundImageFileNoFrame = "assets/images/LocationImages/StoneOverlookNoFrame.png";
 		backgroundImageFileMiniFramed = "assets/images/LocationImages/StoneOverlookEmptyDeerTile.png";
+	}
+	
+	override public function playMusic()
+	{
+		SoundManager.instance.setBackgroundSong("StoneOverlook");
 	}
 	
 	override public function explore(deer:Deer)

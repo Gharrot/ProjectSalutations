@@ -11,6 +11,8 @@ import flixel.util.FlxAxes;
 import flixel.math.FlxRandom;
 import flixel.util.FlxColor;
 
+import sound.SoundManager;
+
 class MountVire extends Location
 {
 	var movingUpwards:String = "No";
@@ -25,6 +27,11 @@ class MountVire extends Location
 		backgroundImageFileNoFrame = "assets/images/LocationImages/BasecampNoFrame.png";
 		backgroundImageFileMiniFramed = "assets/images/LocationImages/BasecampEmptyDeerTile.png";
 		updateBackgroundImages();
+	}
+	
+	override public function playMusic()
+	{
+		SoundManager.instance.setBackgroundSong("Mountain");
 	}
 	
 	public function updateBackgroundImages()

@@ -156,6 +156,102 @@ class DarkCity extends Location
 	}
 	
 	override public function hunt(deer:Array<Deer>) {
-		showResult(["There doesn't seem to be anything to hunt up here."]);
+		var randomNums:FlxRandom = new FlxRandom();
+		randomNums.shuffle(deer);
+
+		var result:Array<String> = new Array<String>();
+
+		//Human
+		result.push("Your hunting pack finds a small rabbit.\n");
+		var initialCatch:Bool = false;
+		for (i in 0...deer.length)
+		{
+			//Successful catch
+			if (randomNums.int(0, 6) + (deer[i].dex*2) + deer[i].lck >= 16)
+			{
+				initialCatch = true;
+				result.push(deer[i].name + " runs the rabbit down and trips it up.");
+				break;
+			}
+		}
+
+		if (initialCatch)
+		{
+			var damageDealt:Int = 0;
+			for (i in 0...deer.length)
+			{
+				//Successful hit
+				if (randomNums.int(0, 8) + (deer[i].dex*2) + (deer[i].lck - 2) >= 8)
+				{
+					var hitStrength:Int = randomNums.int(0, 8) + (deer[i].str * 2) + (deer[i].lck - 1);
+
+					if (hitStrength >= 15)
+					{
+						result.push(deer[i].name + " lands a critical blow on the rabbit.");
+						damageDealt += 2;
+					}
+					else if (hitStrength >= 10)
+					{
+						result.push(deer[i].name + " deals a solid blow to the rabbit.");
+						damageDealt += 1;
+					}
+					else
+					{
+						result.push(deer[i].name + " lands an ineffective attack on the rabbit.");
+					}
+				}
+				else
+				{
+					result.push(deer[i].name + " fails to land their attack.");
+				}
+
+				if (damageDealt >= 2)
+				{
+					GameVariables.instance.modifyFood(5);
+					result.push("The rabbit lies defeated for a moment, then bounds off happily.");
+					
+					if (GameVariables.instance.rabbitFurBeddingMade)
+					{
+						result.push("The rabbit leads you to its den, where it offers you some food (+5 food).");
+					}
+					else
+					{
+						GameVariables.instance.addUnfamiliarWoodsRabbitFur();
+						result.push("The rabbit leads you to its den, where it offers you some food and some of its fluffy shed fur (+5 food) (+1 rabbit fur).");
+						
+						if (GameVariables.instance.rabbitFur >= 2)
+						{
+							GameVariables.instance.rabbitFur = 0;
+							GameVariables.instance.rabbitFurBeddingMade = true;
+							result.push("With the rabbit fur you just got you now have enough to make some bedding with it, so you go ahead and do so.");
+							result.push("(+1 Health and +1 Fortune for deer when resting)");
+						}
+						else 
+						{
+							result.push("If you had a bit more rabbit fur you could make some bedding from it.");
+						}
+					}
+					break;
+				}
+			}
+			
+			if (damageDealt < 2)
+			{
+				if (damageDealt == 1)
+				{
+					result.push("The rabbit bounds off with a few new scratches.");
+				}
+				else
+				{
+					result.push("The rabbit bounds off unharmed.");
+				}
+			}
+		}
+		else
+		{
+			result.push("No one is able to keep up to the rabbit and it bounds off.");
+		}
+
+		showResult(result);
 	}
 }
