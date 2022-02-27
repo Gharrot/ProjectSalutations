@@ -107,8 +107,8 @@ class UndergroundCity extends Location
 		GameVariables.instance.undergroundCityLabsViewed = true;
 		var message:Array<String> = new Array<String>();
 		message.push("You walk into a large room carved into the back wall of the city.");
-		message.push("The walls of the room are lined with glass pods attached to machines by clear tubes. The floor is covered in a slimy green residue.");
-		message.push("Nearly all of the pods appear to have been broken open by chunks of rock that fell from the roof.");
+		message.push("The walls of the room are lined with giant glass vats attached to machines by clear tubes. The floor is covered in a slimy green residue.");
+		message.push("Nearly all of the vats appear to have been broken open by chunks of rock that have fallen from the roof.");
 		message.push("There doesn't seem to be anything useful still able to be done here.");
 		showResult(message);
 	}

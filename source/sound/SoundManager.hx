@@ -137,7 +137,7 @@ class SoundManager
 			}
 			else if (songName == "Mountain")
 			{
-				songPath = "";
+				songPath = "assets/music/Snow_Geese_at_Hagerman_Wildlife_Preserve.ogg";
 			}
 			else if (songName == "Peak")
 			{

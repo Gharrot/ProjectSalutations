@@ -117,9 +117,12 @@ class DarkCity extends Location
 		}else if(forageResult <= 17){
 			GameVariables.instance.modifyFood(3);
 			showResult(["You find a large patch of shrubbery growing next to a broken water fountain (+3 food)."]);
+		}else if(forageResult <= 19){
+			GameVariables.instance.modifyFood(5);
+			showResult(["You find a giant stash of chestnuts buried behind a house (+5 food)."]);
 		}else{
-			GameVariables.instance.modifyFood(4);
-			showResult(["You find a giant stash of chestnuts buried behind a house (+4 food)."]);
+			GameVariables.instance.modifyFood(8);
+			showResult(["You find a hidden greenhouse completely overgrown with leafy vegetables (+8 food)."]);
 		}
 	}
 	
@@ -145,13 +148,46 @@ class DarkCity extends Location
 	
 	override public function defend(deer:Array<Deer>)
 	{
-		if (deer.length > 0)
+		var randomNums:FlxRandom = new FlxRandom();
+		randomNums.shuffle(deer);
+
+		var result:Array<String> = new Array<String>();
+		
+		if (GameVariables.instance.darkCityScurriers > 0)
 		{
-			showResult(["The mountain peak is peaceful, and nothing attacks your den."]);
-		}
-		else
-		{
-			setOut();
+			if (GameVariables.instance.darkCityScurriers <= 3)
+			{
+				result.push("You hear a few creatures gathering in the dark outside your den.");
+			}
+			else if (GameVariables.instance.darkCityScurriers <= 5)
+			{
+				result.push("You hear a group of creatures gathering in the dark outside your den.");
+			}
+			else
+			{
+				result.push("You hear a mass of creatures gathering in the dark outside your den.");
+			}
+			
+			if (GameVariables.instance.darkCitySticks > 0)
+			{
+				if (GameVariables.instance.darkCitySticks == 1)
+				{
+					result.push("You've gathered a stick to build a barricade.");
+				}
+				else
+				{
+					result.push("You've gathered up " + GameVariables.instance.darkCitySticks + " sticks for building barricades.");
+				}
+				
+				if (deer.length > 0)
+				{
+					
+				}
+				else
+				{
+					result.push("But there aren't any deer defending available to build any.")
+				}
+			}
 		}
 	}
 	
@@ -162,7 +198,7 @@ class DarkCity extends Location
 		var result:Array<String> = new Array<String>();
 
 		//Human
-		result.push("Your hunting pack finds a small rabbit.\n");
+		result.push("Your hunting pack heads into the darkness, tracking one of the figures through the unlit streets of the city.\n");
 		var initialCatch:Bool = false;
 		for (i in 0...deer.length)
 		{
@@ -170,7 +206,7 @@ class DarkCity extends Location
 			if (randomNums.int(0, 6) + (deer[i].dex*2) + deer[i].lck >= 16)
 			{
 				initialCatch = true;
-				result.push(deer[i].name + " runs the rabbit down and trips it up.");
+				result.push(deer[i].name + " catches up to the figure and trips them up.");
 				break;
 			}
 		}
@@ -187,17 +223,17 @@ class DarkCity extends Location
 
 					if (hitStrength >= 15)
 					{
-						result.push(deer[i].name + " lands a critical blow on the rabbit.");
+						result.push(deer[i].name + " lands a powerful blow on the creature.");
 						damageDealt += 2;
 					}
 					else if (hitStrength >= 10)
 					{
-						result.push(deer[i].name + " deals a solid blow to the rabbit.");
+						result.push(deer[i].name + " deals a solid blow to the creature.");
 						damageDealt += 1;
 					}
 					else
 					{
-						result.push(deer[i].name + " lands an ineffective attack on the rabbit.");
+						result.push(deer[i].name + " lands an ineffective attack on the creature.");
 					}
 				}
 				else
@@ -205,51 +241,30 @@ class DarkCity extends Location
 					result.push(deer[i].name + " fails to land their attack.");
 				}
 
-				if (damageDealt >= 2)
+				if (damageDealt >= 4)
 				{
-					GameVariables.instance.modifyFood(5);
-					result.push("The rabbit lies defeated for a moment, then bounds off happily.");
-					
-					if (GameVariables.instance.rabbitFurBeddingMade)
-					{
-						result.push("The rabbit leads you to its den, where it offers you some food (+5 food).");
-					}
-					else
-					{
-						GameVariables.instance.addUnfamiliarWoodsRabbitFur();
-						result.push("The rabbit leads you to its den, where it offers you some food and some of its fluffy shed fur (+5 food) (+1 rabbit fur).");
-						
-						if (GameVariables.instance.rabbitFur >= 2)
-						{
-							GameVariables.instance.rabbitFur = 0;
-							GameVariables.instance.rabbitFurBeddingMade = true;
-							result.push("With the rabbit fur you just got you now have enough to make some bedding with it, so you go ahead and do so.");
-							result.push("(+1 Health and +1 Fortune for deer when resting)");
-						}
-						else 
-						{
-							result.push("If you had a bit more rabbit fur you could make some bedding from it.");
-						}
-					}
+					GameVariables.instance.darkCityWidgetsObtained++;
+					result.push("The figure stumbles for a moment, dropping a widget.");
+					result.push("You pick it up as they bolt further into the dark (+1 widget).");
 					break;
 				}
 			}
 			
-			if (damageDealt < 2)
+			if (damageDealt < 4)
 			{
-				if (damageDealt == 1)
+				if (damageDealt >= 1)
 				{
-					result.push("The rabbit bounds off with a few new scratches.");
+					result.push("The creature bolts into the darkness with barely a scratch.");
 				}
 				else
 				{
-					result.push("The rabbit bounds off unharmed.");
+					result.push("The creature bolts into the darkness unharmed.");
 				}
 			}
 		}
 		else
 		{
-			result.push("No one is able to keep up to the rabbit and it bounds off.");
+			result.push("No one is able to keep up with the creature as they weave through the dark city streets.");
 		}
 
 		showResult(result);

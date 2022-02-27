@@ -103,11 +103,11 @@ class GameVariables {
 	
 	//Dark City
 	public var darkCityReached:Bool;
-	public var darkCityPodBlockage:Int;
-	public var darkCityNumberDeciphering:Int;
 	public var darkCitySticks:Int;
-	public var darkCityBarricade:Int;
+	public var darkCityBarricades:Int;
 	public var darkCityScurriers:Int;
+	public var darkCityWidgetsObtained:Int;
+	public var darkCityWidgetsInstalled:Int;
 	
 	public var saveNum:Int;
 
@@ -245,11 +245,11 @@ class GameVariables {
 			
 			if (resetLocationVariables)
 			{
-				darkCityBarricade = 0;
-				darkCityNumberDeciphering = 0;
-				darkCityPodBlockage = 10;
-				darkCityScurriers = 0;
 				darkCitySticks = 0;
+				darkCityBarricades = 0;
+				darkCityScurriers = 0;
+				darkCityWidgetsObtained = 0;
+				darkCityWidgetsInstalled = 0;
 			}
 		}
 		
@@ -632,6 +632,11 @@ class GameVariables {
 		
 		//Dark City
 		darkCityReached = false;
+		darkCitySticks = 0;
+		darkCityBarricades = 0;
+		darkCityScurriers = 0;
+		darkCityWidgetsObtained = 0;
+		darkCityWidgetsInstalled = 0;
 	}
 	
 	public static function getLocationSpriteByName(locationName:String):String

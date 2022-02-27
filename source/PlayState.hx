@@ -121,7 +121,18 @@ class PlayState extends FlxState
 		newGameButton.onOver.callback = buttonHoverOver.bind(newGameButton);
 		newGameButton.onOut.callback = buttonHoverOut.bind(newGameButton);
 		
-		creditsButton = new FlxButton(0, 325, "- Credits -", startCredits);
+		settingsButton = new FlxButton(0, 325, "- Settings -", startCredits);
+		settingsButton.loadGraphic("assets/images/DeerTileSprites/HealthMarkerTransparent.png");
+		add(settingsButton);
+		settingsButton.scale.set(10, 2);
+		ButtonUtils.fixButtonText(settingsButton, 20, 0, 0);
+        settingsButton.label.fieldWidth = settingsButton.width;
+		settingsButton.screenCenter(FlxAxes.X);
+		settingsButton.label.color = 0xFF000000;
+		settingsButton.onOver.callback = buttonHoverOver.bind(settingsButton);
+		settingsButton.onOut.callback = buttonHoverOut.bind(settingsButton);
+		
+		creditsButton = new FlxButton(0, 360, "- Credits -", startCredits);
 		creditsButton.loadGraphic("assets/images/DeerTileSprites/HealthMarkerTransparent.png");
 		add(creditsButton);
 		creditsButton.scale.set(10, 2);

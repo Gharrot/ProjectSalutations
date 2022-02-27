@@ -99,11 +99,11 @@ class SaveManager
 		
 		//Dark City
 		gameVariables.darkCityReached = save.data.darkCityReached;
-		gameVariables.darkCityPodBlockage = save.data.darkCityPodBlockage;
-		gameVariables.darkCityNumberDeciphering = save.data.darkCityNumberDeciphering;
 		gameVariables.darkCitySticks = save.data.darkCitySticks;
-		gameVariables.darkCityBarricade = save.data.darkCityBarricade;
+		gameVariables.darkCityBarricades = save.data.darkCityBarricades;
 		gameVariables.darkCityScurriers = save.data.darkCityScurriers;
+		gameVariables.darkCityWidgetsObtained = save.data.darkCityWidgetsObtained;
+		gameVariables.darkCityWidgetsInstalled = save.data.darkCityWidgetsInstalled;
 	
 		//move to the correct location
 		gameVariables.currentLocationName = save.data.currentLocationName;
@@ -201,11 +201,11 @@ class SaveManager
 		
 		//Dark City
 		save.data.darkCityReached = gameVariables.darkCityReached;
-		save.data.darkCityPodBlockage = gameVariables.darkCityPodBlockage;
-		save.data.darkCityNumberDeciphering = gameVariables.darkCityNumberDeciphering;
 		save.data.darkCitySticks = gameVariables.darkCitySticks;
-		save.data.darkCityBarricade = gameVariables.darkCityBarricade;
+		save.data.darkCityBarricades = gameVariables.darkCityBarricades;
 		save.data.darkCityScurriers = gameVariables.darkCityScurriers;
+		save.data.darkCityWidgetsObtained = gameVariables.darkCityWidgetsObtained;
+		save.data.darkCityWidgetsInstalled = gameVariables.darkCityWidgetsInstalled;
 		
 		save.flush();
 		save.close();

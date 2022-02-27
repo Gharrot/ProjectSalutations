@@ -246,6 +246,7 @@ null
 @:keep @:bind @:noCompletion #if display private #end class __ASSET__assets_music_renovation_ogg extends null { }
 @:keep @:bind @:noCompletion #if display private #end class __ASSET__assets_music_shimmer_mp3 extends null { }
 @:keep @:bind @:noCompletion #if display private #end class __ASSET__assets_music_shimmer_ogg extends null { }
+@:keep @:bind @:noCompletion #if display private #end class __ASSET__assets_music_snow_geese_at_hagerman_wildlife_preserve_ogg extends null { }
 @:keep @:bind @:noCompletion #if display private #end class __ASSET__assets_music_soloacousticblues_ogg extends null { }
 @:keep @:bind @:noCompletion #if display private #end class __ASSET__assets_sounds_click1_ogg extends null { }
 @:keep @:bind @:noCompletion #if display private #end class __ASSET__assets_sounds_click2_ogg extends null { }

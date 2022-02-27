@@ -211,7 +211,7 @@ class ForgottenWoods extends Location
 				if (randomNums.int(0, 8) + (deer[i].dex*2) + (deer[i].lck - 2) >= 14)
 				{
 					initialCatch = true;
-					result.push(deer[i].name + " runs the rabbit down and trips it up.");
+					result.push(deer[i].name + " runs the rabbit down and trips them up.");
 					break;
 				}
 			}
@@ -253,18 +253,18 @@ class ForgottenWoods extends Location
 						
 						if (GameVariables.instance.rabbitFurBeddingMade)
 						{
-							result.push("The rabbit leads you to its den, where it offers you some food (+5 food).");
+							result.push("The rabbit leads you to their den, where they offer you some food (+5 food).");
 						}
 						else
 						{
 							GameVariables.instance.addUnfamiliarWoodsRabbitFur();
-							result.push("The rabbit leads you to its den, where it offers you some food and some of its fluffy shed fur (+5 food) (+1 rabbit fur).");
+							result.push("The rabbit leads you to their den, where they offer you some food and some of their fluffy shed fur (+5 food) (+1 rabbit fur).");
 							
 							if (GameVariables.instance.rabbitFur >= 2)
 							{
 								GameVariables.instance.rabbitFur = 0;
 								GameVariables.instance.rabbitFurBeddingMade = true;
-								result.push("With the rabbit fur you just got you now have enough to make some bedding with it, so you go ahead and do so.");
+								result.push("With the rabbit fur you now have enough to make some bedding, so you go ahead and do so.");
 								result.push("(+1 Health and +1 Fortune for deer when resting)");
 							}
 							else 
@@ -290,7 +290,7 @@ class ForgottenWoods extends Location
 			}
 			else
 			{
-				result.push("No one is able to keep up to the rabbit and it bounds off.");
+				result.push("No one is able to keep up to the rabbit and they bounds off.");
 			}
 
 			showResult(result);
