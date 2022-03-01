@@ -181,14 +181,140 @@ class DarkCity extends Location
 				
 				if (deer.length > 0)
 				{
-					
+					showChoiceMultipleDeer(result, ["Build"], [buildBarricades], deer);
 				}
 				else
 				{
-					result.push("But there aren't any deer defending available to build any.")
+					result.push("But there aren't any deer defending available to build any.");
 				}
 			}
 		}
+		
+		result.push("The creatures in the dark start to launch a volley of stones and sharpened sticks.");
+		
+		if (GameVariables.instance.darkCityBarricades > 0)
+		{
+			result.push("Will your defending deer block and deflect the attacks, or hide behind the barricades with the rest?");
+		}
+		else
+		{
+			result.push("Will your defending deer block and deflect the attacks, or hide in the den with the rest?");
+		}
+		
+		showChoiceMultipleDeer(result, ["Deflect", "Hide"], [defendVolley, defendVolley], deer);
+	}
+	
+	public function buildBarricades(choice:String, deer:Array<Deer>)
+	{
+		var barricadesBuilt = GameVariables.instance.darkCitySticks;
+		GameVariables.instance.darkCityBarricades += GameVariables.instance.darkCitySticks;
+		GameVariables.instance.darkCitySticks = 0;
+		
+		var result:Array<String> = new Array<String>();
+		if (barricadesBuilt == GameVariables.instance.darkCityBarricades)
+		{
+			if (GameVariables.instance.darkCityBarricades == 1)
+			{
+				result.push("Your herd builds up a barricade.");
+			}
+			else
+			{
+				result.push("Your herd builds up " + barricadesBuilt + " barricades.");
+			}
+		}
+		else
+		{
+			result.push("Your herd builds up " + barricadesBuilt + " barricades, leaving you with " + GameVariables.instance.darkCityBarricades + " standing.");
+		}
+		
+		result.push("The creatures in the dark start to launch a volley of stones and sharpened sticks.");
+		
+		if (GameVariables.instance.darkCityBarricades == 1)
+		{
+			result.push("Will your defending deer block and deflect the attacks, or hide behind the barricade with the rest?");
+		}
+		else
+		{
+			result.push("Will your defending deer block and deflect the attacks, or hide behind the barricades with the rest?");
+		}
+		showChoiceMultipleDeer(result, ["Deflect", "Hide"], [defendVolley, defendVolley], deer);
+	}
+	
+	public function defendVolley(choice:String, deer:Array<Deer>)
+	{
+		var randomNums:FlxRandom = new FlxRandom();
+		var result:Array<String> = new Array<String>();
+		
+		var defendingDeer:Array<Deer> = new Array<Deer>();
+		if (choice == "Deflect")
+		{
+			defendingDeer = activeDeer;
+		}
+		
+		for (i in 0...GameVariables.instance.darkCityScurriers)
+		{
+			var dealtWith:Bool = false;
+			
+			for (j in 0...defendingDeer.length)
+			{
+				var currentDeer = defendingDeer[j];
+				
+				var catchSkill:Int = (currentDeer.dex * 3) + (currentDeer.lck * 2) + randomNums.int(0, 7);
+				if (catchSkill > 22)
+				{
+					var landingSkill:Int = (currentDeer.dex * 2) + currentDeer.lck + randomNums.int(0, 4);
+					if (landingSkill > 12)
+					{
+						result.push(currentDeer.getName() + " catches an arrow midair.");
+					}
+					else
+					{
+						result.push(currentDeer.getName() + " catches an arrow midair, but stumbles to the ground on landing.");
+						currentDeer.takeDamage(1);
+					}
+					
+					dealtWith = true;
+					break;
+				}
+				
+				var blockSkill:Int = (currentDeer.res * 3) + currentDeer.dex + currentDeer.lck + randomNums.int(0, 7);
+				if (blockSkill > 20)
+				{
+					var absorbingSkill:Int = (currentDeer.res * 2) + currentDeer.lck + randomNums.int(0, 4);
+					if (absorbingSkill > 16)
+					{
+						result.push(currentDeer.getName() + " blocks a projectile and safely absorbs the blow.");
+					}
+					else
+					{
+						result.push(currentDeer.getName() + " blocks a projectile and is only slightly harmed.");
+						currentDeer.takeDamage(1);
+					}
+					
+					dealtWith = true;
+					break;
+				}
+			}
+			
+			if (!dealtWith)
+			{
+				if (GameVariables.instance.darkCityBarricades > 0)
+				{
+					GameVariables.instance.darkCityBarricades--;
+					result.push("A projectile strikes one of the barricades and destroys it.");
+				}
+				else
+				{
+					var vulnerableDeer:Array<Deer> = GameVariables.instance.getConsciousDeer();
+					var hitDeer:Deer = randomNums.getObject<Deer>(vulnerableDeer);
+					
+					result.push("A projectile strikes " + currentDeer.getName() + "!");
+					hitDeer.takeDamage(3);
+				}
+			}
+		}
+		
+		showResult(result);
 	}
 	
 	override public function hunt(deer:Array<Deer>) {

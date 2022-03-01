@@ -477,6 +477,19 @@ class GameVariables {
 		return restingDeer;
 	}
 	
+	public function getConsciousDeer():Array<Deer>
+	{
+		var consciousDeer:Array<Deer> = new Array<Deer>();
+		
+		for (i in 0...controlledDeer.length) {
+			if (controlledDeer[i].health > 0) {
+				consciousDeer.push(controlledDeer[i]);
+			}
+        }
+		
+		return consciousDeer;
+	}
+	
 	public function loadFromSave(){
 		SaveManager.loadSave("Save" + saveNum);
 	}
