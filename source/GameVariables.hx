@@ -108,6 +108,7 @@ class GameVariables {
 	public var darkCityScurriers:Int;
 	public var darkCityWidgetsObtained:Int;
 	public var darkCityWidgetsInstalled:Int;
+	public var darkCityGooDiverted:Bool;
 	
 	public var saveNum:Int;
 
@@ -250,6 +251,7 @@ class GameVariables {
 				darkCityScurriers = 0;
 				darkCityWidgetsObtained = 0;
 				darkCityWidgetsInstalled = 0;
+				darkCityGooDiverted = false;
 			}
 		}
 		
@@ -650,6 +652,7 @@ class GameVariables {
 		darkCityScurriers = 0;
 		darkCityWidgetsObtained = 0;
 		darkCityWidgetsInstalled = 0;
+		darkCityGooDiverted = false;
 	}
 	
 	public static function getLocationSpriteByName(locationName:String):String
@@ -685,6 +688,10 @@ class GameVariables {
 		else if (locationName == "Squirrel Village")
 		{
 			return "assets/images/LocationImages/SquirrelVillage.png";
+		}
+		else if (locationName == "Onsen Peak")
+		{
+			return "assets/images/LocationImages/OnsenTop.png";
 		}
 		
 		return "assets/images/LocationImages/ForgottenWoods.png";

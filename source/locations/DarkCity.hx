@@ -13,7 +13,9 @@ import flixel.math.FlxRandom;
 
 class DarkCity extends Location
 {
-
+	var starCycle:String = ["Rabbit", "Wolf", "Squirrel", "Goat", "Bird"];
+	var componentsNeeded = 3;
+	
 	public function new(){
 		super();
 		
@@ -66,23 +68,173 @@ class DarkCity extends Location
 	
 	public function enterObservatory(choice:String, deer:Deer)
 	{
+		GameVariables.instance.undergroundCityObservatoryViewed = true;
 		var message:Array<String> = new Array<String>();
-		message.push("You walk into the observatory.");
+		message.push("You walk into a small tall room carved into the back wall of the city.");
+		message.push("The room is filled with screens and devices connected to a center terminal.");
+		message.push("The domed ceiling is lined with diagrams of shining stars that illuminate the room.");
+		showChoice(message, ["Terminal"], [observatoryTerminal], deer);
+	}
+	
+	public function observatoryTerminal(choice:String, deer:Deer)
+	{
+		var message:Array<String> = new Array<String>();
+		message.push("As you approach the terminal all of the machines in the room whir to life and the cieling begins to rotate.");
+		message.push("After a bit the ceiling stops rotating and an eyepiece slides out of the central terminal.");
+		message.push("You look through the eyepiece and see stars in the shape of a " + getCurrentStarCycle() + ".");
 		showResult(message);
 	}
 	
 	public function enterChurch(choice:String, deer:Deer)
 	{
+		GameVariables.instance.undergroundCityChurchViewed = true;
 		var message:Array<String> = new Array<String>();
-		message.push("You walk into the church.");
+		message.push("You walk into the chapel built into the north wall of the city.");
+		message.push("You enter a large stone room. The walls are packed with bookshelves, and the room is filled with aisles of glass pods.");
+		if (GameVariables.instance.darkCityGooDiverted)
+		{
+			message.push("At the far end is an altar with a large monitor on top and a towering vat of green goo on each side.");
+		}
+		else
+		{
+			message.push("At the far end is an altar with a large monitor on top and a giant empty glass vat on each side.");
+		}
+		showChoice(message, ["Altar"], [churchMonitor], deer);
+	}
+	
+	public function churchMonitor(choice:String, deer:Deer)
+	{
+		var message:Array<String> = new Array<String>();
+		message.push("You walk up to the altar and the monitor powers on.");
+		if (GameVariables.instance.darkCityGooDiverted)
+		{
+			message.push("The screen displays an icon that looks like a blinking empty vat along with some symbols you don't understand.");
+		}
+		else
+		{
+			message.push("");
+		}
 		showResult(message);
 	}
 	
 	public function enterPods(choice:String, deer:Deer)
 	{
+		GameVariables.instance.undergroundCityLabsViewed = true;
 		var message:Array<String> = new Array<String>();
-		message.push("You walk into the lab filled with pods.");
-		showResult(message);
+		message.push("You walk into a large room carved into the wall near a chapel.");
+		message.push("The room is filled with giant glass vats filled with a green goo.");
+		message.push("In the center of the room is a giant machine connected to all of the vats.");
+		if (GameVariables.instance.darkCityWidgetsInstalled < componentsNeeded)
+		{
+			message.push("It seems like it was made to pump the goo elsewhere, but it's missing some components.");
+			showChoice(message, ["Machine"], [podMachine], deer);
+		}
+		else if (GameVariables.instance.darkCityGooDiverted)
+		{
+			message.push("The machine is running smoothly and you can see green goo being pumped through the tubes.");
+			showResult(message);
+		}
+		else
+		{
+			message.push("It seems like it was made to pump the goo elsewhere, it just needs to be turned on.");
+			showChoice(message, ["Turn On"], [turnOnGooMachine], deer);
+		}
+	}
+	
+	public function podMachine(choice:String, deer:Deer)
+	{
+		var componentsMissing:Int = componentsNeeded - GameVariables.instance.darkCityWidgetsInstalled;
+		
+		var message:Array<String> = new Array<String>();
+		message.push("You walk forward and inspect the machine closer.");
+		
+		if (componentsMissing <= 0)
+		{
+			message.push("It looks ready to go, it just needs to be turned on.");
+			showChoice(message, ["Turn On"], [turnOnGooMachine], deer);
+		}
+		else 
+		{
+			if (componentsMissing == 1)
+			{
+				message.push("It looks likes it's missing one last widget.");
+			}
+			else if (componentsMissing == componentsNeeded)
+			{
+				message.push("It looks likes it's missing " + componentsMissing + " components.");
+			}
+			else
+			{
+				message.push("It looks likes it's still missing " + componentsMissing + " more widgets.");
+			}
+			
+			if (GameVariables.instance.darkCityWidgetsObtained > 0)
+			{
+				showChoice(message, ["Install Widgets"], [installComponents], deer);
+			}
+			else
+			{
+				showResult(message);
+			}
+		}
+	}
+	
+	public function installComponents(choice:String, deer:Deer)
+	{
+		var componentsMissing:Int = componentsNeeded - GameVariables.instance.darkCityWidgetsInstalled;
+		var completed:Bool = false;
+		
+		var message:Array<String> = new Array<String>();
+		
+		if (componentsMissing <= GameVariables.instance.darkCityWidgetsObtained)
+		{
+			GameVariables.instance.darkCityWidgetsInstalled = componentsNeeded;
+			GameVariables.instance.darkCityWidgetsObtained -= componentsMissing;
+			
+			if (componentsMissing == componentsNeeded)
+			{
+				message.push("You click all of the widgets into place and a button on the side of the machine begins to blink.");
+			}
+			else if (componentsMissing > 1)
+			{
+				message.push("You click the last of the widgets into place and a button on the side of the machine begins to blink.");
+			}
+			else
+			{
+				message.push("You click the last widget into place and a button on the side of the machine begins to blink.");
+			}
+			
+			completed = true;
+		}
+		else
+		{
+			GameVariables.instance.darkCityWidgetsInstalled += GameVariables.instance.darkCityWidgetsObtained;
+			GameVariables.instance.darkCityWidgetsObtained = 0;
+			
+			componentsMissing = componentsNeeded - GameVariables.instance.darkCityWidgetsInstalled;
+			if (GameVariables.instance.darkCityWidgetsObtained > 1)
+			{
+				message.push("You click the " + GameVariables.instance.darkCityWidgetsObtained + " widgets you've found into place, but you still seem to be missing " + componentsMissing + " more.");
+			}
+			else
+			{
+				message.push("You click the widget you found into place, but you still seem to be missing " + componentsMissing + " more.");
+			}
+		}
+		
+		if (completed)
+		{
+			showChoice(message, ["Push the Button"], [turnOnGooMachine], deer);
+		}
+		else
+		{
+			showResult(message);
+		}
+	}
+	
+	public function turnOnGooMachine(choice:String, deer:Deer)
+	{
+		
 	}
 	
 	override public function forage(deer:Deer) 
@@ -259,8 +411,8 @@ class DarkCity extends Location
 			{
 				var currentDeer = defendingDeer[j];
 				
-				var catchSkill:Int = (currentDeer.dex * 3) + (currentDeer.lck * 2) + randomNums.int(0, 7);
-				if (catchSkill > 22)
+				var catchSkill:Int = (currentDeer.dex * 3) + (currentDeer.lck * 2) + randomNums.int(0, 9);
+				if (catchSkill > 24)
 				{
 					var landingSkill:Int = (currentDeer.dex * 2) + currentDeer.lck + randomNums.int(0, 4);
 					if (landingSkill > 12)
@@ -277,8 +429,8 @@ class DarkCity extends Location
 					break;
 				}
 				
-				var blockSkill:Int = (currentDeer.res * 3) + currentDeer.dex + currentDeer.lck + randomNums.int(0, 7);
-				if (blockSkill > 20)
+				var blockSkill:Int = (currentDeer.res * 3) + currentDeer.dex + currentDeer.lck + randomNums.int(0, 9);
+				if (blockSkill > 23)
 				{
 					var absorbingSkill:Int = (currentDeer.res * 2) + currentDeer.lck + randomNums.int(0, 4);
 					if (absorbingSkill > 16)
@@ -306,10 +458,24 @@ class DarkCity extends Location
 				else
 				{
 					var vulnerableDeer:Array<Deer> = GameVariables.instance.getConsciousDeer();
-					var hitDeer:Deer = randomNums.getObject<Deer>(vulnerableDeer);
 					
-					result.push("A projectile strikes " + currentDeer.getName() + "!");
-					hitDeer.takeDamage(3);
+					if (vulnerableDeer.length > 0)
+					{
+						var hitDeer:Deer = randomNums.getObject<Deer>(vulnerableDeer);
+						
+						result.push("A projectile strikes " + currentDeer.getName() + "!");
+						hitDeer.takeDamage(3);
+					}
+				}
+			}
+			
+			var originalLength:Int = controlledDeer.length;
+			for (i in 1...originalLength) {
+				var currentDeer:Deer = defendingDeer[originalLength - i];
+				
+				if (currentDeer.health <= 0)
+				{
+					defendingDeer.remove(currentDeer);
 				}
 			}
 		}
@@ -394,5 +560,10 @@ class DarkCity extends Location
 		}
 
 		showResult(result);
+	}
+	
+	public function getCurrentStarCycle():String
+	{
+		return starCycle[GameVariables.instance.currentDay % starCycle.length];
 	}
 }

@@ -104,6 +104,7 @@ class SaveManager
 		gameVariables.darkCityScurriers = save.data.darkCityScurriers;
 		gameVariables.darkCityWidgetsObtained = save.data.darkCityWidgetsObtained;
 		gameVariables.darkCityWidgetsInstalled = save.data.darkCityWidgetsInstalled;
+		gameVariables.darkCityGooDiverted = save.data.darkCityGooDiverted;
 	
 		//move to the correct location
 		gameVariables.currentLocationName = save.data.currentLocationName;
@@ -206,6 +207,7 @@ class SaveManager
 		save.data.darkCityScurriers = gameVariables.darkCityScurriers;
 		save.data.darkCityWidgetsObtained = gameVariables.darkCityWidgetsObtained;
 		save.data.darkCityWidgetsInstalled = gameVariables.darkCityWidgetsInstalled;
+		save.data.darkCityGooDiverted = gameVariables.darkCityGooDiverted;
 		
 		save.flush();
 		save.close();
