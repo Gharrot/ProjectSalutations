@@ -13,6 +13,7 @@ import haxe.ds.ArraySort;
 import haxe.Serializer;
 import haxe.Unserializer;
 import sound.SoundManager;
+import flixel.FlxSubState;
 
 class PlayState extends FlxState
 {
@@ -41,6 +42,10 @@ class PlayState extends FlxState
 	var showDeleteButton:FlxButton;
 	
 	var saveToStart:Int = 0;
+	
+	var settingsMenuState:SettingsMenu;
+	
+	public var paused = false;
 
 	override public function create()
 	{
@@ -121,7 +126,7 @@ class PlayState extends FlxState
 		newGameButton.onOver.callback = buttonHoverOver.bind(newGameButton);
 		newGameButton.onOut.callback = buttonHoverOut.bind(newGameButton);
 		
-		settingsButton = new FlxButton(0, 325, "- Settings -", startCredits);
+		settingsButton = new FlxButton(0, 325, "- Settings -", showSettings);
 		settingsButton.loadGraphic("assets/images/DeerTileSprites/HealthMarkerTransparent.png");
 		add(settingsButton);
 		settingsButton.scale.set(10, 2);
@@ -145,6 +150,11 @@ class PlayState extends FlxState
 		
 		timeUntilNextSprite = 1;
 		deerSprites = new Array<RunningDeerSprite>();
+		
+		destroySubStates = false;
+		persistentUpdate = true;
+		settingsMenuState = new SettingsMenu();
+		settingsMenuState.makerState = this;
 	}
 
 	override public function update(elapsed:Float)
@@ -205,8 +215,19 @@ class PlayState extends FlxState
 			}
 		}
 	}
+	
+	public function showSettings()
+	{
+		openSubState(settingsMenuState);
+		paused = true;
+	}
 
 	function showSaves(){
+		if (paused)
+		{
+			return;
+		}
+		
 		clearFirstButtons();
 		for(i in 0...3){
 			saveStartButtons[i].visible = true;
@@ -253,6 +274,7 @@ class PlayState extends FlxState
 	function clearFirstButtons(){
 		remove(newGameButton);
 		remove(creditsButton);
+		remove(settingsButton);
 	}
 	
 	function clearSavesButtons(){
@@ -271,7 +293,13 @@ class PlayState extends FlxState
 		FlxG.switchState(new Tutorial());
 	}
 	
-	function startCredits(){
+	function startCredits()
+	{
+		if (paused)
+		{
+			return;
+		}
+		
 		credits = new Array<String>();
 		credits.push("Coding & Art\nPajamaBee");
 		credits.push("Deer Sprites & Animations\nCalciumtrice");

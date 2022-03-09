@@ -13,7 +13,7 @@ import flixel.math.FlxRandom;
 
 class DarkCity extends Location
 {
-	var starCycle:String = ["Rabbit", "Wolf", "Squirrel", "Goat", "Bird"];
+	var starCycle:Array<String> = ["Rabbit", "Wolf", "Squirrel", "Goat", "Bird"];
 	var componentsNeeded = 3;
 	
 	public function new(){
@@ -108,13 +108,85 @@ class DarkCity extends Location
 		message.push("You walk up to the altar and the monitor powers on.");
 		if (GameVariables.instance.darkCityGooDiverted)
 		{
-			message.push("The screen displays an icon that looks like a blinking empty vat along with some symbols you don't understand.");
+			message.push("The screen shows a blinking icon of a full vat before swapping to a new screen of 4 icons.");
+			message.push("The icons are 2→, 1←, 5→, 6←.");
+			message.push("A keyboard in front lights up 5 keys with different animals on them.");
+			showChoice(message, starCycle, [pressKey1], deer);
 		}
 		else
 		{
-			message.push("");
+			message.push("The screen displays an icon that looks like a blinking empty vat along with some symbols you don't understand.");
+			showResult(message);
 		}
-		showResult(message);
+	}
+	
+	public function pressKey1(choice:String, deer:Deer)
+	{
+		var message:Array<String> = new Array<String>();
+		if (choice == getCurrentStarCycle(2))
+		{
+			message.push("The screen flashes green and the first icon disappears.");
+			message.push("The screen displays: 1←, 5→, 6←");
+			showChoice(message, starCycle, [pressKey2], deer);
+		}
+		else
+		{
+			message.push("The screen flashes red before shutting down, you'll have to try again later.");
+			showResult(message);
+		}
+	}
+	
+	public function pressKey2(choice:String, deer:Deer)
+	{
+		var message:Array<String> = new Array<String>();
+		if (choice == getCurrentStarCycle(-1))
+		{
+			message.push("The screen flashes green and the second icon disappears.");
+			message.push("The screen displays: 5→, 6←");
+			showChoice(message, starCycle, [pressKey3], deer);
+		}
+		else
+		{
+			message.push("The screen flashes red before shutting down, you'll have to try again later.");
+			showResult(message);
+		}
+	}
+	
+	public function pressKey3(choice:String, deer:Deer)
+	{
+		var message:Array<String> = new Array<String>();
+		if (choice == getCurrentStarCycle(5))
+		{
+			message.push("The screen flashes green and the third icon disappears.");
+			message.push("The screen displays: 6←");
+			showChoice(message, starCycle, [pressKey4], deer);
+		}
+		else
+		{
+			message.push("The screen flashes red before shutting down, you'll have to try again later.");
+			showResult(message);
+		}
+	}
+	
+	public function pressKey4(choice:String, deer:Deer)
+	{
+		var message:Array<String> = new Array<String>();
+		if (choice == getCurrentStarCycle(-6))
+		{
+			message.push("The screen flashes green and the fourth icon disappears.");
+			message.push("A green button on the keyboard begins to slowly pulse.");
+			showChoice(message, ["Press It"], [startTheResurrections], deer);
+		}
+		else
+		{
+			message.push("The screen flashes red before shutting down, you'll have to try again later.");
+			showResult(message);
+		}
+	}
+	
+	public function startTheResurrections(choice:String, deer:Deer)
+	{
+		
 	}
 	
 	public function enterPods(choice:String, deer:Deer)
@@ -234,7 +306,11 @@ class DarkCity extends Location
 	
 	public function turnOnGooMachine(choice:String, deer:Deer)
 	{
-		
+		GameVariables.instance.darkCityGooDiverted = true;
+		var message:Array<String> = new Array<String>();
+		message.push("You push the button on the side of the machine and it starts to chug.");
+		message.push("Before long a steady stream of green goo is being pumped through the tubes headed elsewhere in the city.");
+		showResult(message);
 	}
 	
 	override public function forage(deer:Deer) 
@@ -461,15 +537,15 @@ class DarkCity extends Location
 					
 					if (vulnerableDeer.length > 0)
 					{
-						var hitDeer:Deer = randomNums.getObject<Deer>(vulnerableDeer);
+						var hitDeer:Deer = vulnerableDeer[randomNums.int(0, vulnerableDeer.length - 1)];
 						
-						result.push("A projectile strikes " + currentDeer.getName() + "!");
+						result.push("A projectile strikes " + hitDeer.getName() + "!");
 						hitDeer.takeDamage(3);
 					}
 				}
 			}
 			
-			var originalLength:Int = controlledDeer.length;
+			var originalLength:Int = defendingDeer.length;
 			for (i in 1...originalLength) {
 				var currentDeer:Deer = defendingDeer[originalLength - i];
 				
@@ -562,8 +638,16 @@ class DarkCity extends Location
 		showResult(result);
 	}
 	
-	public function getCurrentStarCycle():String
+	public function getCurrentStarCycle(offset:Int = 0):String
 	{
-		return starCycle[GameVariables.instance.currentDay % starCycle.length];
+		var index = GameVariables.instance.currentDay % starCycle.length;
+		index = index + offset;
+		
+		while (index < 0)
+		{
+			index += starCycle.length;
+		}
+		
+		return starCycle[index % starCycle.length];
 	}
 }

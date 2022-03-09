@@ -789,13 +789,13 @@ class MainGame extends FlxState
 		if (GameVariables.instance.currentLocationName == "Unfamiliar Woods")
 		{
 			//Unfamiliar Woods (current location)
-			var currentLocationSprite:FlxSprite = new FlxSprite(19, 467);
+			var currentLocationSprite:FlxSprite = new FlxSprite(19, 470);
 			currentLocationSprite.loadGraphic("assets/images/MapImages/CurrentLocationMarker.png", true);
 			mapSprites.push(currentLocationSprite);
 			add(currentLocationSprite);
 			
 			//The Trail
-			var newButton:LocationButton = new LocationButton("The Trail", 0, 116, 442);
+			var newButton:LocationButton = new LocationButton("The Trail", 0, 116, 444);
 			newButton.setMessage("This trail seems to continue for quite a long ways. Are you prepared to set out?");
 			mapButtons.push(newButton);
 			add(newButton);
@@ -803,7 +803,7 @@ class MainGame extends FlxState
 			//Stone Stronghold Entrance
 			if (GameVariables.instance.theTrailCompleted)
 			{
-				var newButton:LocationButton = new LocationButton("Stone Stronghold Entrance", 5, 250, 394);
+				var newButton:LocationButton = new LocationButton("Stone Stronghold Entrance", 5, 248, 398);
 				mapButtons.push(newButton);
 				add(newButton);
 			}
@@ -817,7 +817,7 @@ class MainGame extends FlxState
 			add(currentLocationSprite);
 			
 			//Stone Overlook
-			var newButton:LocationButton = new LocationButton("Stone Stronghold Entrance", 0, 250, 394);
+			var newButton:LocationButton = new LocationButton("Stone Stronghold Entrance", 0, 248, 398);
 			newButton.setMessage("Flee the dark woods and set out back to the overlook?");
 			mapButtons.push(newButton);
 			add(newButton);
@@ -825,13 +825,13 @@ class MainGame extends FlxState
 		else if (GameVariables.instance.currentLocationName == "The Trail")
 		{
 			//The Trail (current location)
-			var currentLocationSprite:FlxSprite = new FlxSprite(116, 442);
+			var currentLocationSprite:FlxSprite = new FlxSprite(116, 444);
 			currentLocationSprite.loadGraphic("assets/images/MapImages/CurrentLocationMarker.png", true);
 			mapSprites.push(currentLocationSprite);
 			add(currentLocationSprite);
 			
 			//Unfamiliar Woods
-			var newButton:LocationButton = new LocationButton("Unfamiliar Woods", 0, 19, 467);
+			var newButton:LocationButton = new LocationButton("Unfamiliar Woods", 0, 19, 470);
 			newButton.setMessage("Do you want to return back to the woods you came from?");
 			mapButtons.push(newButton);
 			add(newButton);
@@ -839,7 +839,7 @@ class MainGame extends FlxState
 			//Stone Stronghold Entrance
 			if (GameVariables.instance.theTrailCompleted)
 			{
-				var newButton:LocationButton = new LocationButton("Stone Stronghold Entrance", 5, 250, 394);
+				var newButton:LocationButton = new LocationButton("Stone Stronghold Entrance", 5, 248, 398);
 				mapButtons.push(newButton);
 				add(newButton);
 			}
@@ -847,7 +847,7 @@ class MainGame extends FlxState
 		else if (GameVariables.instance.currentLocationName == "Stone Stronghold Entrance")
 		{
 			//Stronghold Entrance (current location)
-			var currentLocationSprite:FlxSprite = new FlxSprite(250, 394);
+			var currentLocationSprite:FlxSprite = new FlxSprite(248, 398);
 			currentLocationSprite.loadGraphic("assets/images/MapImages/CurrentLocationMarker.png", true);
 			mapSprites.push(currentLocationSprite);
 			add(currentLocationSprite);
@@ -855,7 +855,7 @@ class MainGame extends FlxState
 			//Underground City
 			if (GameVariables.instance.undergroundCityOpened)
 			{
-				var newButton:LocationButton = new LocationButton("Underground City", 1, 250, 479);
+				var newButton:LocationButton = new LocationButton("Underground City", 1, 250, 490);
 				mapButtons.push(newButton);
 				add(newButton);
 			}
@@ -871,20 +871,20 @@ class MainGame extends FlxState
 			add(newButton);
 			
 			//Unfamiliar Woods
-			var newButton:LocationButton = new LocationButton("Unfamiliar Woods", 6, 19, 467);
+			var newButton:LocationButton = new LocationButton("Unfamiliar Woods", 6, 19, 470);
 			mapButtons.push(newButton);
 			add(newButton);
 		}
 		else if (GameVariables.instance.currentLocationName == "Underground City")
 		{
 			//Underground City (current location)
-			var currentLocationSprite:FlxSprite = new FlxSprite(250, 479);
+			var currentLocationSprite:FlxSprite = new FlxSprite(250, 490);
 			currentLocationSprite.loadGraphic("assets/images/MapImages/CurrentLocationMarker.png", true);
 			mapSprites.push(currentLocationSprite);
 			add(currentLocationSprite);
 			
 			//Stone Stronghold Entrance
-			var newButton:LocationButton = new LocationButton("Stone Stronghold Entrance", 1, 250, 394);
+			var newButton:LocationButton = new LocationButton("Stone Stronghold Entrance", 1, 248, 398);
 			mapButtons.push(newButton);
 			add(newButton);
 		}
@@ -897,7 +897,7 @@ class MainGame extends FlxState
 			add(currentLocationSprite);
 			
 			//Stronghold Entrance
-			var newButton:LocationButton = new LocationButton("Stone Stronghold Entrance", 2, 250, 394);
+			var newButton:LocationButton = new LocationButton("Stone Stronghold Entrance", 2, 248, 398);
 			mapButtons.push(newButton);
 			add(newButton);
 		}

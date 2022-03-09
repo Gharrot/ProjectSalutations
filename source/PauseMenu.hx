@@ -307,7 +307,7 @@ class PauseMenu extends FlxSubState
 		FlxG.switchState(new PlayState());
 	}
 	
-	private function returnToGame()
+	public function returnToGame()
 	{
 		close();
 	}
